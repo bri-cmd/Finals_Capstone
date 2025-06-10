@@ -1,0 +1,16 @@
+.form-field input,
+.form-field label {
+    display: block;
+    width: 100%;
+}
+
+.login-form a {
+    text-decoration: underline;
+}
+
+.forget-pass {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+}
+
