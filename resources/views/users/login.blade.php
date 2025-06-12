@@ -5,25 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
 
-    @vite(['resources\css\app.css', 'resources\css\users\login.css'])
+    @vite(['resources\css\app.css', 'resources\css\users\form.css'])
 </head>
 <body>
-    <form action="" method="" class="login-form">
+    <form action="" method="" class="form">
         <x-logoheader>
-            <h1>Login</h1>
-            <p>Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
-        </x-logoheader>
+            <x-slot name="header">
+                <h1>Login</h1>
+                <p>Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
+            </x-slot>
 
-        <div>
-            <label for="email">Email</label>
-            <input type="email" name="email">    
-        </div>
-        
-        <div">
-            <label for="passsword">Password</label>
-            <input type="password" name="password">   
-            <a href="" class="forget-pass">Forget your password</a> 
-        </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" name="email">    
+            </div>
+            
+            <div">
+                <label for="passsword">Password</label>
+                <input type="password" name="password">   
+                <a href="{{ route('forgot') }}" class="forget-pass">Forget your password</a> 
+            </div>
+        </x-logoheader>
 
         <x-usersbutton label="Login"/>
     </form>
