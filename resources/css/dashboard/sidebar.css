@@ -1,0 +1,42 @@
+.nav-bar {
+    border-right: 1px solid black;
+    width: 15%;
+    height: 100vh;
+    padding: 30px;
+}
+
+.nav-bar h1 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.nav-bar ul {
+    height: 85%;
+    position: relative;
+}
+
+.nav-bar ul li {
+    padding: 4px 0;
+}
+
+.last-nav {
+    padding: 4px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.nav-bar ul li:hover {
+    background-color: aqua;
+}
+
+.nav-bar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.component-icon {
+    position: relative;
+    top: -8px;
+}

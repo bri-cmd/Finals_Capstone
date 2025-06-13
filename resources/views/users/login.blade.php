@@ -31,5 +31,13 @@
         <x-usersbutton label="Login"/>
     </form>
 
+    {{-- validation errors --}}
+    @if ($errors->any())
+        <ul class="px-4 py-2 bg-red-100 text-center">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
 </body>
 </html>
