@@ -6,7 +6,7 @@
     transform: translateX(-50%);
 }
 
-.close {
+.close-icon {
     position: absolute;
     right: 30px;
     transform: translateX(-50%);

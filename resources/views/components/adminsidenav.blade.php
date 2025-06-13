@@ -1,60 +1,45 @@
 <nav class="nav-bar">
-        <h1>Admin</h1>
 
-        <ul>
-            <li>
-                <a href="">
-                    <x-icons.dashboard />
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.user />
-                    User Account
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.order />
-                    Order
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.component />
-                    Component Details
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.bargraph />
-                    Sales Report
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.inventory />
-                    Inventory Report
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.software />
-                    Software Details
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <x-icons.logs />
-                    Activity Logs
-                </a>
-            </li>
-            <li class="last-nav">
-                <a href="">
-                    <x-icons.build />
-                    Build
-                </a>
-            </li>
-        </ul>
-    </nav>
+    {{-- fetching the user role in the database --}}
+    {{-- ucfirst -> capitalizes the first character string --}}
+    <h1>{{ ucfirst($role) }}</h1>
+
+    {{-- grouping links in an array based on roles --}}
+    @php
+        $links = match($role) {
+            'admin' => [
+                ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
+                ['route' => '' , 'label' => 'User Account', 'icon' => 'user'],
+                ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
+                ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => '' , 'label' => 'Sales Report', 'icon' => 'bargraph'],
+                ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
+                ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
+                ['route' => '' , 'label' => 'Activity Logs', 'icon' => 'logs'],
+                ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
+            ],
+            'staff' => [
+                ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
+                ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
+                ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
+                ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
+                ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
+            ],
+            default => []
+        };
+    @endphp
+
+    {{-- rendering links base on roles --}}
+    <ul>
+    @foreach ($links as $link)
+        <li class="{{ $link['style'] ?? '' }}">
+            <a href="{{ $link['route'] }}">
+                <x-dynamic-component :component="'x-icons.' . $link['icon']" />
+                {{ $link['label'] }}
+            </a>
+        </li>
+    @endforeach
+</ul>
+
+</nav>
