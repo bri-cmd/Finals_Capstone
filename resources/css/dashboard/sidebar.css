@@ -1,4 +1,7 @@
 .nav-bar {
+    position: fixed;
+    left: 0;
+    top: 0;
     border-right: 1px solid black;
     width: 15%;
     height: 100vh;
@@ -31,6 +34,10 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .nav-bar ul li a {
     display: flex;
     align-items: center;
@@ -40,4 +47,14 @@
 .component-icon {
     position: relative;
     top: -8px;
+}
+
+.body {
+    display: flex;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 15%;
+    padding: 30px;
 }

@@ -8,8 +8,8 @@
     @php
         $links = match($role) {
             'admin' => [
-                ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
-                ['route' => '' , 'label' => 'User Account', 'icon' => 'user'],
+                ['route' => route('dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
+                ['route' => route('useraccount') , 'label' => 'User Account', 'icon' => 'user'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
                 ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Sales Report', 'icon' => 'bargraph'],
@@ -33,7 +33,10 @@
     {{-- rendering links base on roles --}}
     <ul>
     @foreach ($links as $link)
-        <li class="{{ $link['style'] ?? '' }}">
+        @php
+            $isActive = request()->is(ltrim(parse_url($link['route'], PHP_URL_PATH), '/' . '*'))
+        @endphp
+        <li class="{{ trim(($link['style'] ?? '' ) . ($isActive ? ' active' : '')) }}">
             <a href="{{ $link['route'] }}">
                 <x-dynamic-component :component="'x-icons.' . $link['icon']" />
                 {{ $link['label'] }}

@@ -1,1 +1,1 @@
-<input class="form-button" type="submit" value="{{ $label }}">
+<button class="form-button"> {{ $label }}</button>

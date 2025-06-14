@@ -8,9 +8,13 @@
     @vite(['resources\css\app.css', 'resources\css\dashboard\sidebar.css'])
 
 </head>
-<body>
+<body class="body">
 
     {{-- Display a dynamic sidebar heading base on user --}}
     <x-adminsidenav :role="Auth::user()?->role" />
+
+    <main class="main-content">
+        <h1>Dashboard</h1>
+    </main>
 </body>
 </html>

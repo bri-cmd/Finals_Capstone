@@ -22,8 +22,8 @@ class UserController extends Controller
         return view ('users.forgot');
     }
 
-    public function admin() {
-        return view ('dashboard.admin');
+    public function dashboard() {
+        return view ('dashboard.dashboard');
     }
 
     public function authenticated(Request $request) {
@@ -34,8 +34,9 @@ class UserController extends Controller
             $request->session()->regenerate(); // Prevent session fixation
 
             return match ($user->role) {
-                'admin' => redirect()->route('admin'),
-                'staff' => redirect()->route('admin'),
+                'admin' => redirect()->route('dashboard'),
+                'staff' => redirect()->route('dashboard'),
+                'customer' => redirect()->route('home'),
                 default => redirect()->route('forgot'),
             };
         }
@@ -43,5 +44,9 @@ class UserController extends Controller
         return back()->withErrors([
             'email' => 'Invalid login credentials',
         ]);
+    }
+
+    public function useraccount() {
+        return view ('dashboard.useraccount');
     }
 }
