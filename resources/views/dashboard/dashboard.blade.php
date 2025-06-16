@@ -9,6 +9,7 @@
 
 </head>
 <body class="body">
+    
 
     {{-- Display a dynamic sidebar heading base on user --}}
     <x-adminsidenav :role="Auth::user()?->role" />

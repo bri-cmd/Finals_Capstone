@@ -49,4 +49,20 @@ class UserController extends Controller
     public function useraccount() {
         return view ('dashboard.useraccount');
     }
+
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|max:255',
+            'role' => 'required|string',
+        ]);
+
+        // save password in a hash
+        $validated['password'] = bcrypt($validated['password']);
+
+        User::create($validated);
+
+        return redirect()->route('useraccount')->with('success', 'User Created!');
+    }
 }

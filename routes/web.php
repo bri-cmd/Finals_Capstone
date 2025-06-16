@@ -13,3 +13,4 @@ Route::get('/users/forgot', [UserController::class, 'forgot'])->name('forgot');
 Route::post('/users/login', [UserController::class, 'authenticated'])->name('authenticated');
 Route::get('/dashboard/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 Route::get('/dashboard/useraccount', [UserController::class, 'useraccount'])->name('useraccount');
+Route::post('/dashboard', [UserController::class, 'store'])->name('store.adduser');

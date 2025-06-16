@@ -1,0 +1,52 @@
+.add-user {
+    width: 50%;
+    padding-right: 15px;
+}
+
+.form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-input {
+    display: flex;
+    align-items: center;
+}
+
+.form-input label {
+    width: 20%;
+    height: 24px;
+}
+
+.form-input input {
+    height: 24px;
+    font-size: 12px;
+}
+
+.form-input select {
+    border: 1px solid black;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    height: 24px;
+}
+
+.form-button {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 0 8px;
+    position: inherit;
+    left: 100%;
+    transform: translateX(-100%);
+    width: fit-content;
+    height: 24px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.form-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

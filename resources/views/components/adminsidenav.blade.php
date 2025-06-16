@@ -34,9 +34,10 @@
     <ul>
     @foreach ($links as $link)
         @php
+            // checking if the current url matches the route
             $isActive = request()->is(ltrim(parse_url($link['route'], PHP_URL_PATH), '/' . '*'))
         @endphp
-        <li class="{{ trim(($link['style'] ?? '' ) . ($isActive ? ' active' : '')) }}">
+        <li class="{{ (($link['style'] ?? '' ) . ($isActive ? ' active' : '')) }}">
             <a href="{{ $link['route'] }}">
                 <x-dynamic-component :component="'x-icons.' . $link['icon']" />
                 {{ $link['label'] }}
