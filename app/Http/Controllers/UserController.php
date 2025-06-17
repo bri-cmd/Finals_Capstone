@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserVerification;
 // use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,10 +48,19 @@ class UserController extends Controller
     }
 
     public function useraccount() {
-        return view ('dashboard.useraccount');
+        $unverifiedUsers = UserVerification::all();
+
+        // compact -> takes the string passed into a key-value pair
+        return view('dashboard.useraccount', compact('unverifiedUsers'));
     }
 
     public function store(Request $request) {
+
+        // combining first name and last name from the fields
+        $request->merge([
+            'name' => $request->input('fname') . ' ' . $request->input('lname'),
+        ]);
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -65,4 +75,5 @@ class UserController extends Controller
 
         return redirect()->route('useraccount')->with('success', 'User Created!');
     }
+
 }

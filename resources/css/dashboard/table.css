@@ -1,0 +1,61 @@
+.unverified-users {
+    width: 100%;
+    padding-left: 15px;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-body {
+    overflow-y: scroll;
+}
+
+.unverified-users h2 {
+    position: sticky;
+    top: 0;   
+}
+
+.table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.75rem;
+    overflow-x: auto;
+}
+
+.table thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+}
+
+.table th {
+    padding-bottom: 8px;
+    padding-right: 25px;
+
+}
+
+.table tr {
+    border-bottom: 1px solid black;
+}
+
+.table td {
+    padding: 8px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.table td:nth-of-type(3),
+.table td:nth-of-type(4){
+    text-align: center;
+}
+
+
+.check-icon:hover {
+    color: var(--green);
+}
+
+.close-icon:hover {
+    color: var(--red);
+}

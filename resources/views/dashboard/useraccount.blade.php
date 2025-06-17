@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User Account</title>
 
-    @vite(['resources\css\app.css', 'resources\css\dashboard\sidebar.css', 'resources\css\dashboard\form.css'])
+    @vite([
+        'resources\css\app.css', 
+        'resources\css\dashboard\sidebar.css', 
+        'resources\css\dashboard\form.css',
+        'resources\css\dashboard\table.css'])
 
 </head>
 <body class="body">
@@ -21,20 +25,21 @@
         </div>
         @endif
 
-        <h2>Add New Admin / Staff</h2>
-
+        {{-- add new staff/admin --}}
         <section class="add-user">
+            <h2 class="section-header">Add New Admin / Staff</h2>
+
             <form action="{{ route('store.adduser')}}" method="POST" class="form">
                 @csrf
                 
                 <div class="form-input">
-                    <label for="username">Username</label>
-                    <input type="text" name="username">
+                    <label for="fname">First name</label>
+                    <input type="text" name="fname">
                 </div>
                 
                 <div class="form-input">
-                    <label for="name">Full Name</label>
-                    <input type="text" name="name">
+                    <label for="lname">Last Name</label>
+                    <input type="text" name="lname">
                 </div>
 
                 <div class="form-input">
@@ -56,7 +61,53 @@
                 </div>
 
                 <button class="form-button"">Add</button>
+
+                {{-- validation error --}}
+                @if ($errors->any())
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li class="text-red-500 text-xs">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </form>    
+        </section>
+
+        {{-- unverified users --}}
+        <section class="unverified-users">
+            <h2 class="section-header">Unverified Users</h2>
+            
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="">Name</th>
+                            <th>Email</th>
+                            <th>ID Uploaded</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>    
+            </div>
+            
+            <div class="table-body">
+                <table class="table">
+                    <tbody>
+                        @foreach ($unverifiedUsers as $unverifieduser)
+                            <tr>
+                                <td>{{ $unverifieduser->name}}</td>
+                                <td>{{ $unverifieduser->email}}</td>
+                                <td>{{ $unverifieduser->id_uploaded}}</td>
+                                <td>
+                                    <button><x-icons.check /></button>
+                                    <button><x-icons.close /></button>
+                                </td>    
+                            </tr>    
+                        @endforeach
+                    </tbody>
+                </table>    
+            </div>
+            
         </section>
         
     </main>
