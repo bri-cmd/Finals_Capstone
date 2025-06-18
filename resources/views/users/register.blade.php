@@ -9,16 +9,24 @@
 
 </head>
 <body>
-    <form action="" method="" class="form">
+    <form action="{{ route('registeruser') }}" method="POST" enctype="multipart/form-data" class="form">
+        @csrf
         <x-logoheader name="header">
             <x-slot name="header">
                 <h1>Sign up</h1>      
                 <p>Already have an account? <a href="{{ route('login') }}">Login</a></p> 
             </x-slot>
         
-            <div>
-                <label for="fullname">Full Name</label>
-                <input type="text" name="fullname">
+            <div class="flex gap-2">
+                <div>
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name">
+                </div>
+
+                <div>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name">
+                </div>    
             </div>
 
             <div>
@@ -32,20 +40,50 @@
             </div>
 
             <div>
-                <label for="validid" class="upload-label">
+                <label for="id_uploaded" class="upload-label">
                     Upload a valid ID
                     <x-icons.info/>
                 </label>    
                 
                 <div class="id-upload">
-                    <input type="file" id="validid" name="validid" accept="image/*" class="custom-file">
-                    <x-icons.upload />    
+                    <input type="file" id="id_uploaded" name="id_uploaded" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+
+                    {{-- upload icon --}}
+                    <label for="id_uploaded" class="inline-flex items-center gap-2 cursor-pointer text-blue-600 hover:underline">
+                        <x-icons.upload />    
+                    </label>
+
+                    {{-- show the file name --}}
+                    <p id="filename" class="filename"></p>
                 </div>
             </div>
         </x-logoheader>
 
         <x-usersbutton label="Register"/>
+
+        {{-- validation error --}}
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li class="text-red-500 text-xs">{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
         
     </form>
+
+    {{-- showing the name of the uploaded file --}}
+    <script>
+        function updateFileName(input) {
+            const fileNameDisplay = document.getElementById('filename');
+            const file = input.files[0];
+
+            if (file) {
+                fileNameDisplay.textContent = file.name;
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        }
+    </script>
 </body>
 </html>

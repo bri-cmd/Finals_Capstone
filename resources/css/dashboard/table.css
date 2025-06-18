@@ -1,7 +1,7 @@
-.unverified-users {
+.section-style {
     width: 100%;
     padding-left: 15px;
-    height: 50vh;
+    height: 45vh;
     display: flex;
     flex-direction: column;
 }
@@ -10,7 +10,7 @@
     overflow-y: scroll;
 }
 
-.unverified-users h2 {
+.section-style h2 {
     position: sticky;
     top: 0;   
 }

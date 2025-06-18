@@ -10,5 +10,5 @@ class UserVerification extends Model
     /** @use HasFactory<\Database\Factories\UserVerificationFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'id_uploaded'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'id_uploaded'];
 }

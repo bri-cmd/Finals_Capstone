@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    // user authentication functions
     public function login() {
         return view ('users.login');
     }
@@ -21,10 +22,6 @@ class UserController extends Controller
 
     public function forgot() {
         return view ('users.forgot');
-    }
-
-    public function dashboard() {
-        return view ('dashboard.dashboard');
     }
 
     public function authenticated(Request $request) {
@@ -57,12 +54,10 @@ class UserController extends Controller
     public function store(Request $request) {
 
         // combining first name and last name from the fields
-        $request->merge([
-            'name' => $request->input('fname') . ' ' . $request->input('lname'),
-        ]);
         
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
             'role' => 'required|string',
@@ -74,6 +69,33 @@ class UserController extends Controller
         User::create($validated);
 
         return redirect()->route('useraccount')->with('success', 'User Created!');
+    }
+
+    public function registerUser(Request $request) {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|max:255',
+            'id_uploaded' => 'required|mimes:jpg,jpeg,png|max:2048',
+            'role' => 'customer',
+        ]);
+
+        // check if the email existed
+        if (UserVerification::where('email', $request->email)->exists()) {
+            return back()->withErrors(['email' => 'This email is already awaiting verification']);
+        }
+
+        // save password in hash
+        $validated['password'] = bcrypt($validated['password']);
+
+        UserVerification::create($validated);
+
+        return redirect()->route('home')->with('success', 'Account Created!');
+    }
+
+    public function dashboard() {
+        return view ('dashboard.dashboard');
     }
 
 }

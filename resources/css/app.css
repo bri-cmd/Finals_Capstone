@@ -50,6 +50,16 @@ input:not([type="submit"]) {
     border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
+/* classes */
+.main-content {
+    flex: 1;
+    margin-left: 15%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* id */
 #flash {
     background-color: var(--color-green-50);
     color: var(--color-green-500);

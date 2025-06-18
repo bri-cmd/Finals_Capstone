@@ -75,9 +75,17 @@
     position: relative;
 }
 
+.filename {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+}
+
 .upload-icon {
     position: absolute;
-    top: 40%;
+    top: 50%;
     right: 1%;
     transform: translateY(-50%);
     color: rgba(0, 0, 0, 0.5);
