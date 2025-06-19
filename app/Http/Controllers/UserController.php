@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserVerification;
-// use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -52,15 +52,13 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
-
-        // combining first name and last name from the fields
-        
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
             'role' => 'required|string',
+            // 'role' => 'customer',
         ]);
 
         // save password in a hash
@@ -78,7 +76,6 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
             'id_uploaded' => 'required|mimes:jpg,jpeg,png|max:2048',
-            'role' => 'customer',
         ]);
 
         // check if the email existed
@@ -86,12 +83,56 @@ class UserController extends Controller
             return back()->withErrors(['email' => 'This email is already awaiting verification']);
         }
 
+        // store the uploaded file in 'public/ids' folder
+        $validated['id_uploaded'] = $request->file('id_uploaded')->store('ids', 'public');
+
         // save password in hash
         $validated['password'] = bcrypt($validated['password']);
 
         UserVerification::create($validated);
 
         return redirect()->route('home')->with('success', 'Account Created!');
+
+        // consider functionality: making the id one-time-view
+        // add new column in the user_verifications table
+        // insert the following on the appropriate places:
+        // function:
+            // $table->timestamp('viewed_at')->nullable();
+        // controller:
+            // if ($user->viewed_at) {
+            // abort(403, 'This ID has already been reviewed.');
+            // }
+
+            // $user->update(['viewed_at' => now()]);
+        // display logic:
+            // @if (!$unverifieduser->viewed_at)
+            //     <img src="{{ asset('storage/' . $unverifieduser->id_uploaded) }}" alt="Valid ID">
+            // @else
+            //     <span class="text-red-600">ID already reviewed</span>
+            // @endif
+
+    }
+
+    public function approve($id) {
+        $unverified = UserVerification::findOrFail($id);
+
+        User::create([
+            'first_name' => $unverified->first_name,
+            'last_name' => $unverified->last_name,
+            'email' => $unverified->email,
+            'password' => $unverified->password,
+            'role' => 'customer',
+        ]);
+            // optionally sent email or notifiation here
+
+            // delete the unverified record and id
+            $unverified->delete();
+
+            if ($unverified->id_uploaded) {
+                Storage::disk('public')->delete($unverified->id_uploaded);
+            }
+
+            return back()->with('success', 'User has been approved and added.');
     }
 
     public function dashboard() {

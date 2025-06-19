@@ -97,11 +97,18 @@
                         <tbody>
                             @foreach ($unverifiedUsers as $unverifieduser)
                                 <tr>
-                                    <td>{{ $unverifieduser->name}}</td>
+                                    <td>{{ $unverifieduser->first_name}} {{ $unverifieduser->last_name}}</td>
                                     <td>{{ $unverifieduser->email}}</td>
-                                    <td>{{ $unverifieduser->id_uploaded}}</td>
                                     <td>
-                                        <button><x-icons.check /></button>
+                                        <a href="{{ asset('storage/' . $unverifieduser->id_uploaded) }}" target="_blank" class="hover:underline">
+                                            {{ basename($unverifieduser->id_uploaded)}}
+                                        </a>
+                                    </td>
+                                    <td class="flex justify-center gap-2">
+                                        <form action="{{ route('approvedUser', $unverifieduser->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" ><x-icons.check /></button>
+                                        </form>
                                         <button><x-icons.close /></button>
                                     </td>    
                                 </tr>    
