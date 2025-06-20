@@ -15,6 +15,6 @@
         </div>
         @endif
     <h1>Landing Page</h1>
-    <a href="/users">Start testing</a>
+    <a href="/users" class="hover:text-pink-500">Click here to start testing</a>
 </body>
 </html>

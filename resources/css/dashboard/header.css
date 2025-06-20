@@ -1,0 +1,16 @@
+.header div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.role {
+    color: blue;
+    border: 1px solid #CCDDF9;
+    background-color: #EAF1FF;
+    border-radius: 4px;
+    padding: 2px;
+    font-size: 0.45rem;
+    font-weight: bold;
+    margin-right: 20px;
+}

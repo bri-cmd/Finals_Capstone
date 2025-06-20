@@ -46,9 +46,10 @@ class UserController extends Controller
 
     public function useraccount() {
         $unverifiedUsers = UserVerification::all();
+        $userAccounts = User::all();
 
         // compact -> takes the string passed into a key-value pair
-        return view('dashboard.useraccount', compact('unverifiedUsers'));
+        return view('dashboard.useraccount', compact('unverifiedUsers', 'userAccounts'));
     }
 
     public function store(Request $request) {
@@ -58,7 +59,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
             'role' => 'required|string',
-            // 'role' => 'customer',
+            'status' => 'active',
         ]);
 
         // save password in a hash

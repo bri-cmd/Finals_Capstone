@@ -8,12 +8,14 @@
     @vite([
         'resources\css\app.css', 
         'resources\css\dashboard\sidebar.css', 
+        'resources\css\dashboard\header.css', 
         'resources\css\dashboard\form.css',
         'resources\css\dashboard\table.css'])
 
 </head>
 <body class="body">
-    
+    {{-- Display a dynamic header base on user information --}}
+    <x-dashboardheader/>
     
     {{-- Display a dynamic sidebar heading base on user --}}
     <x-adminsidenav :role="Auth::user()?->role" />
@@ -27,7 +29,7 @@
 
         <div class="flex">
             {{-- add new staff/admin --}}
-            <section class="add-user">
+            <section class="section-style">
                 <h2 class="section-header">Add New Admin / Staff</h2>
 
                 <form action="{{ route('store.adduser')}}" method="POST" class="form">
@@ -144,19 +146,20 @@
                     <tbody>
                         
                     </tbody>
-                    {{-- <tbody>
-                        @foreach ($unverifiedUsers as $unverifieduser)
+                    <tbody>
+                        @foreach ($userAccounts as $userAccounts)
                             <tr>
-                                <td>{{ $unverifieduser->name}}</td>
-                                <td>{{ $unverifieduser->email}}</td>
-                                <td>{{ $unverifieduser->id_uploaded}}</td>
+                                <td>{{ $userAccounts->first_name}} {{ $userAccounts->last_name}}</td>
+                                <td>{{ $userAccounts->email}}</td>
+                                <td>{{ $userAccounts->role}}</td>
+                                <td>{{ $userAccounts->status}}</td>
                                 <td>
-                                    <button><x-icons.check /></button>
-                                    <button><x-icons.close /></button>
+                                    <button><x-icons.edit /></button>
+                                    <button><x-icons.delete /></button>
                                 </td>    
                             </tr>    
                         @endforeach
-                    </tbody> --}}
+                    </tbody>
                 </table>    
             </div>
         </section>

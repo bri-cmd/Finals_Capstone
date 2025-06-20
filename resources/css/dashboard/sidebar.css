@@ -9,12 +9,12 @@
 }
 
 .nav-bar h1 {
-    margin-bottom: 30px;
+    margin: 50px 0 30px ;
     text-align: center;
 }
 
 .nav-bar ul {
-    height: 85%;
+    height: 75%;
     position: relative;
 }
 

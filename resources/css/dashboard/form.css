@@ -2,12 +2,6 @@ main {
     display: flex;
 }
 
-.add-user {
-    width: 100%;
-    padding-right: 15px;
-    height: 50vh;
-}
-
 .section-header {
     margin-bottom: 20px;
 }

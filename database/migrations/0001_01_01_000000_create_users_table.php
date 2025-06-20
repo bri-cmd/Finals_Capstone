@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('phone_number', 11)->nullable();
             $table->string('role')->default('customer');
             $table->timestamp('last_login')->nullable();
+            $table->string('status');
             $table->rememberToken();
             $table->timestamps();
         });

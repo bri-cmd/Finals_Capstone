@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'role' => fake()->randomElement(['admin','staff','customer']),
             'phone_number' => 00000000000,
             'remember_token' => Str::random(10),
+            'status' => 'active',
         ];
     }
 
