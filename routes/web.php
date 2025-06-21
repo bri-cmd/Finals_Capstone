@@ -15,4 +15,5 @@ Route::get('/dashboard/dashboard', [UserController::class, 'dashboard'])->name('
 Route::get('/dashboard/useraccount', [UserController::class, 'useraccount'])->name('useraccount');
 Route::post('/dashboard', [UserController::class, 'store'])->name('store.adduser');
 Route::post('/users/register', [UserController::class, 'registerUser'])->name('registeruser');
-Route::post('/users/{id}', [UserController::class, 'approve'])->name('approvedUser');
+Route::post('/users/{id}/approve', [UserController::class, 'approve'])->name('approvedUser');
+Route::post('/users/{id}/decline', [UserController::class, 'decline'])->name('declineUser');

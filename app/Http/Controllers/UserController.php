@@ -59,11 +59,11 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
             'role' => 'required|string',
-            'status' => 'active',
         ]);
 
         // save password in a hash
         $validated['password'] = bcrypt($validated['password']);
+        $validated['status'] = 'active'; 
 
         User::create($validated);
 
@@ -123,6 +123,7 @@ class UserController extends Controller
             'email' => $unverified->email,
             'password' => $unverified->password,
             'role' => 'customer',
+            'status' => 'active'
         ]);
             // optionally sent email or notifiation here
 
@@ -134,6 +135,17 @@ class UserController extends Controller
             }
 
             return back()->with('success', 'User has been approved and added.');
+    }
+
+    public function decline($id) {
+        $unverified = UserVerification::findOrFail($id);
+
+        $unverified->delete();
+        if ($unverified->id_uploaded) {
+            Storage::disk('public')->delete($unverified->id_uploaded);
+        }
+
+        return back()->with('success', 'User has been declined and deleted.');
     }
 
     public function dashboard() {

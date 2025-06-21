@@ -8,7 +8,7 @@
         <x-icons.bell/>
         <div class="gap-1">
             <x-icons.profile/>
-            <p>Brian</p>
+            <p>{{ $slot }}</p>
             <p class="role">Admin</p>
             <x-icons.arrow class="hover:text-gray-500"/>
         </div>    

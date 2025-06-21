@@ -15,7 +15,10 @@
 </head>
 <body class="body">
     {{-- Display a dynamic header base on user information --}}
-    <x-dashboardheader/>
+    <x-dashboardheader>
+        {{-- retrieves the current authenticated user --}}
+        {{ Auth::user()->first_name }}
+    </x-dashboardheader>
     
     {{-- Display a dynamic sidebar heading base on user --}}
     <x-adminsidenav :role="Auth::user()?->role" />
@@ -36,13 +39,13 @@
                     @csrf
                     
                     <div class="form-input">
-                        <label for="fname">First name</label>
-                        <input type="text" name="fname">
+                        <label for="first_name">First name</label>
+                        <input type="text" name="first_name">
                     </div>
                     
                     <div class="form-input">
-                        <label for="lname">Last Name</label>
-                        <input type="text" name="lname">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" name="last_name">
                     </div>
 
                     <div class="form-input">
@@ -111,7 +114,10 @@
                                             @csrf
                                             <button type="submit" ><x-icons.check /></button>
                                         </form>
-                                        <button><x-icons.close /></button>
+                                        <form action="{{ route('declineUser', $unverifieduser->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" ><x-icons.close /></button>
+                                        </form>
                                     </td>    
                                 </tr>    
                             @endforeach
@@ -153,7 +159,7 @@
                                 <td>{{ $userAccounts->email}}</td>
                                 <td>{{ $userAccounts->role}}</td>
                                 <td>{{ $userAccounts->status}}</td>
-                                <td>
+                                <td class="text-center">
                                     <button><x-icons.edit /></button>
                                     <button><x-icons.delete /></button>
                                 </td>    
@@ -164,5 +170,6 @@
             </div>
         </section>
     </main>
+
 </body>
 </html>

@@ -10,6 +10,7 @@
 </head>
 <body>
     <form action="" method="" class="form">
+        @csrf
         <x-logoheader>
             <x-slot name="header">
                 <h1>Reset Your Password</h1>

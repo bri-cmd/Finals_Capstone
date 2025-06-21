@@ -13,7 +13,7 @@
         <div id="flash">
             {{ session('success') }}
         </div>
-        @endif
+    @endif
     <h1>Landing Page</h1>
     <a href="/users" class="hover:text-pink-500">Click here to start testing</a>
 </body>
