@@ -1,3 +1,5 @@
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 <header class="header">
     <div>
         <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
@@ -6,11 +8,50 @@
     
     <div class="gap-3">
         <x-icons.bell/>
-        <div class="gap-1">
+        <div x-data="{ open: false }" class="gap-1">
             <x-icons.profile/>
             <p>{{ $slot }}</p>
             <p class="role">Admin</p>
-            <x-icons.arrow class="hover:text-gray-500"/>
+            
+            {{-- Clickable arrow --}}
+            <button @click="open = !open">
+                <x-icons.arrow class="hover:text-gray-500"/>
+            </button>
+
+            {{-- Dropdown menu --}}
+            <div
+                x-show="open"
+                x-cloak
+                x-transition
+                @click.outside="open = false"
+                class="dropdown"
+            >
+                <div class="dropdown-profile">
+                    <x-icons.profile/>
+                    <div class="flex flex-col w-full">
+                        <div class="gap-1 w-full">
+                            <p>{{ $slot }}</p>
+                            <p class="role">Admin</p>    
+                        </div>
+                        <div class="w-full">
+                            <p class="email">{{ $email }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full ">
+                    <a  href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="sign-out hover:text-gray-50"
+                    >
+                        <x-icons.signout/>
+                        Sign Out
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                        @csrf
+                    </form>    
+                </div>
+            </div>
         </div>    
     </div>
     

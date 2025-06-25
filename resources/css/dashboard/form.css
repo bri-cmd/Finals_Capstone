@@ -13,22 +13,22 @@ main {
     gap: 8px;
 }
 
-.form-input {
+.input-label {
     display: flex;
     align-items: center;
 }
 
-.form-input label {
+.input-label label {
     width: 20%;
     height: 24px;
 }
 
-.form-input input {
+.input-label input {
     height: 24px;
     font-size: 12px;
 }
 
-.form-input select {
+.input-label select {
     border: 1px solid black;
     width: 100%;
     border-radius: 4px;

@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <form action="{{ route('registeruser') }}" method="POST" enctype="multipart/form-data" class="form">
+    <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" class="form">
         @csrf
         <x-logoheader name="header">
             <x-slot name="header">

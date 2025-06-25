@@ -8,7 +8,7 @@
     @vite(['resources\css\app.css', 'resources\css\users\form.css'])
 </head>
 <body>
-    <form action="{{ route('authenticated') }}" method="POST" class="form">
+    <form action="{{ route('login') }}" method="POST" class="form">
         @csrf
         <x-logoheader>
             <x-slot name="header">
@@ -24,7 +24,7 @@
             <div>
                 <label for="password">Password</label>
                 <input type="password" name="password">   
-                <a href="{{ route('forgot') }}" class="forget-pass">Forget your password</a> 
+                <a href="{{ route('password.request') }}" class="forget-pass">Forget your password</a> 
             </div>
         </x-logoheader>
 

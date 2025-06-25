@@ -14,13 +14,13 @@
 </head>
 <body class="body">
     {{-- Display a dynamic header base on user information --}}
-    <x-dashboardheader>
+    <x-dashboardheader >
         {{-- retrieves the current authenticated user --}}
-        {{ Auth::user()->first_name }}
+        {{-- {{ Auth::user()->first_name }} --}}
     </x-dashboardheader>
 
     {{-- Display a dynamic sidebar heading base on user --}}
-    <x-adminsidenav :role="Auth::user()?->role" />
+    {{-- <x-adminsidenav :role="Auth::user()?->role" /> --}}
 
     <main class="main-content">
         <h1>Dashboard</h1>

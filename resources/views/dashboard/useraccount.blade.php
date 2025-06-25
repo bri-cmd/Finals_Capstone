@@ -15,7 +15,7 @@
 </head>
 <body class="body">
     {{-- Display a dynamic header base on user information --}}
-    <x-dashboardheader>
+    <x-dashboardheader :email="Auth::user()->email">
         {{-- retrieves the current authenticated user --}}
         {{ Auth::user()->first_name }}
     </x-dashboardheader>
@@ -38,27 +38,27 @@
                 <form action="{{ route('store.adduser')}}" method="POST" class="form">
                     @csrf
                     
-                    <div class="form-input">
+                    <div class="input-label">
                         <label for="first_name">First name</label>
                         <input type="text" name="first_name">
                     </div>
                     
-                    <div class="form-input">
+                    <div class="input-label">
                         <label for="last_name">Last Name</label>
                         <input type="text" name="last_name">
                     </div>
 
-                    <div class="form-input">
+                    <div class="input-label">
                         <label for="email">Email</label>
                         <input type="email" name="email">
                     </div>
 
-                    <div class="form-input">
+                    <div class="input-label">
                         <label for="password">Password</label>
                         <input type="text" name="password">
                     </div>
 
-                    <div class="form-input">
+                    <div class="input-label">
                         <label for="role">Role</label>
                         <select name="role" id="role">
                             <option value="staff">Staff</option>
