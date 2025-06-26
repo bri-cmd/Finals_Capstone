@@ -10,7 +10,7 @@
 </head>
 <body>
     @if (session('success'))
-        <div id="flash">
+        <div class="flash">
             {{ session('success') }}
         </div>
     @endif

@@ -40,6 +40,11 @@
             </div>
 
             <div>
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" name="password_confirmation">
+            </div>
+
+            <div>
                 <label for="id_uploaded" class="upload-label">
                     Upload a valid ID
                     <x-icons.info/>
@@ -59,16 +64,16 @@
             </div>
         </x-logoheader>
 
-        <x-usersbutton label="Register"/>
-
-        {{-- validation error --}}
+        {{-- validation errors --}}
         @if ($errors->any())
-            <ul>
+            <ul class=" text-left text-xs text-red-500">
                 @foreach ($errors->all() as $error)
-                    <li class="text-red-500 text-xs">{{ $error }}</li>
+                    <li>{{ $error }}</li>
                 @endforeach
             </ul>
         @endif
+
+        <x-usersbutton label="Register"/>
         
     </form>
 

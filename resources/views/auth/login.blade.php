@@ -8,8 +8,15 @@
     @vite(['resources\css\app.css', 'resources\css\users\form.css'])
 </head>
 <body>
+    @if (session('status'))
+        <div class="flash !top-0">
+            {{ session('status') }}
+        </div>
+    @endif
+        
     <form action="{{ route('login') }}" method="POST" class="form">
         @csrf
+        
         <x-logoheader>
             <x-slot name="header">
                 <h1>Login</h1>
@@ -28,16 +35,18 @@
             </div>
         </x-logoheader>
 
-        <x-usersbutton label="Login"/>
-    </form>
+        {{-- validation errors --}}
+        @if ($errors->any())
+            <ul class="absolute top-[69%] text-left text-xs text-red-500">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
 
-    {{-- validation errors --}}
-    @if ($errors->any())
-        <ul class="px-4 py-2 bg-red-100 text-center">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+        <x-usersbutton label="Login"/>
+        
+    </form>
+    
 </body>
 </html>

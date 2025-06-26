@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
@@ -36,7 +36,7 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-guest-layout> --}}
 
 <html lang="en">
 <head>
@@ -49,7 +49,7 @@
 
 </head>
 <body>
-    <form action="" method="" class="form">
+    <form action="{{ route('password.store') }}" method="POST" class="form">
         @csrf
         <x-logoheader>
             <x-slot name="header">
@@ -57,18 +57,35 @@
                 <p>What would you like your new password to be?</p>
             </x-slot>
 
+            <!-- Password Reset Token -->
+            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+            
             <div>
-                <label for="newPass">New Password</label>
-                <input type="password" name="newPass">    
+                <label for="email">Email</label>
+                <input type="email" name="email" :value="old('email', $request->email)">
+            </div>
+
+            <div>
+                <label for="password">New Password</label>
+                <input type="password" name="password">    
             </div>
             
             <div">
-                <label for="confirmPass">Confirm Password</label>
-                <input type="password" name="confirmPass">   
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" name="password_confirmation">  
             </div>
         </x-logoheader>
 
-        <x-usersbutton label="Done"/>
+        {{-- validation errors --}}
+        @if ($errors->any())
+            <ul class=" text-left text-xs text-red-500">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
+
+        <x-usersbutton label="Reset Password"/>
     </form>
 </body>
 </html>

@@ -78,7 +78,7 @@ input:not([type="submit"]) {
     position: relative;
 }
 
-#flash {
+.flash {
     background-color: #F0FDF4;
     color: #22C55E;
     position: absolute;
@@ -90,7 +90,7 @@ input:not([type="submit"]) {
     text-align: center;
     font-weight: bold;
     padding: 4px;
-    /* animation: fadeOut 3s ease-in-out 3s forwards; */
+    animation: fadeOut 3s ease-in-out 3s forwards;
 }
 
 @keyframes fadeOut {
