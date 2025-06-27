@@ -60,7 +60,10 @@ class RegisteredUserController extends Controller
         // if commented out, change route to dashboard or landing page
         // Auth::login($user); 
 
-        return redirect()->route('home')->with('success', 'Your account has been submitted and is pending review.');
+        return redirect()->route('home')->with([
+            'message' => 'Your account has been submitted and is pending review.',
+            'type' => 'success',
+        ]);
 
         // consider functionality: making the id one-time-view
         // add new column in the user_verifications table

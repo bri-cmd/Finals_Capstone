@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,13 +21,8 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Route::get('/users', [UserController::class, 'login'])->name('login'); // -> name('login') serves as a route nickname used for links
-// Route::get('/users/register', [UserController::class, 'register'])->name('register');
-Route::get('/users/forgot', [UserController::class, 'forgot'])->name('forgot');
-Route::post('/users/login', [UserController::class, 'authenticated'])->name('authenticated');
-// Route::get('/dashboard/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-Route::get('/dashboard/useraccount', [UserController::class, 'useraccount'])->name('useraccount');
-Route::post('/dashboard', [UserController::class, 'store'])->name('store.adduser');
-Route::post('/users/register', [UserController::class, 'registerUser'])->name('registeruser');
-Route::post('/users/{id}/approve', [UserController::class, 'approve'])->name('approvedUser');
-Route::post('/users/{id}/decline', [UserController::class, 'decline'])->name('declineUser');
+Route::get('dashboard/useraccount', [UserAccountController::class, 'useraccount'])->name('useraccount');
+Route::post('dashboard', [UserAccountController::class, 'store'])->name('store.adduser');
+Route::post('users/register', [UserAccountController::class, 'registerUser'])->name('registeruser');
+Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->name('approvedUser');
+Route::post('users/{id}/decline', [UserAccountController::class, 'decline'])->name('declineUser');

@@ -9,11 +9,13 @@
         'resources\css\app.css', ])
 </head>
 <body>
-    @if (session('success'))
-        <div class="flash">
-            {{ session('success') }}
-        </div>
+
+    @if (session('message'))
+        <x-message :type="session('type')">
+            {{ session('message') }}
+        </x-message>
     @endif
+
     <h1>Landing Page</h1>
     <a href="{{ route('login') }}" class="hover:text-pink-500">Click here to start testing</a>
 </body>

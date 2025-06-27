@@ -50,7 +50,8 @@ main {
 }
 
 .form-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: black;
+    color: white;
     cursor: pointer;
 }
 

@@ -24,10 +24,10 @@
     <x-adminsidenav :role="Auth::user()?->role" />
 
     <main class="main-content">
-        @if (session('success'))
-        <div class="flash">
-            {{ session('success') }}
-        </div>
+        @if (session('message'))
+            <x-message :type="session('type')">
+                {{ session('message') }}
+            </x-message>
         @endif
 
         <div class="flex">
@@ -60,7 +60,7 @@
 
                     <div class="input-label">
                         <label for="role">Role</label>
-                        <select name="role" id="role">
+                        <select name="role" id="role" class="pt-0 pb-0 pl-1">
                             <option value="staff">Staff</option>
                             <option value="admin">Admin</option>
                         </select>               
@@ -131,7 +131,23 @@
         
         {{-- user acccounts --}}
         <section class="section-style">
-            <h2 class="section-header">User accounts</h2>
+            <div class="header-container">
+                <h2 class="section-header">User accounts</h2>
+                
+                {{-- search bar --}}
+                <form action="{{ route('useraccount') }}" method="GET">
+                    <input 
+                        type="text"
+                        name="search"
+                        placeholder="Seach Users"
+                        value="{{ request('search') }}" 
+                        class="search-bar"
+                    >
+                    <button type="submit">
+                        <x-icons.search class="search-icon"/>
+                    </button>
+                </form>
+            </div>
 
             <div>
                 <table class="table">
@@ -153,12 +169,12 @@
                         
                     </tbody>
                     <tbody>
-                        @foreach ($userAccounts as $userAccounts)
+                        @foreach ($userAccounts as $userAccount)
                             <tr>
-                                <td>{{ $userAccounts->first_name}} {{ $userAccounts->last_name}}</td>
-                                <td>{{ $userAccounts->email}}</td>
-                                <td>{{ $userAccounts->role}}</td>
-                                <td>{{ $userAccounts->status}}</td>
+                                <td>{{ $userAccount->first_name}} {{ $userAccount->last_name}}</td>
+                                <td>{{ $userAccount->email}}</td>
+                                <td>{{ $userAccount->role}}</td>
+                                <td>{{ $userAccount->status}}</td>
                                 <td class="text-center">
                                     <button><x-icons.edit /></button>
                                     <button><x-icons.delete /></button>

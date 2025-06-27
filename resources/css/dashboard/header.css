@@ -50,9 +50,38 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    /* background-color: aqua; */
 }
 
 .sign-out:hover {
     color: gray;
 }
+
+.search-bar {
+    height: 24px;
+    font-size: 0.75rem;
+    border: 0;
+    border-bottom: 1px solid black;
+}
+
+.header-container form input:focus {
+    box-shadow: none;
+    border-bottom: 1px solid black;
+}
+
+.search-icon {
+    border-bottom: 1px solid black;
+    width: 1rem;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.header-container form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
