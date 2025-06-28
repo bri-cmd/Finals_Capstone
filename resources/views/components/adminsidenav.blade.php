@@ -7,7 +7,7 @@
     {{-- grouping links in an array based on roles --}}
     @php
         $links = match($role) {
-            'admin' => [
+            'Admin' => [
                 ['route' => route('dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
                 ['route' => route('useraccount') , 'label' => 'User Account', 'icon' => 'user'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
@@ -18,7 +18,7 @@
                 ['route' => '' , 'label' => 'Activity Logs', 'icon' => 'logs'],
                 ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
             ],
-            'staff' => [
+            'Staff' => [
                 ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
                 ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],

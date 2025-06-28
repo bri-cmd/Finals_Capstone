@@ -57,6 +57,12 @@
     color: var(--green);
 }
 
-.close-icon:hover {
+.close-icon:hover,
+.delete-icon:hover {
     color: var(--red);
+}
+
+.view-icon:hover, 
+.edit-icon:hover {
+    color: var(--blue);
 }

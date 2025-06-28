@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,4 +24,6 @@ Route::get('dashboard/useraccount', [UserAccountController::class, 'useraccount'
 Route::post('dashboard', [UserAccountController::class, 'store'])->name('store.adduser');
 Route::post('users/register', [UserAccountController::class, 'registerUser'])->name('registeruser');
 Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->name('approvedUser');
-Route::post('users/{id}/decline', [UserAccountController::class, 'decline'])->name('declineUser');
+Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('declineUser');
+Route::put('users/{id}/update', [UserAccountController::class, 'update'])->name('updateUser');
+Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('deleteUser');

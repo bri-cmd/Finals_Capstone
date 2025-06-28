@@ -6,21 +6,30 @@ use App\Models\User;
 use App\Models\UserVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class UserAccountController extends Controller
 {
+
     public function useraccount(Request $request) {
         $unverifiedUsers = UserVerification::all();
         $search = $request->input('search');
 
-        $userAccounts = User::all()->sortByDesc(function ($user) use ($search) {
-            if (!$search) return false;
+        // exclude the authenticated user first
+        $authId = Auth::user()->id;
+        $query = User::where('id', '!=', $authId);
 
-            return  stripos($user->first_name, $search) !== false ||
-                    stripos($user->last_name, $search) !== false ||
-                    stripos($user->email, $search) !== false;
-        });
+        // Apply search filter if needed
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
 
+        // Get the results and sort by latest created
+        $userAccounts = $query->orderByDesc('created_at')->get();
 
         // compact -> takes the string passed into a key-value pair
         return view('dashboard.useraccount', compact('unverifiedUsers', 'userAccounts'));
@@ -37,7 +46,7 @@ class UserAccountController extends Controller
 
         // save password in a hash
         $validated['password'] = bcrypt($validated['password']);
-        $validated['status'] = 'active'; 
+        $validated['status'] = 'Active'; 
 
         User::create($validated);
 
@@ -63,8 +72,8 @@ class UserAccountController extends Controller
             'last_name' => $unverified->last_name,
             'email' => $unverified->email,
             'password' => $unverified->password,
-            'role' => 'customer',
-            'status' => 'active'
+            'role' => 'Customer',
+            'status' => 'Active'
         ]);
             // optionally sent email or notifiation here
 
@@ -92,6 +101,33 @@ class UserAccountController extends Controller
         return back()->with([
             'message' => 'User has been declined and deleted.',
             'type' => 'error',
+        ]);
+    }
+
+    public function update(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'role' => $request->role,
+        ]);
+
+        return redirect()->route('useraccount')->with([
+            'message' => 'User updated',
+            'type' => 'success',
+        ]);
+    }
+
+    public function delete($id) {
+        $user = User::findorFail($id);
+
+        $user->delete();
+        
+        return back()->with([
+            'message' => 'User has been deleted.',
+            'type' => 'success',
         ]);
     }
 

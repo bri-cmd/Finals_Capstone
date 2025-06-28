@@ -10,7 +10,8 @@
         'resources\css\dashboard\sidebar.css', 
         'resources\css\dashboard\header.css', 
         'resources\css\dashboard\form.css',
-        'resources\css\dashboard\table.css'])
+        'resources\css\dashboard\table.css',
+        'resources\css\dashboard\modal.css'])
 
 </head>
 <body class="body">
@@ -61,12 +62,12 @@
                     <div class="input-label">
                         <label for="role">Role</label>
                         <select name="role" id="role" class="pt-0 pb-0 pl-1">
-                            <option value="staff">Staff</option>
-                            <option value="admin">Admin</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Admin">Admin</option>
                         </select>               
                     </div>
 
-                    <button class="form-button"">Add</button>
+                    <button class="form-button">Add</button>
 
                     {{-- validation error --}}
                     @if ($errors->any())
@@ -109,22 +110,24 @@
                                             {{ basename($unverifieduser->id_uploaded)}}
                                         </a>
                                     </td>
-                                    <td class="flex justify-center gap-2">
-                                        <form action="{{ route('approvedUser', $unverifieduser->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" ><x-icons.check /></button>
-                                        </form>
-                                        <form action="{{ route('declineUser', $unverifieduser->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" ><x-icons.close /></button>
-                                        </form>
+                                    <td class="align-middle text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <form action="{{ route('approvedUser', $unverifieduser->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" ><x-icons.check /></button>
+                                            </form>
+                                            <form action="{{ route('declineUser', $unverifieduser->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" ><x-icons.close /></button>
+                                            </form>
+                                        </div>
                                     </td>    
                                 </tr>    
                             @endforeach
                         </tbody>
                     </table>    
                 </div>
-                
             </section>    
         </div>
         
@@ -163,26 +166,105 @@
                 </table>    
             </div>
             
-            <div class="table-body">
+            <div class="table-body" x-data="{ showEditModal: false, selectedUser: {}, showViewModal: false, selectedUser: {} }">
                 <table class="table">
-                    <tbody>
-                        
-                    </tbody>
                     <tbody>
                         @foreach ($userAccounts as $userAccount)
                             <tr>
-                                <td>{{ $userAccount->first_name}} {{ $userAccount->last_name}}</td>
-                                <td>{{ $userAccount->email}}</td>
-                                <td>{{ $userAccount->role}}</td>
-                                <td>{{ $userAccount->status}}</td>
-                                <td class="text-center">
-                                    <button><x-icons.edit /></button>
-                                    <button><x-icons.delete /></button>
+                                <td>{{ $userAccount->first_name }} {{ $userAccount->last_name}}</td>
+                                <td>{{ $userAccount->email }}</td>
+                                <td>{{ ucfirst($userAccount->role) }}</td>
+                                <td>{{ ucfirst($userAccount->status) }}</td>
+                                <td class="align-middle text-center">
+                                    <div class="flex justify-center gap-2">
+                                        @if ($userAccount->role === 'Customer') 
+                                            <button @click="showViewModal = true; selectedUser = {{ $userAccount->toJson() }}">
+                                            {{-- <button @click="showModal = true; selectedUser = JSON.parse('{!! addslashes($userAccount->toJson()) !!}')"> --}}
+                                                <x-icons.view />    
+                                            </button>
+                                        @else
+                                            <button @click="showEditModal = true; selectedUser = {{ $userAccount->toJson() }}">
+                                                <x-icons.edit />
+                                            </button>
+                                        @endif
+                                        <form action="{{ route('deleteUser', $userAccount->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" ><x-icons.delete /></button>
+                                        </form>
+                                    </div>
                                 </td>    
                             </tr>    
                         @endforeach
                     </tbody>
                 </table>    
+
+                {{-- Edit Modal --}}
+                <div x-show="showEditModal" class="modal">
+                    <div class="modal-form" @click.away="showEditModal = false">
+                        <h2 class="text-center">Edit User</h2>
+
+                        <form :action="'/users/' + selectedUser.id + '/update'" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="id" x-model="selectedUser.id">
+
+                            <div>
+                                <label for="first_name">First Name</label>
+                                <input type="text" name="first_name" x-model="selectedUser.first_name">
+                            </div>
+                            <div>
+                                <label for="last_name">Last Name</label>
+                                <input type="text" name="last_name" x-model="selectedUser.last_name">
+                            </div>
+                            <div>
+                                <label for="email">Email</label>
+                                <input type="text" name="email" x-model="selectedUser.email">
+                            </div>
+
+                            <div>
+                                <label for="role">Role</label>
+                                <select name="role" id="role" class="rounded" x-model="selectedUser.role">
+                                    <option value="Staff">Staff</option>
+                                    <option value="Admin">Admin</option>
+                                </select>               
+                            </div>
+
+                            <button type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- View Modal --}}
+                <div x-show="showViewModal" class="modal">
+                    <div class="modal-form" @click.away="showViewModal = false">
+                        <h2 class="text-center">Customer Details</h2>
+
+                        <form>
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="id" x-model="selectedUser.id">
+
+                            <div>
+                                <label for="first_name">First Name</label>
+                                <input type="text" name="first_name" x-model="selectedUser.first_name" readonly>
+                            </div>
+                            <div>
+                                <label for="last_name">Last Name</label>
+                                <input type="text" name="last_name" x-model="selectedUser.last_name" readonly>
+                            </div>
+                            <div>
+                                <label for="email">Email</label>
+                                <input type="text" name="email" x-model="selectedUser.email" readonly>
+                            </div>
+
+                            <div>
+                                <label for="role">Role</label>
+                                <input type="text" name="role" x-model="selectedUser.role" readonly>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
