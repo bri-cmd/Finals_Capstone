@@ -6,9 +6,11 @@
     <title>Techboxx</title>
 
     @vite([
-        'resources\css\app.css', ])
+        'resources\css\app.css',
+        'resources\css\landingpage\header.css',
+        'resources\js\app.js'])
 </head>
-<body>
+<body class="flex">
 
     @if (session('message'))
         <x-message :type="session('type')">
@@ -16,7 +18,11 @@
         </x-message>
     @endif
 
-    <h1>Landing Page</h1>
-    <a href="{{ route('login') }}" class="hover:text-pink-500">Click here to start testing</a>
+    <x-landingheader :name="Auth::user()?->first_name" />
+
+    <main class="main-content">
+        <h1>Landing Page</h1>
+        <a href="{{ route('login') }}" class="hover:text-pink-500">Click here to start testing</a>
+    </main>
 </body>
 </html>

@@ -1,16 +1,24 @@
-.main-content {
-    flex: 1;
-    margin-top: 4%;
-    margin-left: 15%;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+.header {
+    background: linear-gradient(
+        to bottom,
+        #0F0F3D 32%,
+        #1D6494 68%,
+        #4F9CF9 100%
+        /* #6BDFFF 100% */
+    );
+    color: white;
+    cursor: pointer;
 }
-
 .header div {
     display: flex;
     align-items: center;
+}
+
+.header-profile {
+    gap: 60px;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 4px 8px;
 }
 
 .role {
@@ -36,6 +44,7 @@
     flex-direction: column;
     align-content: left;
     box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.3);
+    color: black;
 }
 
 .dropdown-profile {
@@ -65,33 +74,3 @@
 .sign-out:hover {
     color: gray;
 }
-
-.search-bar {
-    height: 24px;
-    font-size: 0.75rem;
-    border: 0;
-    border-bottom: 1px solid black;
-}
-
-.header-container form input:focus {
-    box-shadow: none;
-    border-bottom: 1px solid black;
-}
-
-.search-icon {
-    border-bottom: 1px solid black;
-    width: 1rem;
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    
-}
-
-.header-container form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-

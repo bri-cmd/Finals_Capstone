@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,5 @@ Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->na
 Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('declineUser');
 Route::put('users/{id}/update', [UserAccountController::class, 'update'])->name('updateUser');
 Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('deleteUser');
+
+Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('customerDashboard');

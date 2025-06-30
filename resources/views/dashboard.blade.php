@@ -27,6 +27,7 @@
         'resources\css\app.css', 
         'resources\css\dashboard\sidebar.css',
         'resources\css\dashboard\header.css', 
+        'resources\js\app.js'
         ])
 
 </head>
