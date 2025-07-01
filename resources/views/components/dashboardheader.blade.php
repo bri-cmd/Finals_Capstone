@@ -9,7 +9,7 @@
         <div x-data="{ open: false }" class="gap-1">
             <x-icons.profile/>
             <p>{{ $slot }}</p>
-            <p class="role">Admin</p>
+            <p class="role">{{ $role }}</p>
             
             {{-- Clickable arrow --}}
             <button @click="open = !open">
@@ -29,7 +29,7 @@
                     <div class="flex flex-col w-full">
                         <div class="gap-1 w-full">
                             <p>{{ $slot }}</p>
-                            <p class="role">Admin</p>    
+                            <p class="role">{{ $role }}</p>    
                         </div>
                         <div class="w-full">
                             <p class="email">{{ $email }}</p>

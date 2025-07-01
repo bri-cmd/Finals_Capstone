@@ -26,17 +26,24 @@
     @vite([
         'resources\css\app.css', 
         'resources\css\dashboard\sidebar.css',
-        'resources\css\dashboard\header.css', 
+        'resources\css\dashboard\header.css',
+        'resources\css\customer\header.css', 
         'resources\js\app.js'
         ])
 
 </head>
 <body class="body">
     {{-- Display a dynamic header base on user information --}}
-    <x-dashboardheader :email="Auth::user()->email">
-        {{-- retrieves the current authenticated user --}}
-        {{ Auth::user()->first_name }}
-    </x-dashboardheader>
+    @if (Auth::user()->role === 'Customer')
+        <x-customerheader :email="Auth::user()->email" >
+            {{ Auth::user()->first_name }}
+        </x-customerheader >
+    @else
+        <x-dashboardheader :email="Auth::user()->email" :role="Auth::user()->role">
+            {{-- retrieves the current authenticated user --}}
+            {{ Auth::user()->first_name }}
+        </x-dashboardheader>
+    @endif
 
     {{-- Display a dynamic sidebar heading base on user --}}
     <x-adminsidenav :role="Auth::user()?->role" />

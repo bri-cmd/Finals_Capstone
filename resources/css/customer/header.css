@@ -1,4 +1,4 @@
-.header {
+.customerHeader {
     background: linear-gradient(
         to bottom,
         #0F0F3D 32%,
@@ -9,27 +9,16 @@
     color: white;
     cursor: pointer;
 }
-.header div {
+.customerHeader div {
     display: flex;
     align-items: center;
 }
 
-.header-profile {
+.customerHeader-profile {
     gap: 60px;
     border: 1px solid white;
     border-radius: 4px;
     padding: 4px 8px;
-}
-
-.role {
-    color: blue;
-    border: 1px solid #CCDDF9;
-    background-color: #EAF1FF;
-    border-radius: 4px;
-    padding: 2px;
-    font-size: 0.45rem;
-    font-weight: bold;
-    margin-right: 20px;
 }
 
 .dropdown {

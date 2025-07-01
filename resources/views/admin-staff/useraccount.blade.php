@@ -11,12 +11,13 @@
         'resources\css\dashboard\header.css', 
         'resources\css\dashboard\form.css',
         'resources\css\dashboard\table.css',
-        'resources\css\dashboard\modal.css'])
+        'resources\css\dashboard\modal.css',
+        'resources\js\app.js'])
 
 </head>
 <body class="body">
     {{-- Display a dynamic header base on user information --}}
-    <x-dashboardheader :email="Auth::user()->email">
+    <x-dashboardheader :email="Auth::user()->email" :role="Auth::user()->role">
         {{-- retrieves the current authenticated user --}}
         {{ Auth::user()->first_name }}
     </x-dashboardheader>
@@ -200,7 +201,7 @@
                 </table>    
 
                 {{-- Edit Modal --}}
-                <div x-show="showEditModal" class="modal">
+                <div x-show="showEditModal" x-cloak x-transition class="modal">
                     <div class="modal-form" @click.away="showEditModal = false">
                         <h2 class="text-center">Edit User</h2>
 
@@ -236,7 +237,7 @@
                 </div>
 
                 {{-- View Modal --}}
-                <div x-show="showViewModal" class="modal">
+                <div x-show="showViewModal" x-cloak x-transition class="modal">
                     <div class="modal-form" @click.away="showViewModal = false">
                         <h2 class="text-center">Customer Details</h2>
 

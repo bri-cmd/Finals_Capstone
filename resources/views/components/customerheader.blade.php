@@ -1,10 +1,10 @@
-<header class="header">
+<header class="customerHeader">
     <div class="header-logo">
         <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
         <h2>Madoxx.qwe</h2>    
     </div>
     
-    <div x-data="{ open: false }" class="header-profile">
+    <div x-data="{ open: false }" class="customerHeader-profile">
         <div class="gap-1">
             <x-icons.profile/>
             <p>{{ $slot }}</p>
@@ -28,7 +28,6 @@
                 <div class="flex flex-col w-full">
                     <div class="gap-1 w-full">
                         <p>{{ $slot }}</p>
-                        <p class="role">Admin</p>    
                     </div>
                     <div class="w-full">
                         <p class="email">{{ $email }}</p>

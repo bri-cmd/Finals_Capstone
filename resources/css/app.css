@@ -54,7 +54,7 @@ header {
     border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-/* To avoid dropdown from flickering when changing pages */
+/* To avoid dropdown from flickering when changing pages | always hides the modal when pages loads*/
 [x-cloak] {
     display: none !important;
 }

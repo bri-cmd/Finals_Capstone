@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('dashboard/useraccount', [UserAccountController::class, 'useraccount'])->name('useraccount');
+Route::get('admin-staff/useraccount', [UserAccountController::class, 'useraccount'])->name('useraccount');
 Route::post('dashboard', [UserAccountController::class, 'store'])->name('store.adduser');
 Route::post('users/register', [UserAccountController::class, 'registerUser'])->name('registeruser');
 Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->name('approvedUser');

@@ -32,7 +32,7 @@ class UserAccountController extends Controller
         $userAccounts = $query->orderByDesc('created_at')->get();
 
         // compact -> takes the string passed into a key-value pair
-        return view('dashboard.useraccount', compact('unverifiedUsers', 'userAccounts'));
+        return view('admin-staff.useraccount', compact('unverifiedUsers', 'userAccounts'));
     }
 
     public function store(Request $request) {
