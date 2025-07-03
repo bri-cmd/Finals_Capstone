@@ -4,7 +4,6 @@
     height: 40vh;
     display: flex;
     flex-direction: column;
-    /* background-color: aliceblue; */
 }
 
 .table-body {
@@ -21,7 +20,6 @@
     border-collapse: collapse;
     width: 100%;
     font-size: 0.75rem;
-    overflow-x: auto;
 }
 
 .table thead {
@@ -47,12 +45,6 @@
     word-break: break-word;
 }
 
-.table td:nth-of-type(3),
-.table td:nth-of-type(4){
-    text-align: center;
-}
-
-
 .check-icon:hover {
     color: var(--green);
 }
@@ -65,4 +57,13 @@
 .view-icon:hover, 
 .edit-icon:hover {
     color: var(--blue);
+}
+
+/* Customer profile dashboard */
+.builds-table {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
 }

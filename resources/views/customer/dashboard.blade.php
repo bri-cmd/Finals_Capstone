@@ -1,0 +1,162 @@
+{{-- Customer Profile --}}
+<section class="customer-profile" x-data="{ user: @js(Auth::user()), showEditModal: false }">
+    <div class="profile">
+        <div>
+            <x-icons.profile />
+        </div>
+        <div class="profile-details">
+            <p>
+                <span>Name</span>
+                <span>:</span>
+                <span>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
+            </p>
+            <p>
+                <span>Email</span>
+                <span>:</span>
+                <span>{{ Auth::user()->email }}</span>
+            </p>
+            <p>
+                <span>Contact</span>
+                <span>:</span>
+                <span>{{ Auth::user()->phone_number }}</span>
+            </p>
+            <p>
+                {{-- change status to Verified --}}
+                <span>Status</span>
+                <span>:</span>
+                <span>{{ Auth::user()->status }}</span> 
+            </p>
+        </div>
+    </div>
+
+    <div>
+        <button @click="showEditModal = true">
+            <x-icons.edit />
+        </button>
+    </div>
+    
+    <hr>
+
+    {{-- Edit Modal --}}
+    <div x-show="showEditModal" x-cloak x-transition class="modal">
+        <div class="modal-form" @click.away="showEditModal = false">
+            <h2 class="text-center">Edit User</h2>
+
+            <form action="{{ route('updateCustomer', Auth::user()->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div>
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name"  x-model="user.first_name">
+                </div>
+                <div>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" x-model="user.last_name">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" x-model="user.email">
+                </div>
+                <div>
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" name="phone_number" x-model="user.phone_number">
+                </div>
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{{-- Builds Table --}}
+<section class="section-style !pl-0 !h-[50vh]">
+    <div class="builds-table">
+        <x-icons.build />
+        <p>Builds</p>
+    </div>
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Build Name/Name</th>
+                    <th>Details</th>
+                    <th>Date Created</th>
+                    <th>Total Cost</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="table-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View this</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                <tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+                    <td>Ryzen Build</td>
+                    <td class="text-center !pr-[2.5%]">View</td>
+                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
+                    <td class="text-center">₱22,000</td>
+                    <td class="text-center !pr-[.6%]">Saved</td>
+                    <td class="text-center">Order</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+

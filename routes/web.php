@@ -30,3 +30,4 @@ Route::put('users/{id}/update', [UserAccountController::class, 'update'])->name(
 Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('deleteUser');
 
 Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('customerDashboard');
+Route::put('users/{user}', [CustomerController::class, 'update'])->name('updateCustomer');

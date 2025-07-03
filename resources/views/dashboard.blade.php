@@ -27,6 +27,9 @@
         'resources\css\app.css', 
         'resources\css\dashboard\sidebar.css',
         'resources\css\dashboard\header.css',
+        'resources\css\dashboard\profile.css', 
+        'resources\css\dashboard\table.css', 
+        'resources\css\dashboard\modal.css', 
         'resources\css\customer\header.css', 
         'resources\js\app.js'
         ])
@@ -50,6 +53,7 @@
 
     <main class="main-content">
         <h1>Dashboard</h1>
+        @include('customer.dashboard')
     </main>
 </body>
 </html>

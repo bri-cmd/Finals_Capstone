@@ -106,7 +106,7 @@
                                 <tr>
                                     <td>{{ $unverifieduser->first_name}} {{ $unverifieduser->last_name}}</td>
                                     <td>{{ $unverifieduser->email}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ asset('storage/' . $unverifieduser->id_uploaded) }}" target="_blank" class="hover:underline">
                                             {{ basename($unverifieduser->id_uploaded)}}
                                         </a>
@@ -174,8 +174,8 @@
                             <tr>
                                 <td>{{ $userAccount->first_name }} {{ $userAccount->last_name}}</td>
                                 <td>{{ $userAccount->email }}</td>
-                                <td>{{ ucfirst($userAccount->role) }}</td>
-                                <td>{{ ucfirst($userAccount->status) }}</td>
+                                <td class="text-center">{{ ucfirst($userAccount->role) }}</td>
+                                <td class="text-center">{{ ucfirst($userAccount->status) }}</td>
                                 <td class="align-middle text-center">
                                     <div class="flex justify-center gap-2">
                                         @if ($userAccount->role === 'Customer') 
@@ -220,7 +220,7 @@
                             </div>
                             <div>
                                 <label for="email">Email</label>
-                                <input type="text" name="email" x-model="selectedUser.email">
+                                <input type="email" name="email" x-model="selectedUser.email">
                             </div>
 
                             <div>
