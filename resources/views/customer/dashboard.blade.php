@@ -1,3 +1,5 @@
+<h1>Dashboard</h1>
+
 {{-- Customer Profile --}}
 <section class="customer-profile" x-data="{ user: @js(Auth::user()), showEditModal: false }">
     <div class="profile">
@@ -5,27 +7,37 @@
             <x-icons.profile />
         </div>
         <div class="profile-details">
-            <p>
+            <div>
                 <span>Name</span>
                 <span>:</span>
                 <span>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
-            </p>
-            <p>
+            </div>
+            <div >
                 <span>Email</span>
                 <span>:</span>
                 <span>{{ Auth::user()->email }}</span>
-            </p>
-            <p>
+                <span class="email-row">
+                    @if (! Auth::user()->hasVerifiedEmail())
+                        <form action="{{ route('verification.send') }}" method="POST">
+                            @csrf
+                            <button type="submit">
+                                <u>(Verifiy Email)</u>
+                            </button>
+                        </form>
+                    @endif    
+                </span>
+            </div>
+            <div>
                 <span>Contact</span>
                 <span>:</span>
                 <span>{{ Auth::user()->phone_number }}</span>
-            </p>
-            <p>
+            </div>
+            <div>
                 {{-- change status to Verified --}}
                 <span>Status</span>
                 <span>:</span>
                 <span>{{ Auth::user()->status }}</span> 
-            </p>
+            </div>
         </div>
     </div>
 

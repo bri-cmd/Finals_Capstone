@@ -32,9 +32,9 @@
             ],
             'Customer' => [
                 ['route' => '', 'label' => 'Profile', 'icon' => 'dashboard'],
-                ['route' => '', 'label' => 'Checkout Details', 'icon' => 'dashboard'],
-                ['route' => '', 'label' => 'Order Details', 'icon' => 'dashboard'],
-                ['route' => '', 'label' => 'Purchased History', 'icon' => 'dashboard'],
+                ['route' => '', 'label' => 'Checkout Details', 'icon' => 'checkout'],
+                ['route' => '', 'label' => 'Order Details', 'icon' => 'order'],
+                ['route' => '', 'label' => 'Purchased History', 'icon' => 'purchase'],
             ],
             default => []
         };

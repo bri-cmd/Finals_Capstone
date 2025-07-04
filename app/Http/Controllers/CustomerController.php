@@ -22,15 +22,20 @@ class CustomerController extends Controller
             'phone_number' => 'nullable|string|max:20',
         ]);
 
+        $emailChanged = $request->email !== $user->email;
+
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
+            'email_verified_at' => $emailChanged ? null : $user->email_verified_at,
         ]);
 
-        return redirect()->route('useraccount')->with([
-            'message' => 'Profile Updated',
+        return redirect()->route('customerDashboard')->with([
+            'message' => $emailChanged
+                ? 'Profile Updated. Please verify your new email address'
+                : 'Profile updated successfully.',
             'type' => 'success',
         ]);
     }

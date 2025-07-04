@@ -8,28 +8,41 @@
     gap: 2.5rem;
 }
 
+.profile-details {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .profile div:nth-of-type(1) .profile-icon {
     width: 100px;
     height: 100px;
 }
 
-.profile-details p span:nth-of-type(1) {
+.profile-details div span {
+    font-size: 0.75rem;
+}
+
+.profile-details div span:nth-of-type(1) {
     width: 4rem;
 }
 
-.profile-details p span:nth-of-type(2) {
+.profile-details div span:nth-of-type(2) {
     width: 1rem;
 }
 
-.profile-details p {
-    display: flex;
+.email-row {
+    margin-left: 1rem;
+    color: var(--blue);
 }
 
-.profile div:nth-of-type(2) {
-    height: 100px;
+.email-row:hover {
+    opacity: 0.5;
+}
+
+.profile-details div {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 hr {

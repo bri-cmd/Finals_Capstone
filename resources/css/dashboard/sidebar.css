@@ -45,7 +45,8 @@
     gap: 4px;
 }
 
-.component-icon {
+.component-icon,
+.purchase-icon {
     position: relative;
     top: -8px;
 }

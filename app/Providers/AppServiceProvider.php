@@ -30,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('components.icons.software', 'x-icons.software');
         Blade::component('components.icons.logs', 'x-icons.logs');
         Blade::component('components.icons.build', 'x-icons.build');
+        Blade::component('components.icons.checkout', 'x-icons.checkout');
+        Blade::component('components.icons.purchase', 'x-icons.purchase');
 
     }
 }
