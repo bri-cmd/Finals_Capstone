@@ -13,9 +13,9 @@
         $links = match($role) {
             'Admin' => [
                 ['route' => route('dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
-                ['route' => route('useraccount') , 'label' => 'User Account', 'icon' => 'user'],
+                ['route' => route('admin.useraccount') , 'label' => 'User Account', 'icon' => 'user'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
-                ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => route('management.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Sales Report', 'icon' => 'bargraph'],
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
@@ -25,13 +25,13 @@
             'Staff' => [
                 ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
-                ['route' => '' , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => route('management.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
                 ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
             ],
             'Customer' => [
-                ['route' => '', 'label' => 'Profile', 'icon' => 'dashboard'],
+                ['route' => route('customer.dashboard'), 'label' => 'Profile', 'icon' => 'dashboard'],
                 ['route' => '', 'label' => 'Checkout Details', 'icon' => 'checkout'],
                 ['route' => '', 'label' => 'Order Details', 'icon' => 'order'],
                 ['route' => '', 'label' => 'Purchased History', 'icon' => 'purchase'],

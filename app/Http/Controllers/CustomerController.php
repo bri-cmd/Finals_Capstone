@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserBuild;
+use App\Models\UserVerification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
     public function index() {
-        return view('dashboard');
+        $authId = Auth::user()->id;
+        $userBuilds = UserBuild::where('user_id', $authId)->get();
+
+        return view('customer.dashboard', compact('userBuilds'));
     }
 
     public function update(Request $request) {
@@ -32,7 +37,7 @@ class CustomerController extends Controller
             'email_verified_at' => $emailChanged ? null : $user->email_verified_at,
         ]);
 
-        return redirect()->route('customerDashboard')->with([
+        return redirect()->route('customer.dashboard')->with([
             'message' => $emailChanged
                 ? 'Profile Updated. Please verify your new email address'
                 : 'Profile updated successfully.',

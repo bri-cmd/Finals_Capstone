@@ -31,7 +31,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Reset Password</title>
 
-    @vite(['resources\css\app.css', 'resources\css\users\form.css'])
+    @vite(['resources\css\app.css', 'resources\css\form.css'])
 
 </head>
 <body>

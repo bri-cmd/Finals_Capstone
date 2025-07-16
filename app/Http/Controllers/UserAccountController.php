@@ -50,7 +50,7 @@ class UserAccountController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('useraccount')->with([
+        return redirect()->route('admin.useraccount')->with([
             'message' => 'User Created!',
             'type' => 'success',
         ]);
@@ -114,7 +114,7 @@ class UserAccountController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('useraccount')->with([
+        return redirect()->route('admin.useraccount')->with([
             'message' => 'User updated',
             'type' => 'success',
         ]);

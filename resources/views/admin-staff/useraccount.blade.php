@@ -4,7 +4,7 @@
         <section class="section-style">
             <h2 class="section-header">Add New Admin / Staff</h2>
 
-            <form action="{{ route('store.adduser')}}" method="POST" class="form">
+            <form action="{{ route('admin.users.add')}}" method="POST" class="form">
                 @csrf
                 
                 <div class="input-label">
@@ -80,11 +80,11 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <div class="flex justify-center gap-2">
-                                        <form action="{{ route('approvedUser', $unverifieduser->id) }}" method="POST">
+                                        <form action="{{ route('admin.users.approved', $unverifieduser->id) }}" method="POST">
                                             @csrf
                                             <button type="submit" ><x-icons.check /></button>
                                         </form>
-                                        <form action="{{ route('declineUser', $unverifieduser->id) }}" method="POST">
+                                        <form action="{{ route('admin.users.decline', $unverifieduser->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" ><x-icons.close /></button>
@@ -106,7 +106,7 @@
             <h2 class="section-header">User accounts</h2>
             
             {{-- search bar --}}
-            <form action="{{ route('useraccount') }}" method="GET">
+            <form action="{{ route('admin.useraccount') }}" method="GET">
                 <input 
                     type="text"
                     name="search"
@@ -155,7 +155,7 @@
                                             <x-icons.edit />
                                         </button>
                                     @endif
-                                    <form action="{{ route('deleteUser', $userAccount->id) }}" method="POST">
+                                    <form action="{{ route('admin.users.delete', $userAccount->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" ><x-icons.delete /></button>

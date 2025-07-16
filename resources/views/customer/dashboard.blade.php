@@ -1,3 +1,5 @@
+<x-dashboardlayout>
+{{-- <pre>{{ dd($userBuilds) }}</pre> --}}
 <h1>Dashboard</h1>
 
 {{-- Customer Profile --}}
@@ -54,7 +56,7 @@
         <div class="modal-form" @click.away="showEditModal = false">
             <h2 class="text-center">Edit User</h2>
 
-            <form action="{{ route('updateCustomer', Auth::user()->id) }}" method="POST">
+            <form action="{{ route('customer.profile.update', Auth::user()->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div>
@@ -104,71 +106,21 @@
     <div class="table-body">
         <table class="table">
             <tbody>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View this</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                <tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
-                    <td>Ryzen Build</td>
-                    <td class="text-center !pr-[2.5%]">View</td>
-                    <td class="text-center !pr-[1.5%]">2025-04-20</td>
-                    <td class="text-center">₱22,000</td>
-                    <td class="text-center !pr-[.6%]">Saved</td>
-                    <td class="text-center">Order</td>
-                </tr>
+                @foreach ($userBuilds as $userBuild)
+                    <tr>
+                        <td>{{ $userBuild->build_name }}</td>
+                        <td class="text-center !pr-[2.5%]">View</td>
+                        <td class="text-center !pr-[1.5%]">{{ $userBuild->created_at->format('Y-m-d') }}</td>
+                        <td class="text-center">₱ {{ $userBuild->total_price }}</td>
+                        <td class="text-center !pr-[.6%]">{{ $userBuild->status }}</td>
+                        <td class="text-center">Order</td>
+                    </tr>
+                @endforeach
+
+                
             </tbody>
         </table>
     </div>
 </section>
 
+</x-dashboardlayout>

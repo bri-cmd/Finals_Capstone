@@ -13,7 +13,7 @@
             @auth
                 @if (auth()->user()->role === 'Customer')
                     {{-- show custom content for logged-in customer --}}
-                    <form action="{{ route('customerDashboard') }}">
+                    <form action="{{ route('customer.dashboard') }}">
                         @csrf
                         <button>{{ $name }}</button>
                     </form>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComponentDetailsController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
@@ -26,13 +27,30 @@ Route::get('/email/verify', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('admin-staff/useraccount', [UserAccountController::class, 'useraccount'])->name('useraccount');
-Route::post('dashboard', [UserAccountController::class, 'store'])->name('store.adduser');
-Route::post('users/register', [UserAccountController::class, 'registerUser'])->name('registeruser');
-Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->name('approvedUser');
-Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('declineUser');
-Route::put('users/{id}/update', [UserAccountController::class, 'update'])->name('updateUser');
-Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('deleteUser');
+// ADMIN ROUTES
+Route::prefix('admin')->name('admin.')->group(function () {
+    // USER ACCOUNT
+    Route::get('user-account', [UserAccountController::class, 'useraccount'])->name('useraccount');
+    Route::post('dashboard', [UserAccountController::class, 'store'])->name('users.add');
+    Route::post('users/{id}/approve', [UserAccountController::class, 'approve'])->name('users.approved');
+    Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('users.decline');
+    Route::put('users/{id}/update', [UserAccountController::class, 'update']);
+    Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('users.delete');
+});
 
-Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('customerDashboard');
-Route::put('users/{user}', [CustomerController::class, 'update'])->name('updateCustomer');
+// STAFF ROUTES
+Route::prefix('staff')->name('staff.')->group(function () {
+
+});
+
+// SHARED ROUTES (ADMIN/STAFF)
+Route::prefix('management')->name('management.')->group(function () {
+    // COMPONENT DETAILS
+    Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
+});
+
+// CUSTOMER ROUTES
+Route::prefix('customer')->name('customer.')->group(function () {
+    Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+    Route::put('profile/{user}', [CustomerController::class, 'update'])->name('profile.update');
+});

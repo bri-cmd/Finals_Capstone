@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserVerificationSeeder::class, 
+            UserBuildSeeder::class
         ]);
     }
 }
