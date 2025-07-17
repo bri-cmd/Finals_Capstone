@@ -55,3 +55,15 @@ main {
     cursor: pointer;
 }
 
+/* TO TRIGGER MODALS */
+.modal-button {
+    border: 1px solid black;
+    padding: 4px 40px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.modal-button:hover {
+    background-color: black;
+    color: white;
+}

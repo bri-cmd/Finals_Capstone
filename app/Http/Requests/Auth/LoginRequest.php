@@ -40,8 +40,8 @@ class LoginRequest extends FormRequest
         $user = $this->user();
 
         return match ($user->role) {
-            'Admin' => route('dashboard'),
-            'Staff' => route('dashboard'),
+            'Admin' => route('admin.dashboard'),
+            'Staff' => route('staff.dashboard'),
             'Customer' => route('customer.dashboard'),
             default => route('forgot'),
         };

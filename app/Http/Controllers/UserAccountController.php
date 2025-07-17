@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class UserAccountController extends Controller
 {
+    public function index() {
+        return view('admin.dashboard');
+    }
+
+    public function staffindex() {
+        return view('staff.dashboard');
+    }
 
     public function useraccount(Request $request) {
         $unverifiedUsers = UserVerification::all();
@@ -32,7 +39,7 @@ class UserAccountController extends Controller
         $userAccounts = $query->orderByDesc('created_at')->get();
 
         // compact -> takes the string passed into a key-value pair
-        return view('admin-staff.useraccount', compact('unverifiedUsers', 'userAccounts'));
+        return view('admin.useraccount', compact('unverifiedUsers', 'userAccounts'));
     }
 
     public function store(Request $request) {

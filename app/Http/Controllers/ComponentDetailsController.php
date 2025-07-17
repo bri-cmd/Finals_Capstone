@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class ComponentDetailsController extends Controller
 {
     public function index() {
-        return view('admin-staff.component');
+        return view('staff.componentdetails');
     }
 }

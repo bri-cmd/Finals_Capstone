@@ -29,6 +29,9 @@ require __DIR__.'/auth.php';
 
 // ADMIN ROUTES
 Route::prefix('admin')->name('admin.')->group(function () {
+    // DASHBOARD
+    Route::get('dashboard', [UserAccountController::class, 'index'])->name('dashboard');
+
     // USER ACCOUNT
     Route::get('user-account', [UserAccountController::class, 'useraccount'])->name('useraccount');
     Route::post('dashboard', [UserAccountController::class, 'store'])->name('users.add');
@@ -40,17 +43,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // STAFF ROUTES
 Route::prefix('staff')->name('staff.')->group(function () {
+    //DASHBOARD
+    Route::get('dashboard', [UserAccountController::class, 'index'])->name('dashboard');
+
+    // COMPONENT DETAILS
+    Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
 
 });
 
 // SHARED ROUTES (ADMIN/STAFF)
 Route::prefix('management')->name('management.')->group(function () {
-    // COMPONENT DETAILS
-    Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
+
 });
 
 // CUSTOMER ROUTES
 Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('dashboard');
-    Route::put('profile/{user}', [CustomerController::class, 'update'])->name('profile.update');
+    Route::put('profile', [CustomerController::class, 'update'])->name('profile.update');
 });

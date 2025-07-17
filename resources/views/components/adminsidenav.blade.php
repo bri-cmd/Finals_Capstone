@@ -12,10 +12,10 @@
     @php
         $links = match($role) {
             'Admin' => [
-                ['route' => route('dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
+                ['route' => route('admin.dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
                 ['route' => route('admin.useraccount') , 'label' => 'User Account', 'icon' => 'user'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
-                ['route' => route('management.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => route('staff.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Sales Report', 'icon' => 'bargraph'],
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
@@ -23,9 +23,9 @@
                 ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
             ],
             'Staff' => [
-                ['route' => '' , 'label' => 'Dashboard', 'icon' => 'dashboard'],
+                ['route' => route('staff.dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
                 ['route' => '' , 'label' => 'Order', 'icon' => 'order'],
-                ['route' => route('management.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
+                ['route' => route('staff.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
                 ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],

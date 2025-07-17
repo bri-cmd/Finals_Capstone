@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
 
-    @vite(['resources\css\app.css', 'resources\css\form.css'])
+    @vite(['resources\css\app.css', 'resources\css\verificationform.css'])
 </head>
 <body>
     @if (session('status'))

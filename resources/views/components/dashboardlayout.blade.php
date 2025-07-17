@@ -7,12 +7,12 @@
 
     @vite([
         'resources\css\app.css', 
-        'resources\css\dashboard\sidebar.css',
-        'resources\css\dashboard\header.css',
-        'resources\css\dashboard\profile.css', 
-        'resources\css\dashboard\table.css', 
-        'resources\css\dashboard\modal.css',
-        'resources\css\dashboard\form.css',
+        'resources\css\admin-staff\sidebar.css',
+        'resources\css\admin-staff\header.css',
+        'resources\css\customer\profile.css', 
+        'resources\css\admin-staff\table.css', 
+        'resources\css\admin-staff\modal.css',
+        'resources\css\admin-staff\form.css',
         'resources\css\customer\header.css', 
         'resources\js\app.js'
         ])

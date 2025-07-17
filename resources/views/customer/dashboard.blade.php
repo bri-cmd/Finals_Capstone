@@ -1,5 +1,4 @@
 <x-dashboardlayout>
-{{-- <pre>{{ dd($userBuilds) }}</pre> --}}
 <h1>Dashboard</h1>
 
 {{-- Customer Profile --}}
@@ -56,7 +55,7 @@
         <div class="modal-form" @click.away="showEditModal = false">
             <h2 class="text-center">Edit User</h2>
 
-            <form action="{{ route('customer.profile.update', Auth::user()->id) }}" method="POST">
+            <form action="{{ route('customer.profile.update') }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div>

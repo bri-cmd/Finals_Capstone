@@ -45,7 +45,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Forgot Password</title>
 
-    @vite(['resources\css\app.css', 'resources\css\form.css'])
+    @vite(['resources\css\app.css', 'resources\css\verificationform.css'])
 
 </head>
 <body>
