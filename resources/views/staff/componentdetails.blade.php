@@ -1,7 +1,7 @@
 <x-dashboardlayout>
     <h2>Component Details</h2>
 
-    <div class="header-container" x-data="{ showAddModal: false }">
+    <div class="header-container" x-data="{ showAddModal: false, componentModal: null }">
         <button class="modal-button" @click="showAddModal = true">
             Add New Component
         </button>
@@ -20,13 +20,28 @@
             </form>
         </div>
     
-        {{-- ADD MODALS --}}
+        {{-- ADD COMPONENT MODAL --}}
         <div x-show="showAddModal" x-cloak x-transition class="modal">
             <div class="add-component" @click.away="showAddModal = false">
-                <x-modals.addnewcomponent />
+                <x-modals.addnewcomponent/>
             </div>
         </div>
 
+        {{-- COMPONENT MODALS --}}
+        {{-- <div x-show="componentModal === 'cpu'" x-cloak x-transition class="modal">
+            <div class="add-component" @click.away="componentModal = null; showAddModal = true;">
+                <x-modals.cpu/>
+            </div>
+        </div> --}}
+
+        @foreach (['cpu', 'gpu', 'ram', 'motherboard'] as $type)
+            <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal">
+                <div class="add-component" @click.away="componentModal = null; showAddModal = true;">
+                    <x-dynamic-component :component="'modals.' . $type" />
+                </div>
+            </div>
+        @endforeach
+        
     </div>
 
 

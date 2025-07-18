@@ -1,18 +1,18 @@
 <h2 class="text-center">ADD NEW COMPONENT</h2>
     <div>
-        <button>
+        <button @click="componentModal = 'cpu'; showAddModal = false">
             <x-icons.addcomponents.cpu/>
             CPU
         </button>
-        <button>
+        <button @click="componentModal = 'motherboard'; showAddModal = false">
             <x-icons.addcomponents.mobo/>
             Motherboard
         </button>
-        <button>
+        <button @click="componentModal = 'ram'; showAddModal = false">
             <x-icons.addcomponents.ram/>
             RAM
         </button>
-        <button>
+        <button @click="componentModal = 'gpu'; showAddModal = false">
             <x-icons.addcomponents.gpu/>
             GPU
         </button>
@@ -32,4 +32,11 @@
             <x-icons.addcomponents.cooling/>
             Cooler
         </button>
+
+        {{-- Modals --}}
+        <div x-show="showCPU" x-cloak x-transition class="modal">
+            <div class="add-component" @click.away="showCPU = false">
+                <x-modals.cpu />
+            </div>
+        </div>
     </div>
