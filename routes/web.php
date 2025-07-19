@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ComponentDetailsController;
+use App\Http\Controllers\Components\CpuController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
@@ -51,13 +52,10 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
 });
 
-// SHARED ROUTES (ADMIN/STAFF)
-Route::prefix('management')->name('management.')->group(function () {
-
-});
-
 // CUSTOMER ROUTES
 Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('dashboard');
     Route::put('profile', [CustomerController::class, 'update'])->name('profile.update');
 });
+
+Route::resource('cpus', CpuController::class);

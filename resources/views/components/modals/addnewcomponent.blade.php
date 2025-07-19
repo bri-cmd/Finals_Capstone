@@ -16,19 +16,19 @@
             <x-icons.addcomponents.gpu/>
             GPU
         </button>
-        <button>
+        <button @click="componentModal = 'storage'; showAddModal = false">
             <x-icons.addcomponents.storage/>
             Storage
         </button>
-        <button>
+        <button @click="componentModal = 'psu'; showAddModal = false">
             <x-icons.addcomponents.psu/>
             PSU
         </button>
-        <button>
+        <button @click="componentModal = 'case'; showAddModal = false">
             <x-icons.addcomponents.case/>
             Case
         </button>
-        <button>
+        <button @click="componentModal = 'cooler'; showAddModal = false">
             <x-icons.addcomponents.cooling/>
             Cooler
         </button>

@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('write_speed_mbps');
             $table->decimal('price',10,2);
             $table->integer('stock');
+            $table->string('image');
+            $table->string('model_3d')->nullable();
         });
     }
 

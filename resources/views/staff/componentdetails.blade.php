@@ -28,20 +28,31 @@
         </div>
 
         {{-- COMPONENT MODALS --}}
+        {{-- BASE CODE FOR THE FOREACH LOOP --}}
         {{-- <div x-show="componentModal === 'cpu'" x-cloak x-transition class="modal">
             <div class="add-component" @click.away="componentModal = null; showAddModal = true;">
                 <x-modals.cpu/>
             </div>
         </div> --}}
 
-        @foreach (['cpu', 'gpu', 'ram', 'motherboard'] as $type)
-            <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal">
-                <div class="add-component" @click.away="componentModal = null; showAddModal = true;">
-                    <x-dynamic-component :component="'modals.' . $type" />
+        @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case'] as $type)
+            <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal modal-scroll">
+                <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
+                    <x-dynamic-component :component="'modals.' . $type" >
+                        <button @click="componentModal = null; showAddModal = true;">
+                            <x-icons.arrow class="new-component-arrow"/>
+                        </button>
+                    </x-dynamic-component>
                 </div>
             </div>
         @endforeach
         
+        {{-- EDIT AREA (MODAL) --}}
+        {{-- <div class="modal modal-scroll">
+            <div class="new-component" @click.away="showAddModal = false">
+                <x-modals.ram/>
+            </div>
+        </div> --}}
     </div>
 
 
