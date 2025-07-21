@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Motherboard extends Model
+class UsbPorts extends Model
 {
-    /** @use HasFactory<\Database\Factories\MotherboardFactory> */
+    /** @use HasFactory<\Database\Factories\UsbPortsFactory> */
     use HasFactory;
 }

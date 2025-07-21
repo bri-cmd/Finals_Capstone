@@ -76,11 +76,12 @@
         <div>
             <table class="table">
                 <tbody>
+                    @foreach ($mobos as $mobo)
                     <tr>
-                        <td>Ryzen 5 5600</td>
-                        <td>CPU</td>
-                        <td>₱12, 500</td>
-                        <td>34</td>
+                        <td>{{ $mobo->brand}} {{ $mobo->model }}</td>
+                        <td>Gaming</td>
+                        <td>{{ $mobo->price}}</td>
+                        <td>{{ $mobo->stock}}</td>
                         <td class="align-middle text-center">
                             <div class="flex justify-center gap-2">
                                 <x-icons.view/>
@@ -88,7 +89,9 @@
                                 <x-icons.delete/>
                             </div>
                         </td>
-                    </tr>
+                    </tr>    
+                    @endforeach
+                    
                 </tbody>
             </table>
         </div>
