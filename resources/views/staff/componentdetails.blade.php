@@ -73,7 +73,7 @@
             </table> 
         </div>
 
-        <div>
+        <div x-data="{ showViewModal: false, selectedComponent:{} }">
             <table class="table">
                 <tbody>
                     @foreach ($mobos as $mobo)
@@ -84,17 +84,32 @@
                         <td>{{ $mobo->stock}}</td>
                         <td class="align-middle text-center">
                             <div class="flex justify-center gap-2">
-                                <x-icons.view/>
-                                <x-icons.edit/>
-                                <x-icons.delete/>
+                                <button @click="showViewModal = true; selectedComponent = {{ $mobo->toJson() }}">
+                                    <x-icons.view/>    
+                                </button>
+                                <button>
+                                    <x-icons.edit/>    
+                                </button>
+                                <button>
+                                    <x-icons.delete/>    
+                                </button>
                             </div>
                         </td>
                     </tr>    
                     @endforeach
-                    
                 </tbody>
             </table>
+
+            {{-- VIEW MODAL --}}
+            <div x-show="showViewModal" x-cloak x-transition class="modal modal-scroll">
+            {{-- <div class="modal modal-scroll"> --}}
+                <div class="view-component" @click.away="showViewModal = false">
+                    <x-modals.componentdetails.view/>
+                </div>
+            </div>
         </div>
+
+        
     </section>
 
 </x-dashboardlayout>
