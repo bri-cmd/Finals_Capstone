@@ -5,7 +5,7 @@
             CPU
         </button>
         <button @click="componentModal = 'motherboard'; showAddModal = false">
-            <x-icons.addcomponents.mobo/>
+            <x-icons.addcomponents.mobo />
             Motherboard
         </button>
         <button @click="componentModal = 'ram'; showAddModal = false">

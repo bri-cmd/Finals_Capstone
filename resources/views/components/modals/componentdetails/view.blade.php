@@ -53,7 +53,7 @@
         </div>
         <div>
             <p>USB Ports </p>
-            <p x-text="selectedComponent.usb_display">2× USB 3.2 Gen 1 (rear), 1× USB 3.2 Gen 1 header, 2× USB 2.0 (rear), 2× USB 2.0 headers</p>
+            <p x-text="selectedComponent.usb_display"></p>
         </div>
         <div>
             <p>Wi-Fi Onboard </p>

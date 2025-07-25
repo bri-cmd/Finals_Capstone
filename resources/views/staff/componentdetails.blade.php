@@ -38,7 +38,18 @@
         @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case'] as $type)
             <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal modal-scroll">
                 <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
-                    <x-dynamic-component :component="'modals.' . $type" >
+                    <x-dynamic-component 
+                        :component="'modals.' . $type" 
+                        :brands="$brands"
+                        :socketTypes="$socketTypes"
+                        :chipsets="$chipsets"
+                        :formFactors="$formFactors" 
+                        :ramTypes="$ramTypes"
+                        :maxRams="$maxRams"
+                        :ramSlots="$ramSlots"
+                        :versions="$versions"
+                        :laneTypes="$laneTypes"
+                        :quantities="$quantities">
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
                         </button>
