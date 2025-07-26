@@ -41,19 +41,19 @@
         </div>
         <div>
             <p>PCIe Slots </p>
-            <p x-text="selectedComponent.pcie_display"></p>
+            <p x-html="selectedComponent.pcie_display"></p>
         </div>
         <div>
             <p>M.2 Slots </p>
-            <p x-text="selectedComponent.m2_display"></p>
+            <p x-html="selectedComponent.m2_display"></p>
         </div>
         <div>
             <p>SATA Ports </p>
-            <p x-text="selectedComponent.sata_display"></p>
+            <p x-html="selectedComponent.sata_display"></p>
         </div>
         <div>
             <p>USB Ports </p>
-            <p x-text="selectedComponent.usb_display"></p>
+            <p x-html="selectedComponent.usb_display"></p>
         </div>
         <div>
             <p>Wi-Fi Onboard </p>

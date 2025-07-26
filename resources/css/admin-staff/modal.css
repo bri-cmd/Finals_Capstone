@@ -230,8 +230,12 @@
     padding: 0 !important;
     margin-top: 0 !important;
     position: relative !important;
-    top: -15 !important;
+    top: -15px !important;
     left: 23% !important;
+}
+
+.top {
+    top: -23px !important;
 }
 
 .add-pcie:hover {
@@ -239,55 +243,22 @@
     color: gray !important;
 }
 
-/* INPUT appearance */
-.ts-control {
-    height: 24px;
-    font-size: 0.75rem;
-    border-radius: 4px;
-    width: 80%;
-    padding: 0 4px;
-    border: 1px solid black;
-    background-color: white;
+.checkbox-input {
+    gap: 0rem !important;
+    align-items: center;
+    width: 20% !important;
+    position: absolute !important;
+    bottom: -87% !important;
+    right: 0% !important;
 }
 
-/* When selected or focused */
-.ts-control.focus {
-    border: 1px solid black;
-    background-color: white;
+.checkbox-input label {
+    width: 100% !important;
+    font-size: 0.65rem;
 }
 
-/* Dropdown menu container */
-.ts-dropdown {
-    font-size: 0.75rem;
-    border: 1px solid black;
-    border-radius: 4px;
-    width: 80% !important;
-    left: 20% !important; /* aligns with label if needed */
-    background-color: white;
-    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-}
+.checkbox-input input{
+    width: 15px !important;
+    height: 15px !important;
 
-/* Each dropdown option */
-.ts-dropdown .option {
-    padding: 4px 8px;
-    cursor: pointer;
-    border-radius: 2px;
-}
-
-/* Hover effect */
-.ts-dropdown .option:hover {
-    background-color: #f3f4f6;
-}
-
-.ts-dropdown-content {
-    /* background-color: aqua; */
-    display: flex;
-    flex-direction: column;
-}
-
-div#brand-ts-dropdown.ts-dropdown-content {
-    background-color: pink;
-    position: absolute;
-    width: 100%;
 }

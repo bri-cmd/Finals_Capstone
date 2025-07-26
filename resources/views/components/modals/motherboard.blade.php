@@ -7,7 +7,18 @@
         'ramSlots',
         'versions', 
         'laneTypes',
-        'quantities', ])
+        'quantities', 
+        'lengths',
+        'm2Versions',
+        'm2LaneTypes',
+        'supportSatas',
+        'm2quantities',
+        'sataVersions',
+        'sataQuantities',
+        'usbVersions',
+        'locations',
+        'types',
+        'usbQuantities'])
 {{-- <pre>{{ json_encode($ram_type) }}</pre> --}}
 <div class="new-component-header">
     {{ $slot }}
@@ -140,7 +151,6 @@
                             </div>  
                         </div>      
                     </div>
-                    
                 </template>
                       
                 
@@ -152,24 +162,124 @@
                 </button>
             </div>
 
-            <div>
-                <label for="">M2 Slots</label>
-                <input required type="text">
+            <div class="flex flex-col "
+                 x-data="{ slots:[{}] }">
+                <template x-for="(slot, index) in slots" 
+                          :key="index">
+                    <div class="flex flex-col mb-3">
+                        <div>
+                            <label for="">M2 Slots <span x-text="index + 1"></span></label>
+                            <div class="w-[80%]">
+                                <select name="length" id="length">
+                                <option disabled selected hidden value="">Length</option>   
+                                @foreach ($lengths as $length)
+                                    <option value={{ $length->length}}>{{ $length->length }}</option>
+                                @endforeach 
+                                </select> 
+                                <select name="m2Version" id="m2Version">
+                                    <option disabled selected hidden value="">Version</option>   
+                                    @foreach ($m2Versions as $m2Version)
+                                        <option value={{ $m2Version->version}}>{{ $m2Version->version }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select name="m2LaneType" id="m2LaneType">
+                                    <option disabled selected hidden value="">LaneType</option>   
+                                    @foreach ($m2LaneTypes as $m2LaneType)
+                                        <option value={{ $m2LaneType->lane_type}}>{{ $m2LaneType->lane_type }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select name="quantity" id="quantity">
+                                    <option disabled selected hidden value="">Quantity</option>   
+                                    @foreach ($quantities as $quantity)
+                                        <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
+                                    @endforeach 
+                                </select>    
+                            </div>    
+                        </div>
+                        <div class="checkbox-input">
+                        <label for="">Supports Sata</label>
+                        <input type="checkbox">
+                    </div> 
+                    </div>
+                    
+                </template>
+                      
+                {{-- ADD M2 BUTTON --}}
+                <button type="button"
+                        @click="slots.push({})"
+                        class="add-pcie top">
+                    + Add M2 Slot
+                </button> 
             </div>
 
-            <div>
-                <label for="">Sata Ports</label>
-                <input required type="text">
-            </div>
 
             <div>
-                <label for="">USB Ports</label>
-                <input required type="text">
+                <label for="">Sata Port <span x-text="index + 1"></span></label>
+                <div class="w-[80%]">
+                    <select name="sataVersion" id="sataVersion">
+                        <option disabled selected hidden value="">Version</option>   
+                        @foreach ($sataVersions as $sataVersion)
+                            <option value={{ $sataVersion->version}}>{{ $sataVersion->version }}</option>
+                        @endforeach 
+                    </select> 
+                    <select name="sataQuantity" id="sataQuantity">
+                        <option disabled selected hidden value="">Quantity</option>   
+                        @foreach ($sataQuantities as $sataQuantity)
+                            <option value={{ $sataQuantity->quantity}}>{{ $sataQuantity->quantity }}</option>
+                        @endforeach 
+                    </select>   
+                </div>    
+            </div>
+
+            <div class="flex flex-col "
+                 x-data="{ slots:[{}] }">
+                <template x-for="(slot, index) in slots" 
+                          :key="index">
+                    <div class="flex flex-col mb-3">
+                        <div>
+                            <label for="">USB Port <span x-text="index + 1"></span></label>
+                            <div class="w-[80%]">
+                                <select name="usbVersion" id="usbVersion">
+                                    <option disabled selected hidden value="">Version</option>   
+                                    @foreach ($usbVersions as $usbVersion)
+                                        <option value={{ $usbVersion->version}}>{{ $usbVersion->version }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select name="location" id="location">
+                                    <option disabled selected hidden value="">Location</option>   
+                                    @foreach ($locations as $location)
+                                        <option value={{ $location->location}}>{{ $location->location }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select name="type" id="type">
+                                    <option disabled selected hidden value="">LaneType</option>   
+                                    @foreach ($types as $type)
+                                        <option value={{ $type->type }}>{{ $type->type  }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select name="usbQuantity" id="usbQuantity">
+                                    <option disabled selected hidden value="">Quantity</option>   
+                                    @foreach ($usbQuantities as $usbQuantity)
+                                        <option value={{ $usbQuantity->quantity}}>{{ $usbQuantity->quantity }}</option>
+                                    @endforeach 
+                                </select>    
+                            </div>    
+                        </div>
+                    </div>
+                    
+                </template>
+                      
+                {{-- ADD M2 BUTTON --}}
+                <button type="button"
+                        @click="slots.push({})"
+                        class="add-pcie top">
+                    + Add USB Slot
+                </button> 
             </div>
 
             <div>
                 <label for="">Wifi OnBoard</label>
-                <input required type="text">
+                <input required type="text" placeholder="Enter details if applicable">
             </div>
 
         </div>
@@ -178,27 +288,27 @@
         <div class="form-divider">
             <div>
                 <label for="">Price</label>
-                <input required type="text">
+                <input type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
             
             <div>
                 <label for="">Build Category</label>
-                <input required type="text">
+                <input required type="text" placeholder="Select category">
             </div>
 
             <div>
                 <label for="">Stock</label>
-                <input required type="text">
+                <input type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
                 <label for="">Upload Image</label>
-                <input type="text">
+                <input type="text" placeholder="Upload product image">
             </div>
 
             <div>
                 <label for="">Upload 3d Model</label>
-                <input type="text">
+                <input type="text" placeholder="Upload product 3d model">
             </div>
         </div>    
     </div>

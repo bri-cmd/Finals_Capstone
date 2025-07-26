@@ -49,7 +49,18 @@
                         :ramSlots="$ramSlots"
                         :versions="$versions"
                         :laneTypes="$laneTypes"
-                        :quantities="$quantities">
+                        :quantities="$quantities"
+                        :lengths="$lengths"
+                        :m2Versions="$m2Versions"
+                        :m2LaneTypes="$m2LaneTypes"
+                        :supportSatas="$supportSatas"
+                        :m2quantities="$m2quantities"
+                        :sataVersions="$sataVersions"
+                        :sataQuantities="$sataQuantities"
+                        :usbVersions="$usbVersions"
+                        :locations="$locations"
+                        :types="$types"
+                        :usbQuantities="$usbQuantities">
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
                         </button>
