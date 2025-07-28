@@ -140,7 +140,8 @@
 }
 
 .form-divider div input,
-.form-divider div select {
+.form-divider div select,
+.product-img {
     height: 24px;
     font-size: 0.75rem;
     border-radius: 4px;
@@ -261,4 +262,33 @@
     width: 15px !important;
     height: 15px !important;
 
+}
+
+.product-img {
+    border: 1px solid gray;   
+}
+
+.custom-file {
+  color: transparent; /* hides the "No file chosen" text */
+}
+
+.custom-file::file-selector-button {
+    opacity: 0;
+    position: absolute;
+}
+
+.filename {
+    position: absolute;
+    top: 50%;
+    left: 1%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+}
+
+.upload-icon {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, 0.5);
 }

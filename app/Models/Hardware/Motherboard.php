@@ -2,6 +2,7 @@
 
 namespace App\Models\Hardware;
 
+use App\Models\BuildCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,10 @@ class Motherboard extends Model
     use HasFactory;
 
     // DEFINE RELATIONSHIP
+    public function motherboard() {
+        return $this->belongsTo(BuildCategory::class);
+    }
+
     public function pcieSlots() {
         return $this->hasMany(PcieSlots::class);
     }

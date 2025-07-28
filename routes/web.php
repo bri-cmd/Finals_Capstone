@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ComponentDetailsController;
 use App\Http\Controllers\Components\CpuController;
+use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
+use App\Models\Hardware\Motherboard;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,6 +51,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // COMPONENT DETAILS
     Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
+    Route::post('component-details/{type}', [ComponentDetailsController::class, 'store'])->name('componentdetails.store');
 
 });
 
