@@ -10,6 +10,8 @@ use App\Models\Hardware\PcieSlots;
 use App\Models\Hardware\SataPorts;
 use App\Models\Hardware\UsbPorts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class MoboController extends Controller
 {
@@ -45,7 +47,7 @@ class MoboController extends Controller
             'locations' => UsbPorts::select('location')->distinct()->orderBy('location')->get(),
             'types' => UsbPorts::select('type')->distinct()->orderBy('type')->get(),
             'usbQuantities' => UsbPorts::select('quantity')->distinct('quantity')->get(),
-            'buildCategories' => BuildCategory::select('name')->distinct('name')->get(),
+            'buildCategories' => BuildCategory::select('id', 'name')->get(),
         ];
     }
 
@@ -105,9 +107,57 @@ class MoboController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        
+        $validated = $request->validate([
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'socket_type' => 'required|string|max:255',
+            'chipset' => 'required|string|max:255',
+            'form_factor' => 'required|string|max:255',
+            'width' => 'nullable|numeric',
+            'height' => 'nullable|numeric',
+            'ram_type' => 'required|string|max:255',
+            'max_ram' => 'required|integer|max:255',
+            'ram_slots' => 'required|integer|max:255',
+            'max_ram_speed' => 'required|string|max:255',
+            'wifi_onboard' => 'nullable|string|max:255',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer|max:255',
+            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'build_category_id' => 'required|exists:build_categories,id',
+        ]);
+
+        if ($validated['width'] && $validated['height']) {
+            $validated['form_factor'] .= " ({$validated['width']}x({$validated['height']}cm)";
+        }
+
+        // REMOVING TO AVOID SAVING
+        unset($validated['width'], $validated['height']);
+
+        // store the uploaded file in 'public/ids' folder
+        // avoid accidental overrites or security issues
+        $validated['image'] = $request->file('image');
+        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
+        $validated['image'] =  $validated['image']->storeAs('ids', $filename, 'public');
+
+        // SKIPPING 3D MODEL ON STORING IN DB
+        if ($request->hasFile('model_3d')) {
+            $model3d = $request->file('model_3d');
+            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
+            $validated['model_3d'] = $model3d->storeAs('ids', $filename, 'public');
+        } else {
+            // If nothing was uploaded, just leave it null or unset it
+            $validated['model_3d'] = null;
+        }
+
+        Motherboard::create($validated);
+        
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'Motherboard added',
+            'type' => 'success',
+        ]);
     }
 
     /**

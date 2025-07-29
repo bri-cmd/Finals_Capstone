@@ -11,6 +11,24 @@ class Motherboard extends Model
     /** @use HasFactory<\Database\Factories\MotherboardFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'build_category_id',
+        'brand',
+        'model',
+        'socket_type',
+        'chipset',
+        'form_factor',
+        'ram_type',
+        'max_ram',
+        'ram_slots',
+        'max_ram_speed',
+        'wifi_onboard',
+        'price',
+        'stock',
+        'image',
+        'model_3d',
+    ];
+
     // DEFINE RELATIONSHIP
     public function motherboard() {
         return $this->belongsTo(BuildCategory::class);

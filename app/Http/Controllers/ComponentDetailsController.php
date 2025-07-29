@@ -11,6 +11,7 @@ use App\Models\Hardware\SataPorts;
 use App\Models\Hardware\UsbPorts;
 use Illuminate\Http\Request;
 
+
 class ComponentDetailsController extends Controller
 {
     public function index() {
@@ -23,20 +24,7 @@ class ComponentDetailsController extends Controller
                                                     ));
     }
 
-    public function store(Request $request) {
-        $formFactor = $request->input('form_factor');
-        $width = $request->input('width');
-        $height = $request->input('height');
+    public function store () {
 
-        $size = ($width && $height) ? ' ({$width}x{$height}cm)' : '';
-
-        Motherboard::create([
-            'brand' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'socket_type' => 'required|string|max:255',
-            'chipset' => 'required|string|max:255',
-            'form_factor' => $formFactor . $size,
-            
-        ]);
     }
 }

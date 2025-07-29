@@ -57,7 +57,7 @@
         </div>
         <div>
             <p>Wi-Fi Onboard </p>
-            <p x-text="selectedComponent.wifi_onboard_notes ? selectedComponent.wifi_onboard_notes : 'No'"></p>
+            <p x-text="selectedComponent.wifi_onboard ? selectedComponent.wifi_onboard : 'No'"></p>
 
         </div>
         <div>

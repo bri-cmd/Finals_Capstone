@@ -6,7 +6,7 @@
     <h2 class="text-center">Motherboard</h2>
 </div>
 
-<form action="{{ route('staff.componentdetails.store', ['type' => 'motherboard']) }}" method="POST" class="new-component-form">
+<form action="{{ route('staff.componentdetails.store', ['type' => 'motherboard']) }}" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
     <div class="form-container">
         {{-- SPECS --}}
@@ -23,12 +23,12 @@
 
             <div>
                 <label for="">Model</label>
-                <input required type="text" placeholder="Enter Model">
+                <input name="model" required type="text" placeholder="Enter Model">
             </div>
 
             <div>
                 <label for="">Socket Type</label>
-                <select required name="socketType" id="socketType">
+                <select required name="socket_type" id="socket_type">
                     <option disabled selected hidden value="">Select a socket type</option>
                     @foreach ($specs['socketTypes'] as $socketType)
                         <option value="{{ $socketType->socket_type }}">{{ $socketType->socket_type }}</option>
@@ -41,7 +41,7 @@
                 <select required name="chipset" id="chipset">
                     <option disabled selected hidden value="">Select a chipset</option>
                     @foreach ($specs['chipsets'] as $chipset)
-                        <option value={{ $chipset->chipset }}>{{ $chipset->chipset }}</option>
+                        <option value="{{ $chipset->chipset }}">{{ $chipset->chipset }}</option>
                     @endforeach
                 </select>
             </div>
@@ -49,10 +49,10 @@
             <div class="flex flex-col">
                 <div>
                     <label for="">Form Factor</label>
-                    <select required name="formFactor" id="formFactor">
+                    <select required name="form_factor" id="form_factor">
                     <option disabled selected hidden value="">Select a formFactor</option>
                     @foreach ($specs['formFactors'] as $formFactor)
-                        <option value={{ $formFactor->form_factor }}>{{ $formFactor->form_factor }}</option>
+                        <option value="{{ $formFactor->form_factor }}">{{ $formFactor->form_factor }}</option>
                     @endforeach
                 </select>
                 </div>
@@ -61,211 +61,52 @@
                 {{-- MEASUREMENTS --}}
                 <div class="nested">
                     <div>
-                        <input type="number" placeholder="Width 000cm" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                        <input type="number" placeholder="Height 000cm" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                        <input name="width" id="width" type="number" placeholder="Width 000cm" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                        <input name="height" id="height" type="number" placeholder="Height 000cm" onkeydown="return !['e','E','+','-'].includes(event.key)">
                     </div>    
                 </div>
             </div>
 
             <div>
                 <label for="">Ram Type</label>
-                <select name="ramType" id="ramType">
+                <select name="ram_type" id="ram_type">
                     <option disabled selected hidden value="">Select a ram type</option>   
                     @foreach ($specs['ramTypes'] as $ramType)
-                        <option value={{ $ramType->ram_type}}>{{ $ramType->ram_type }}</option>
+                        <option value="{{ $ramType->ram_type}}">{{ $ramType->ram_type }}</option>
                     @endforeach 
                 </select> 
             </div>
 
             <div>
                 <label for="">Max Ram</label>
-                <select name="maxRam" id="maxRam">
+                <select name="max_ram" id="max_ram">
                     <option disabled selected hidden value="">Select a max ram</option>   
                     @foreach ($specs['maxRams'] as $maxRam)
-                        <option value={{ $maxRam->max_ram}}>{{ $maxRam->max_ram }}</option>
+                        <option value="{{ $maxRam->max_ram}}">{{ $maxRam->max_ram }}</option>
                     @endforeach 
                 </select> 
             </div>
 
             <div>
                 <label for="">Ram Slots</label>
-                <select name="ramSlot" id="ramSlot">
+                <select name="ram_slots" id="ram_slots">
                     <option disabled selected hidden value="">Select a ram slots</option>   
                     @foreach ($specs['ramSlots'] as $ramSlot)
-                        <option value={{ $ramSlot->ram_slots}}>{{ $ramSlot->ram_slots }}</option>
+                        <option value="{{ $ramSlot->ram_slots }}">{{ $ramSlot->ram_slots }}</option>
                     @endforeach 
                 </select> 
             </div>
             
             <div>
                 <label for="">Max Ram Speed</label>
-                <input required type="text" placeholder="Enter max RAM speed">
+                <input name="max_ram_speed" id="max_ram_speed" required type="text" placeholder="Enter max RAM speed">
             </div>
 
-            <div class="flex flex-col"
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div class="flex flex-col">
-                        <div>
-                            <label for="">PCIe Slots <span x-text="index + 1"></span></label>
-                            <div class="w-[80%]">
-                                <select name="version" id="version">
-                                    <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['versions'] as $version)
-                                        <option value={{ $version->version}}>{{ $version->version }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="laneType" id="laneType">
-                                    <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['laneTypes'] as $laneType)
-                                        <option value={{ $laneType->lane_type}}>{{ $laneType->lane_type }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="quantity" id="quantity">
-                                    <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['quantities'] as $quantity)
-                                        <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
-                                    @endforeach 
-                                </select>   
-                            </div>    
-                        </div>
-                        <div class="nested">
-                            <div class="flex flex-col">
-                                {{-- <label for="notes">Notes</label> --}}
-                                <input type="text" placeholder="Enter additional description">
-                            </div>  
-                        </div>      
-                    </div>
-                </template>
-                      
-                
-                {{-- ADD PCIE BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie">
-                    + Add PCIe Slot
-                </button>
-            </div>
-
-            <div class="flex flex-col "
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div class="flex flex-col mb-3">
-                        <div>
-                            <label for="">M2 Slots <span x-text="index + 1"></span></label>
-                            <div class="w-[80%]">
-                                <select name="length" id="length">
-                                <option disabled selected hidden value="">Length</option>   
-                                @foreach ($specs['lengths'] as $length)
-                                    <option value={{ $length->length}}>{{ $length->length }}</option>
-                                @endforeach 
-                                </select> 
-                                <select name="m2Version" id="m2Version">
-                                    <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['m2Versions'] as $m2Version)
-                                        <option value={{ $m2Version->version}}>{{ $m2Version->version }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="m2LaneType" id="m2LaneType">
-                                    <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['m2LaneTypes'] as $m2LaneType)
-                                        <option value={{ $m2LaneType->lane_type}}>{{ $m2LaneType->lane_type }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="quantity" id="quantity">
-                                    <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['quantities'] as $quantity)
-                                        <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
-                                    @endforeach 
-                                </select>    
-                            </div>    
-                        </div>
-                        <div class="checkbox-input">
-                        <label for="">Supports Sata</label>
-                        <input type="checkbox">
-                    </div> 
-                    </div>
-                    
-                </template>
-                      
-                {{-- ADD M2 BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie top">
-                    + Add M2 Slot
-                </button> 
-            </div>
-
-
-            <div>
-                <label for="">Sata Port <span x-text="index + 1"></span></label>
-                <div class="w-[80%]">
-                    <select name="sataVersion" id="sataVersion">
-                        <option disabled selected hidden value="">Version</option>   
-                        @foreach ($specs['sataVersions'] as $sataVersion)
-                            <option value={{ $sataVersion->version}}>{{ $sataVersion->version }}</option>
-                        @endforeach 
-                    </select> 
-                    <select name="sataQuantity" id="sataQuantity">
-                        <option disabled selected hidden value="">Quantity</option>   
-                        @foreach ($specs['sataQuantities'] as $sataQuantity)
-                            <option value={{ $sataQuantity->quantity}}>{{ $sataQuantity->quantity }}</option>
-                        @endforeach 
-                    </select>   
-                </div>    
-            </div>
-
-            <div class="flex flex-col "
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div class="flex flex-col mb-3">
-                        <div>
-                            <label for="">USB Port <span x-text="index + 1"></span></label>
-                            <div class="w-[80%]">
-                                <select name="usbVersion" id="usbVersion">
-                                    <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['usbVersions'] as $usbVersion)
-                                        <option value={{ $usbVersion->version}}>{{ $usbVersion->version }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="location" id="location">
-                                    <option disabled selected hidden value="">Location</option>   
-                                    @foreach ($specs['locations'] as $location)
-                                        <option value={{ $location->location}}>{{ $location->location }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="type" id="type">
-                                    <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['types'] as $type)
-                                        <option value={{ $type->type }}>{{ $type->type  }}</option>
-                                    @endforeach 
-                                </select> 
-                                <select name="usbQuantity" id="usbQuantity">
-                                    <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['usbQuantities'] as $usbQuantity)
-                                        <option value={{ $usbQuantity->quantity}}>{{ $usbQuantity->quantity }}</option>
-                                    @endforeach 
-                                </select>    
-                            </div>    
-                        </div>
-                    </div>
-                    
-                </template>
-                      
-                {{-- ADD M2 BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie top">
-                    + Add USB Slot
-                </button> 
-            </div>
+            
 
             <div>
                 <label for="">Wifi OnBoard</label>
-                <input required type="text" placeholder="Enter details if applicable">
+                <input name="wifi_onboard" id="wifi_onboard" type="text" placeholder="Enter details if applicable">
             </div>
 
         </div>
@@ -274,29 +115,29 @@
         <div class="form-divider">
             <div>
                 <label for="">Price</label>
-                <input type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input name="price" id="price" type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
             
             <div>
                 <label for="">Build Category</label>
-                <select name="buildCategory" id="buildCategory">
+                <select name="build_category_id" id="build_category_id">
                     <option disabled selected hidden value="">Select build category</option>   
                     @foreach ($specs['buildCategories'] as $buildCategory)
-                        <option value={{ $buildCategory->name }}>{{ $buildCategory->name }}</option>
+                        <option value="{{ $buildCategory->id }}">{{ $buildCategory->name }}</option>
                     @endforeach 
                 </select>  
             </div>
 
             <div>
                 <label for="">Stock</label>
-                <input type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div class="prod">
                 <label for="product_img">Upload product image</label>    
                 
                 <div class="product-img">
-                    <input type="file" id="product_img" name="product_img" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+                    <input type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
                     <label for="product_img">
@@ -312,7 +153,7 @@
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div class="product-img">
-                    <input type="file" id="product_3d" name="product_3d" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
                     <label for="product_img">
@@ -333,7 +174,9 @@
 {{-- showing the name of the uploaded file --}}
     <script>
         function updateFileName(input) {
-            const fileNameDisplay = document.getElementById('filename');
+            // GET THE SIBLING .FILENAME ELEMENT INSIDE THE SAME .PRODUCT-IMG CONTAINER
+            const container = input.closest('.product-img');
+            const fileNameDisplay = container.querySelector('.filename');
             const file = input.files[0];
 
             if (file) {

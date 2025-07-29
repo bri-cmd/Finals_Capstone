@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('motherboards', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('build_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
             $table->string('socket_type');
@@ -28,8 +28,7 @@ return new class extends Migration
             // $table->integer('m2_slots');
             // $table->integer('sata_ports');
             // $table->integer('usb_ports');
-            $table->string('wifi_onboard');
-            $table->string('wifi_onboard_notes')->nullable();
+            $table->string('wifi_onboard')->nullable();
             $table->decimal('price',10,2);
             $table->integer('stock');
             $table->string('image');

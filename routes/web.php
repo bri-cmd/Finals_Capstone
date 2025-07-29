@@ -51,7 +51,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // COMPONENT DETAILS
     Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
-    Route::post('component-details/{type}', [ComponentDetailsController::class, 'store'])->name('componentdetails.store');
+    Route::post('component-details/{type}', [MoboController::class, 'store'])->name('componentdetails.store');
 
 });
 
