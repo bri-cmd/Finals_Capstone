@@ -11,6 +11,14 @@ class PcieSlots extends Model
     /** @use HasFactory<\Database\Factories\PcieSlotsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'motherboard_id',
+        'version',
+        'lane_type',
+        'add_notes',
+        'quantity',
+    ];
+
     // DEFINE RELATIONSHIP
     public function motherboard() {
         return $this->belongsTo(Motherboard::class);

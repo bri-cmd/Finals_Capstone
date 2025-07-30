@@ -15,10 +15,10 @@ return new class extends Migration
         Schema::create('pcie_slots', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('motherboard_id')->constrained()->onDelete('cascade');
-            $table->decimal('version',2,1);
+            $table->foreignId('motherboard_id')->constrained('motherboards')->onDelete('cascade');
+            $table->string('version');
             $table->string('lane_type');
-            $table->string('lane_type_notes')->nullable();
+            $table->string('add_notes')->nullable();
             $table->integer('quantity')->default(1);
         });
     }

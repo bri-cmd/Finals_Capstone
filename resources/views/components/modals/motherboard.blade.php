@@ -102,7 +102,53 @@
                 <input name="max_ram_speed" id="max_ram_speed" required type="text" placeholder="Enter max RAM speed">
             </div>
 
-            
+            <div class="flex flex-col"
+                 x-data="{ slots:[{}] }">
+                <template x-for="(slot, index) in slots" 
+                          :key="index">
+                    <div class="flex flex-col">
+                        <div>
+                            <label for="">PCIe Slots <span x-text="index + 1"></span></label>
+                            <div class="w-[80%]">
+                                <select :name="'pcie_slots[' + index + '][version]'" id="version">
+                                    <option disabled selected hidden value="">Version</option>   
+                                    @foreach ($specs['versions'] as $version)
+                                        <option value={{ $version->version}}>{{ $version->version }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select :name="'pcie_slots[' + index + '][lane_type]'" id="laneType">
+                                    <option disabled selected hidden value="">LaneType</option>   
+                                    @foreach ($specs['laneTypes'] as $laneType)
+                                        <option value={{ $laneType->lane_type}}>{{ $laneType->lane_type }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select :name="'pcie_slots[' + index + '][quantity]'" id="quantity">
+                                    <option disabled selected hidden value="">Quantity</option>   
+                                    @foreach ($specs['quantities'] as $quantity)
+                                        <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
+                                    @endforeach 
+                                </select>   
+                            </div>    
+                        </div>
+                        <div class="nested">
+                            <div class="flex flex-col">
+                                {{-- <label for="notes">Notes</label> --}}
+                                <input :name="'pcie_slots[' + index + '][add_notes]'" type="text" placeholder="Enter additional description">
+                            </div>  
+                        </div>      
+                    </div>
+                </template>
+                      
+                
+                {{-- ADD PCIE BUTTON --}}
+                <button type="button"
+                        @click="slots.push({})"
+                        class="add-pcie">
+                    + Add PCIe Slot
+                </button>
+            </div>
+
+        
 
             <div>
                 <label for="">Wifi OnBoard</label>

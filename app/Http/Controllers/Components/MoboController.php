@@ -61,8 +61,8 @@ class MoboController extends Controller
             $mobo->pcie_display = $mobo->pcieSlots->map(function ($slot) {
                 $display = "{$slot->quantity}x PCIe {$slot->version} {$slot->lane_type}";
 
-                if ($slot->lane_type_notes != null) {
-                    $display .= " ({$slot->lane_type_notes})";
+                if ($slot->add_notes != null) {
+                    $display .= " ({$slot->add_notes})";
                 }
 
                 return $display;
@@ -108,57 +108,89 @@ class MoboController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        
-        $validated = $request->validate([
-            'brand' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'socket_type' => 'required|string|max:255',
-            'chipset' => 'required|string|max:255',
-            'form_factor' => 'required|string|max:255',
-            'width' => 'nullable|numeric',
-            'height' => 'nullable|numeric',
-            'ram_type' => 'required|string|max:255',
-            'max_ram' => 'required|integer|max:255',
-            'ram_slots' => 'required|integer|max:255',
-            'max_ram_speed' => 'required|string|max:255',
-            'wifi_onboard' => 'nullable|string|max:255',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer|max:255',
-            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
-            'build_category_id' => 'required|exists:build_categories,id',
-        ]);
 
-        if ($validated['width'] && $validated['height']) {
-            $validated['form_factor'] .= " ({$validated['width']}x({$validated['height']}cm)";
-        }
+    // Validate the request data
+    $validated = $request->validate([
+        'brand' => 'required|string|max:255',
+        'model' => 'required|string|max:255',
+        'socket_type' => 'required|string|max:255',
+        'chipset' => 'required|string|max:255',
+        'form_factor' => 'required|string|max:255',
+        'width' => 'nullable|numeric',
+        'height' => 'nullable|numeric',
+        'ram_type' => 'required|string|max:255',
+        'max_ram' => 'required|integer|max:255',
+        'ram_slots' => 'required|integer|max:255',
+        'max_ram_speed' => 'required|string|max:255',
+        'wifi_onboard' => 'nullable|string|max:255',
+        'price' => 'required|numeric',
+        'stock' => 'required|integer|max:255',
+        'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+        'build_category_id' => 'required|exists:build_categories,id',
+    ]);
 
-        // REMOVING TO AVOID SAVING
-        unset($validated['width'], $validated['height']);
-
-        // store the uploaded file in 'public/ids' folder
-        // avoid accidental overrites or security issues
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] =  $validated['image']->storeAs('ids', $filename, 'public');
-
-        // SKIPPING 3D MODEL ON STORING IN DB
-        if ($request->hasFile('model_3d')) {
-            $model3d = $request->file('model_3d');
-            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
-            $validated['model_3d'] = $model3d->storeAs('ids', $filename, 'public');
-        } else {
-            // If nothing was uploaded, just leave it null or unset it
-            $validated['model_3d'] = null;
-        }
-
-        Motherboard::create($validated);
-        
-        return redirect()->route('staff.componentdetails')->with([
-            'message' => 'Motherboard added',
-            'type' => 'success',
-        ]);
+    // Add form factor information based on width and height
+    if ($validated['width'] && $validated['height']) {
+        $validated['form_factor'] .= " ({$validated['width']}x{$validated['height']}cm)";
     }
+
+    // Handle image upload
+    $validated['image'] = $request->file('image');
+    $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
+    $validated['image'] = $validated['image']->storeAs('ids', $filename, 'public');
+
+    // Handle 3D model upload
+    if ($request->hasFile('model_3d')) {
+        $model3d = $request->file('model_3d');
+        $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
+        $validated['model_3d'] = $model3d->storeAs('ids', $filename, 'public');
+    } else {
+        $validated['model_3d'] = null;
+    }
+
+    // Save the motherboard
+    $mobo = Motherboard::create($validated);
+
+    // Validate PCIe slots
+    $pcieValidated = $request->validate([
+        'pcie_slots.*.version' => 'required|string|max:255',
+        'pcie_slots.*.lane_type' => 'required|string|max:255',
+        'pcie_slots.*.add_notes' => 'nullable|string|max:255',
+        'pcie_slots.*.quantity' => 'required|integer|max:3',
+    ]);
+
+    if ($mobo) {
+        $pcieSlots = $request->input('pcie_slots');
+        // dd($pcieSlots); // This will show you the structure of the data
+
+        // Store PCIe slots
+        foreach ($pcieSlots as $pcieData) {
+            // dd($mobo->id, $pcieData); 
+            try {
+                PcieSlots::create([
+                    'motherboard_id' => $mobo->id,
+                    'version' => $pcieData['version'],
+                    'lane_type' => $pcieData['lane_type'],
+                    'add_notes' => $pcieData['add_notes'] ?? null,
+                    'quantity' => $pcieData['quantity'],
+                ]);
+            } catch (\Exception $e) {
+                dd('Error creating PCIe slot: ' . $e->getMessage());
+            }
+        }
+    } else {
+        dd('Motherboard creation failed');
+    }
+
+    
+
+    return redirect()->route('staff.componentdetails')->with([
+        'message' => 'Motherboard added',
+        'type' => 'success',
+    ]);
+}
+
 
     /**
      * Display the specified resource.
