@@ -50,11 +50,11 @@
                 <div>
                     <label for="">Form Factor</label>
                     <select required name="form_factor" id="form_factor">
-                    <option disabled selected hidden value="">Select a formFactor</option>
-                    @foreach ($specs['formFactors'] as $formFactor)
-                        <option value="{{ $formFactor->form_factor }}">{{ $formFactor->form_factor }}</option>
-                    @endforeach
-                </select>
+                        <option disabled selected hidden value="">Select a formFactor</option>
+                        <option value="Micro-ATX">Micro-ATX</option>
+                        <option value="ATX">ATX</option>
+                        <option value="Mini-ITX">Mini-ITX</option>
+                    </select>
                 </div>
                 
 
@@ -69,7 +69,7 @@
 
             <div>
                 <label for="">Ram Type</label>
-                <select name="ram_type" id="ram_type">
+                <select required name="ram_type" id="ram_type">
                     <option disabled selected hidden value="">Select a ram type</option>   
                     @foreach ($specs['ramTypes'] as $ramType)
                         <option value="{{ $ramType->ram_type}}">{{ $ramType->ram_type }}</option>
@@ -79,7 +79,7 @@
 
             <div>
                 <label for="">Max Ram</label>
-                <select name="max_ram" id="max_ram">
+                <select required name="max_ram" id="max_ram">
                     <option disabled selected hidden value="">Select a max ram</option>   
                     @foreach ($specs['maxRams'] as $maxRam)
                         <option value="{{ $maxRam->max_ram}}">{{ $maxRam->max_ram }}</option>
@@ -89,7 +89,7 @@
 
             <div>
                 <label for="">Ram Slots</label>
-                <select name="ram_slots" id="ram_slots">
+                <select required name="ram_slots" id="ram_slots">
                     <option disabled selected hidden value="">Select a ram slots</option>   
                     @foreach ($specs['ramSlots'] as $ramSlot)
                         <option value="{{ $ramSlot->ram_slots }}">{{ $ramSlot->ram_slots }}</option>
@@ -99,7 +99,7 @@
             
             <div>
                 <label for="">Max Ram Speed</label>
-                <input name="max_ram_speed" id="max_ram_speed" required type="text" placeholder="Enter max RAM speed">
+                <input required name="max_ram_speed" id="max_ram_speed" required type="text" placeholder="Enter max RAM speed">
             </div>
 
             <div class="flex flex-col"
@@ -110,19 +110,19 @@
                         <div>
                             <label for="">PCIe Slots <span x-text="index + 1"></span></label>
                             <div class="w-[80%]">
-                                <select :name="'pcie_slots[' + index + '][version]'" id="version">
+                                <select required :name="'pcie_slots[' + index + '][version]'" id="version">
                                     <option disabled selected hidden value="">Version</option>   
                                     @foreach ($specs['versions'] as $version)
                                         <option value={{ $version->version}}>{{ $version->version }}</option>
                                     @endforeach 
                                 </select> 
-                                <select :name="'pcie_slots[' + index + '][lane_type]'" id="laneType">
+                                <select required :name="'pcie_slots[' + index + '][lane_type]'" id="laneType">
                                     <option disabled selected hidden value="">LaneType</option>   
                                     @foreach ($specs['laneTypes'] as $laneType)
                                         <option value={{ $laneType->lane_type}}>{{ $laneType->lane_type }}</option>
                                     @endforeach 
                                 </select> 
-                                <select :name="'pcie_slots[' + index + '][quantity]'" id="quantity">
+                                <select required :name="'pcie_slots[' + index + '][quantity]'" id="quantity">
                                     <option disabled selected hidden value="">Quantity</option>   
                                     @foreach ($specs['quantities'] as $quantity)
                                         <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
@@ -135,10 +135,17 @@
                                 {{-- <label for="notes">Notes</label> --}}
                                 <input :name="'pcie_slots[' + index + '][add_notes]'" type="text" placeholder="Enter additional description">
                             </div>  
-                        </div>      
+                        </div>    
+                        
+                        <template x-if="index > 0">
+                            <button type="button"
+                                class="remove-add"
+                                @click="slots.splice(index, 1)">
+                                x
+                            </button>    
+                        </template>
                     </div>
                 </template>
-                      
                 
                 {{-- ADD PCIE BUTTON --}}
                 <button type="button"
@@ -146,9 +153,84 @@
                         class="add-pcie">
                     + Add PCIe Slot
                 </button>
+                
             </div>
 
-        
+            <div class="flex flex-col mb-3"
+                 x-data="{ slots:[{}] }">
+                <template x-for="(slot, index) in slots" 
+                          :key="index">
+                    <div class="flex flex-col mb-3">
+                        <div>
+                            <label for="">M2 Slots <span x-text="index + 1"></span></label>
+                            <div class="w-[80%]">
+                                <select required :name="'m2_slots[' + index + '][length]'" id="length">
+                                <option disabled selected hidden value="">Length</option>   
+                                @foreach ($specs['lengths'] as $length)
+                                    <option value={{ $length->length}}>{{ $length->length }}</option>
+                                @endforeach 
+                                </select> 
+                                <select required :name="'m2_slots[' + index + '][version]'" id="m2Version">
+                                    <option disabled selected hidden value="">Version</option>   
+                                    @foreach ($specs['m2Versions'] as $m2Version)
+                                        <option value={{ $m2Version->version}}>{{ $m2Version->version }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select required :name="'m2_slots[' + index + '][lane_type]'" id="m2LaneType">
+                                    <option disabled selected hidden value="">LaneType</option>   
+                                    @foreach ($specs['m2LaneTypes'] as $m2LaneType)
+                                        <option value={{ $m2LaneType->lane_type}}>{{ $m2LaneType->lane_type }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select required :name="'m2_slots[' + index + '][quantity]'" id="quantity">
+                                    <option disabled selected hidden value="">Quantity</option>   
+                                    @foreach ($specs['quantities'] as $quantity)
+                                        <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
+                                    @endforeach 
+                                </select>    
+                            </div>    
+                        </div>
+                        <div class="checkbox-input">
+                            <input :name="'m2_slots[' + index + '][supports_sata]'" type="hidden" value="false">
+                            <input :name="'m2_slots[' + index + '][supports_sata]'" type="checkbox" value="true">
+                            <label for="">Supports Sata</label>
+                        </div> 
+
+                        <template x-if="index > 0">
+                        <button type="button"
+                            class="remove-add bottom"
+                            @click="slots.splice(index, 1)">
+                            x
+                        </button>    
+                    </template>
+                    </div>
+                </template>
+                      
+                {{-- ADD M2 BUTTON --}}
+                <button type="button"
+                        @click="slots.push({})"
+                        class="add-pcie top">
+                    + Add M2 Slot
+                </button> 
+            </div>
+
+            <div>
+                <label for="">Sata Port</label>
+                <div class="w-[80%]">
+                    <select required name="version" id="sataVersion">
+                        <option disabled selected hidden value="">Version</option>   
+                        @foreach ($specs['sataVersions'] as $sataVersion)
+                            <option value="{{ $sataVersion->version}}">{{ $sataVersion->version }}</option>
+                        @endforeach 
+                    </select> 
+                    <select required name="quantity" id="sataQuantity">
+                        <option disabled selected hidden value="">Quantity</option>   
+                        @foreach ($specs['sataQuantities'] as $sataQuantity)
+                            <option value="{{ $sataQuantity->quantity}}">{{ $sataQuantity->quantity }}</option>
+                        @endforeach 
+                    </select>   
+                </div>    
+            </div>
 
             <div>
                 <label for="">Wifi OnBoard</label>
@@ -179,15 +261,15 @@
                 <input name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            <div class="prod">
-                <label for="product_img">Upload product image</label>    
+            <div>
+                <label for="product-img">Upload product image</label>    
                 
                 <div class="product-img">
                     <input type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
-                    <label for="product_img">
-                        <x-icons.upload class="w-[16px] h-[16px]"/>    
+                    <label for="image">
+                        <x-icons.upload class="upload-product"/>    
                     </label>
 
                     {{-- show the file name --}}
@@ -195,15 +277,15 @@
                 </div>
             </div>
 
-            <div class="prod">
+            <div>
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div class="product-img">
                     <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
-                    <label for="product_img">
-                        <x-icons.upload class="w-[16px] h-[16px]"/>    
+                    <label for="model_3d">
+                        <x-icons.upload class="upload-product"/>    
                     </label>
 
                     {{-- show the file name --}}

@@ -11,6 +11,15 @@ class M2Slots extends Model
     /** @use HasFactory<\Database\Factories\M2SlotsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'motherboard_id',
+        'length',
+        'version',
+        'lane_type',
+        'supports_sata',
+        'quantity',
+    ];
+
     public function motherboard() {
         return $this->belongsTo(Motherboard::class);
     }

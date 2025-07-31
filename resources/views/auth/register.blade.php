@@ -54,7 +54,7 @@
                     <input type="file" id="id_uploaded" name="id_uploaded" accept="image/*" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
-                    <label for="id_uploaded" class="inline-flex items-center gap-2 cursor-pointer text-blue-600 hover:underline">
+                    <label for="id_uploaded">
                         <x-icons.upload />    
                     </label>
 

@@ -10,6 +10,12 @@ class SataPorts extends Model
     /** @use HasFactory<\Database\Factories\SataPortsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'motherboard_id',
+        'version',
+        'quantity',
+    ];
+
     public function motherboard() {
         return $this->belongsTo(Motherboard::class);
     }

@@ -61,7 +61,7 @@
 
 
     {{-- TABLE --}}
-    <section class="section-style !pl-0 !h-[50vh]">
+    <section class="section-style !pl-0 !h-[65vh]">
         <div>
             <table class="table">
                 <thead>
@@ -76,7 +76,7 @@
             </table> 
         </div>
 
-        <div x-data="{ showViewModal: false, selectedComponent:{} }">
+        <div x-data="{ showViewModal: false, selectedComponent:{} }" class="overflow-y-scroll">
             <table class="table">
                 <tbody>
                     @foreach ($formattedMobos as $mobo)
