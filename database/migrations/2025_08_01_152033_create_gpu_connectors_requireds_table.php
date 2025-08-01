@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usb_ports',function (Blueprint $table) {
+        Schema::create('gpu_connectors_requireds', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('motherboard_id')->constrained()->onDelete('cascade');
-            $table->string('version');
-            $table->string('location');
-            $table->string('type')->nullable();
-            $table->integer('quantity');
+            $table->foreignId('gpu_id')->constrained()->onDelete('cascade');
+            $table->string('connector_type')->nullable();
+            $table->integer('count')->nullable();
+            $table->string('notes')->nullable();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('usb_ports');
+        Schema::dropIfExists('gpu_connectors_requireds');
     }
 };

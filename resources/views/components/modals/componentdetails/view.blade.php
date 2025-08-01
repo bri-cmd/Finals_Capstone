@@ -3,7 +3,7 @@
 <div class="view-container">
     {{-- IMAGE --}}
     <div class="image-container">
-        <img src="https://dlcdnwebimgs.asus.com/gain/58304d96-dc0e-4367-988b-7c1b2744f147/w692" alt="">
+        <img :src="`/${selectedComponent.image}`" alt="Product Image" >
     </div>
     {{-- SPECS --}}
     <div class="specs-container">

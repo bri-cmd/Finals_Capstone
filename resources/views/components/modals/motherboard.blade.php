@@ -197,12 +197,12 @@
                         </div> 
 
                         <template x-if="index > 0">
-                        <button type="button"
-                            class="remove-add bottom"
-                            @click="slots.splice(index, 1)">
-                            x
-                        </button>    
-                    </template>
+                            <button type="button"
+                                class="remove-add bottom"
+                                @click="slots.splice(index, 1)">
+                                x
+                            </button>    
+                        </template>
                     </div>
                 </template>
                       
@@ -230,6 +230,58 @@
                         @endforeach 
                     </select>   
                 </div>    
+            </div>
+
+            <div class="flex flex-col "
+                 x-data="{ slots:[{}] }">
+                <template x-for="(slot, index) in slots" 
+                          :key="index">
+                    <div class="flex flex-col mb-2">
+                        <div>
+                            <label for="">USB Port <span x-text="index + 1"></span></label>
+                            <div class="w-[80%]">
+                                <select required :name="'usb_ports[' + index + '][version]'" id="usbVersion">
+                                    <option disabled selected hidden value="">Version</option>   
+                                    @foreach ($specs['usbVersions'] as $usbVersion)
+                                        <option value={{ $usbVersion->version}}>{{ $usbVersion->version }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select required :name="'usb_ports[' + index + '][location]'" id="location">
+                                    <option disabled selected hidden value="">Location</option>   
+                                    @foreach ($specs['locations'] as $location)
+                                        <option value={{ $location->location}}>{{ $location->location }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select required :name="'usb_ports[' + index + '][type]'" id="type">
+                                    <option disabled selected hidden value="">LaneType</option>   
+                                    @foreach ($specs['types'] as $type)
+                                        <option value={{ $type->type }}>{{ $type->type  }}</option>
+                                    @endforeach 
+                                </select> 
+                                <select required :name="'usb_ports[' + index + '][quantity]'" id="usbQuantity">
+                                    <option disabled selected hidden value="">Quantity</option>   
+                                    @foreach ($specs['usbQuantities'] as $usbQuantity)
+                                        <option value={{ $usbQuantity->quantity}}>{{ $usbQuantity->quantity }}</option>
+                                    @endforeach 
+                                </select>    
+                            </div>    
+                        </div>
+                        <template x-if="index > 0">
+                            <button type="button"
+                                class="remove-add usb"
+                                @click="slots.splice(index, 1)">
+                                x
+                            </button>    
+                        </template>
+                    </div>
+                </template>
+                      
+                {{-- ADD M2 BUTTON --}}
+                <button type="button"
+                        @click="slots.push({})"
+                        class="add-pcie bottom">
+                    + Add USB Slot
+                </button> 
             </div>
 
             <div>

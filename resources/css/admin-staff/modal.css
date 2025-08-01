@@ -256,6 +256,10 @@
     bottom: -40px !important;
 }
 
+.usb {
+    bottom: -24px !important;
+}
+
 .add-pcie:hover,
 .remove-add:hover {
     background-color: transparent !important;

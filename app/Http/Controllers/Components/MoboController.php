@@ -130,13 +130,13 @@ class MoboController extends Controller
         // Handle image upload
         $validated['image'] = $request->file('image');
         $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('ids', $filename, 'public');
+        $validated['image'] = $validated['image']->storeAs('product_img', $filename, 'public');
 
         // Handle 3D model upload
         if ($request->hasFile('model_3d')) {
             $model3d = $request->file('model_3d');
             $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
-            $validated['model_3d'] = $model3d->storeAs('ids', $filename, 'public');
+            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
         } else {
             $validated['model_3d'] = null;
         }
@@ -197,8 +197,30 @@ class MoboController extends Controller
         $sataValidated['motherboard_id'] = $mobo->id;
         // dd($sataValidated); 
 
-
         SataPorts::create($sataValidated);
+
+        // Validate Usb ports
+        $request->validate([
+            'usb_ports.*.version' => 'required|string|max:255',
+            'usb_ports.*.location' => 'required|string|max:255',
+            'usb_ports.*.type' => 'nullable|string|max:20',
+            'usb_ports.*.quantity' => 'required|integer|max:3',
+        ]);
+
+        $usbPorts = $request->input('usb_ports');
+        // dd($usbPorts); 
+
+
+        // Store Usb ports
+        foreach ($usbPorts as $usbData) {
+            UsbPorts::create([
+                'motherboard_id' => $mobo->id,
+                'version' => $usbData['version'],
+                'location' => $usbData['location'],
+                'type' => $usbData['type'],
+                'quantity' => $usbData['quantity'],
+            ]);
+        }
     
         return redirect()->route('staff.componentdetails')->with([
             'message' => 'Motherboard added',
