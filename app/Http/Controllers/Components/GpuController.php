@@ -3,10 +3,27 @@
 namespace App\Http\Controllers\Components;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hardware\Gpu;
 use Illuminate\Http\Request;
 
 class GpuController extends Controller
 {
+    public function getGpuSpecs() 
+    {
+
+    }
+
+    public function getFormattedGpus() 
+    {
+        $gpus = Gpu::all();
+        
+        $gpus->each(function ($gpu) {
+            $gpu->component_type = 'motherboard';
+        });
+
+        return $gpus;
+    }
+
     /**
      * Display a listing of the resource.
      */

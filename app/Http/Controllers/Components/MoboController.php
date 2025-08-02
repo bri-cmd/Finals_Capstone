@@ -75,6 +75,9 @@ class MoboController extends Controller
             $mobo->usb_display = $mobo->usbPorts->map(function ($port) {
                 return "{$port->quantity}x USB {$port->version} {$port->type} ({$port->location})";
             })->implode('<br>');
+
+            $mobo->component_type = 'Motherboard';
+            
         });
 
         return $mobos;

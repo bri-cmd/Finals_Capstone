@@ -79,15 +79,15 @@
         <div x-data="{ showViewModal: false, selectedComponent:{} }" class="overflow-y-scroll">
             <table class="table">
                 <tbody>
-                    @foreach ($formattedMobos as $mobo)
+                    @foreach ($components as $component)
                     <tr>
-                        <td>{{ $mobo->brand}} {{ $mobo->model }}</td>
-                        <td>Gaming</td>
-                        <td>{{ $mobo->price}}</td>
-                        <td>{{ $mobo->stock}}</td>
+                        <td>{{ $component->brand}} {{ $component->model }}</td>
+                        <td>{{ $component->buildCategory->name}}</td>
+                        <td>{{ $component->price}}</td>
+                        <td>{{ $component->stock}}</td>
                         <td class="align-middle text-center">
                             <div class="flex justify-center gap-2">
-                                <button @click="showViewModal = true; selectedComponent = {{ $mobo->toJson() }}">
+                                <button @click="showViewModal = true; selectedComponent = {{ $component->toJson() }};">
                                     <x-icons.view/>    
                                 </button>
                                 <button>
@@ -105,9 +105,8 @@
 
             {{-- VIEW MODAL --}}
             <div x-show="showViewModal" x-cloak x-transition class="modal modal-scroll">
-            {{-- <div class="modal modal-scroll"> --}}
                 <div class="view-component" @click.away="showViewModal = false">
-                    <x-modals.componentdetails.view/>
+                    <x-view.motherboard/>
                 </div>
             </div>
         </div>

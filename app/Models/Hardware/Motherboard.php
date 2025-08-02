@@ -30,7 +30,7 @@ class Motherboard extends Model
     ];
 
     // DEFINE RELATIONSHIP
-    public function motherboard() {
+    public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);
     }
 
