@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
-            $table->integer('vram_gb');
+            $table->string('vram_gb');
             $table->integer('power_draw_watts');
             $table->integer('recommended_psu_watt');
             $table->integer('length_mm');

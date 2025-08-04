@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('m2_slots', function (Blueprint $table) {
+        Schema::create('mobo_m2_slots', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('motherboard_id')->constrained()->onDelete('cascade');

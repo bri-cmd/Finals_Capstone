@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Components;
 use App\Http\Controllers\Controller;
 use App\Models\BuildCategory;
 use App\Models\Hardware\M2Slots;
+use App\Models\Hardware\MoboM2Slots;
+use App\Models\Hardware\MoboPcieSlot;
+use App\Models\Hardware\MoboSataPorts;
+use App\Models\Hardware\MoboUsbPorts;
 use App\Models\Hardware\Motherboard;
 use App\Models\Hardware\PcieSlots;
 use App\Models\Hardware\SataPorts;
@@ -25,20 +29,20 @@ class MoboController extends Controller
             'ramTypes' => Motherboard::select('ram_type')->distinct()->orderBy('ram_type')->get(),
             'maxRams' => Motherboard::select('max_ram')->distinct()->orderBy('max_ram')->get(),
             'ramSlots' => Motherboard::select('ram_slots')->distinct()->orderBy('ram_slots')->get(),
-            'versions' => PcieSlots::select('version')->distinct()->orderBy('version')->get(),
-            'laneTypes' => PcieSlots::select('lane_type')->distinct()->orderBy('lane_type')->get(),
-            'quantities' => PcieSlots::select('quantity')->distinct()->orderBy('quantity')->get(),
-            'lengths' => M2Slots::select('length')->distinct()->orderBy('length')->get(),
-            'm2Versions' => M2Slots::select('version')->distinct()->orderBy('version')->get(),
-            'm2LaneTypes' => M2Slots::select('lane_type')->distinct()->orderBy('lane_type')->get(),
-            'supportSatas' => M2Slots::select('supports_sata')->distinct()->orderBy('supports_sata')->get(),
-            'm2quantities' => M2Slots::select('quantity')->distinct()->orderBy('quantity')->get(),
-            'sataVersions' => SataPorts::select('version')->distinct()->orderBy('version')->get(),
-            'sataQuantities' => SataPorts::select('quantity')->distinct()->orderBy('quantity')->get(), 
-            'usbVersions' => UsbPorts::select('version')->distinct()->orderBy('version')->get(),
-            'locations' => UsbPorts::select('location')->distinct()->orderBy('location')->get(),
-            'types' => UsbPorts::select('type')->distinct()->orderBy('type')->get(),
-            'usbQuantities' => UsbPorts::select('quantity')->distinct('quantity')->get(),
+            'versions' => MoboPcieSlot::select('version')->distinct()->orderBy('version')->get(),
+            'laneTypes' => MoboPcieSlot::select('lane_type')->distinct()->orderBy('lane_type')->get(),
+            'quantities' => MoboPcieSlot::select('quantity')->distinct()->orderBy('quantity')->get(),
+            'lengths' => MoboM2Slots::select('length')->distinct()->orderBy('length')->get(),
+            'm2Versions' => MoboM2Slots::select('version')->distinct()->orderBy('version')->get(),
+            'm2LaneTypes' => MoboM2Slots::select('lane_type')->distinct()->orderBy('lane_type')->get(),
+            'supportSatas' => MoboM2Slots::select('supports_sata')->distinct()->orderBy('supports_sata')->get(),
+            'm2quantities' => MoboM2Slots::select('quantity')->distinct()->orderBy('quantity')->get(),
+            'sataVersions' => MoboSataPorts::select('version')->distinct()->orderBy('version')->get(),
+            'sataQuantities' => MoboSataPorts::select('quantity')->distinct()->orderBy('quantity')->get(), 
+            'usbVersions' => MoboUsbPorts::select('version')->distinct()->orderBy('version')->get(),
+            'locations' => MoboUsbPorts::select('location')->distinct()->orderBy('location')->get(),
+            'types' => MoboUsbPorts::select('type')->distinct()->orderBy('type')->get(),
+            'usbQuantities' => MoboUsbPorts::select('quantity')->distinct('quantity')->get(),
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
         ];
     }
@@ -76,7 +80,7 @@ class MoboController extends Controller
                 return "{$port->quantity}x USB {$port->version} {$port->type} ({$port->location})";
             })->implode('<br>');
 
-            $mobo->component_type = 'Motherboard';
+            $mobo->component_type = 'motherboard';
             
         });
 
@@ -159,7 +163,7 @@ class MoboController extends Controller
 
         // Store PCIe slots
         foreach ($pcieSlots as $pcieData) {
-            PcieSlots::create([
+            MoboPcieSlot::create([
                 'motherboard_id' => $mobo->id,
                 'version' => $pcieData['version'],
                 'lane_type' => $pcieData['lane_type'],
@@ -181,7 +185,7 @@ class MoboController extends Controller
         // dd($m2Slots); 
 
         foreach ($m2Slots as $m2Data) {
-            M2Slots::create([
+            MoboM2Slots::create([
                 'motherboard_id' => $mobo->id,
                 'length' => $m2Data['length'],
                 'version' => $m2Data['version'],
@@ -200,7 +204,7 @@ class MoboController extends Controller
         $sataValidated['motherboard_id'] = $mobo->id;
         // dd($sataValidated); 
 
-        SataPorts::create($sataValidated);
+        MoboSataPorts::create($sataValidated);
 
         // Validate Usb ports
         $request->validate([
@@ -216,7 +220,7 @@ class MoboController extends Controller
 
         // Store Usb ports
         foreach ($usbPorts as $usbData) {
-            UsbPorts::create([
+            MoboUsbPorts::create([
                 'motherboard_id' => $mobo->id,
                 'version' => $usbData['version'],
                 'location' => $usbData['location'],

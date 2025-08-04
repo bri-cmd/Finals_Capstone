@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usb_ports',function (Blueprint $table) {
+        Schema::create('mobo_usb_ports',function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('motherboard_id')->constrained()->onDelete('cascade');

@@ -23,9 +23,11 @@ class ComponentDetailsController extends Controller
         $components = $formattedMobos->concat($formattedGpus);
 
         $motherboardSpecs = app(MoboController::class)->getMotherboardSpecs();
+        $gpuSpecs = app(GpuController::class)->getGpuSpecs();
         
         return view('staff.componentdetails', compact(  'components',
                                                         'motherboardSpecs',
+                                                        'gpuSpecs',
                                                     ));
     }
 

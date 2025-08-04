@@ -139,6 +139,10 @@
     width: 20%;
 }
 
+.gpu div label {
+    width: 25%;
+}
+
 .form-divider div input,
 .form-divider div select,
 .product-img {
@@ -181,6 +185,7 @@
 
 .specs-container div {
     display: flex;
+    gap: 1rem;
 }
 
 .specs-container div:nth-child(odd) {

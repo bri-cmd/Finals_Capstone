@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
 
-        Schema::create('pcie_slots', function (Blueprint $table) {
+        Schema::create('mobo_pcie_slots', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('motherboard_id')->constrained('motherboards')->onDelete('cascade');

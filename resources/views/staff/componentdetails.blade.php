@@ -40,7 +40,8 @@
                 <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
                     <x-dynamic-component 
                         :component="'modals.' . $type" 
-                        :specs="$motherboardSpecs"
+                        :moboSpecs="$motherboardSpecs"
+                        :gpuSpecs="$gpuSpecs"
                         >
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
@@ -106,7 +107,13 @@
             {{-- VIEW MODAL --}}
             <div x-show="showViewModal" x-cloak x-transition class="modal modal-scroll">
                 <div class="view-component" @click.away="showViewModal = false">
-                    <x-view.motherboard/>
+                    <div x-show="selectedComponent.component_type === 'motherboard'">
+                        @include('components.view.motherboard')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'gpu'">
+                        @include('components.view.gpu')
+                    </div>
                 </div>
             </div>
         </div>

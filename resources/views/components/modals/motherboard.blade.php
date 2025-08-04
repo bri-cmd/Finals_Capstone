@@ -1,4 +1,4 @@
-@props(['specs'])
+@props(['moboSpecs'])
 {{-- <pre>{{ json_encode($ram_type) }}</pre> --}}
 <div class="new-component-header">
     {{ $slot }}
@@ -15,7 +15,7 @@
                 <label for="">Brand</label>
                 <select required name="brand" id="brand">
                     <option disabled selected hidden value="">Select a brand</option>
-                    @foreach ($specs['brands'] as $brand)
+                    @foreach ($moboSpecs['brands'] as $brand)
                         <option value="{{ $brand->brand }}">{{ $brand->brand }}</option>
                     @endforeach
                 </select>
@@ -30,7 +30,7 @@
                 <label for="">Socket Type</label>
                 <select required name="socket_type" id="socket_type">
                     <option disabled selected hidden value="">Select a socket type</option>
-                    @foreach ($specs['socketTypes'] as $socketType)
+                    @foreach ($moboSpecs['socketTypes'] as $socketType)
                         <option value="{{ $socketType->socket_type }}">{{ $socketType->socket_type }}</option>
                     @endforeach
                 </select>             
@@ -40,7 +40,7 @@
                 <label for="">Chipset</label>
                 <select required name="chipset" id="chipset">
                     <option disabled selected hidden value="">Select a chipset</option>
-                    @foreach ($specs['chipsets'] as $chipset)
+                    @foreach ($moboSpecs['chipsets'] as $chipset)
                         <option value="{{ $chipset->chipset }}">{{ $chipset->chipset }}</option>
                     @endforeach
                 </select>
@@ -71,7 +71,7 @@
                 <label for="">Ram Type</label>
                 <select required name="ram_type" id="ram_type">
                     <option disabled selected hidden value="">Select a ram type</option>   
-                    @foreach ($specs['ramTypes'] as $ramType)
+                    @foreach ($moboSpecs['ramTypes'] as $ramType)
                         <option value="{{ $ramType->ram_type}}">{{ $ramType->ram_type }}</option>
                     @endforeach 
                 </select> 
@@ -81,7 +81,7 @@
                 <label for="">Max Ram</label>
                 <select required name="max_ram" id="max_ram">
                     <option disabled selected hidden value="">Select a max ram</option>   
-                    @foreach ($specs['maxRams'] as $maxRam)
+                    @foreach ($moboSpecs['maxRams'] as $maxRam)
                         <option value="{{ $maxRam->max_ram}}">{{ $maxRam->max_ram }}</option>
                     @endforeach 
                 </select> 
@@ -91,7 +91,7 @@
                 <label for="">Ram Slots</label>
                 <select required name="ram_slots" id="ram_slots">
                     <option disabled selected hidden value="">Select a ram slots</option>   
-                    @foreach ($specs['ramSlots'] as $ramSlot)
+                    @foreach ($moboSpecs['ramSlots'] as $ramSlot)
                         <option value="{{ $ramSlot->ram_slots }}">{{ $ramSlot->ram_slots }}</option>
                     @endforeach 
                 </select> 
@@ -112,19 +112,19 @@
                             <div class="w-[80%]">
                                 <select required :name="'pcie_slots[' + index + '][version]'" id="version">
                                     <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['versions'] as $version)
+                                    @foreach ($moboSpecs['versions'] as $version)
                                         <option value={{ $version->version}}>{{ $version->version }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'pcie_slots[' + index + '][lane_type]'" id="laneType">
                                     <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['laneTypes'] as $laneType)
+                                    @foreach ($moboSpecs['laneTypes'] as $laneType)
                                         <option value={{ $laneType->lane_type}}>{{ $laneType->lane_type }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'pcie_slots[' + index + '][quantity]'" id="quantity">
                                     <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['quantities'] as $quantity)
+                                    @foreach ($moboSpecs['quantities'] as $quantity)
                                         <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
                                     @endforeach 
                                 </select>   
@@ -166,25 +166,25 @@
                             <div class="w-[80%]">
                                 <select required :name="'m2_slots[' + index + '][length]'" id="length">
                                 <option disabled selected hidden value="">Length</option>   
-                                @foreach ($specs['lengths'] as $length)
+                                @foreach ($moboSpecs['lengths'] as $length)
                                     <option value={{ $length->length}}>{{ $length->length }}</option>
                                 @endforeach 
                                 </select> 
                                 <select required :name="'m2_slots[' + index + '][version]'" id="m2Version">
                                     <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['m2Versions'] as $m2Version)
+                                    @foreach ($moboSpecs['m2Versions'] as $m2Version)
                                         <option value={{ $m2Version->version}}>{{ $m2Version->version }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'m2_slots[' + index + '][lane_type]'" id="m2LaneType">
                                     <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['m2LaneTypes'] as $m2LaneType)
+                                    @foreach ($moboSpecs['m2LaneTypes'] as $m2LaneType)
                                         <option value={{ $m2LaneType->lane_type}}>{{ $m2LaneType->lane_type }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'m2_slots[' + index + '][quantity]'" id="quantity">
                                     <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['quantities'] as $quantity)
+                                    @foreach ($moboSpecs['quantities'] as $quantity)
                                         <option value={{ $quantity->quantity}}>{{ $quantity->quantity }}</option>
                                     @endforeach 
                                 </select>    
@@ -219,13 +219,13 @@
                 <div class="w-[80%]">
                     <select required name="version" id="sataVersion">
                         <option disabled selected hidden value="">Version</option>   
-                        @foreach ($specs['sataVersions'] as $sataVersion)
+                        @foreach ($moboSpecs['sataVersions'] as $sataVersion)
                             <option value="{{ $sataVersion->version}}">{{ $sataVersion->version }}</option>
                         @endforeach 
                     </select> 
                     <select required name="quantity" id="sataQuantity">
                         <option disabled selected hidden value="">Quantity</option>   
-                        @foreach ($specs['sataQuantities'] as $sataQuantity)
+                        @foreach ($moboSpecs['sataQuantities'] as $sataQuantity)
                             <option value="{{ $sataQuantity->quantity}}">{{ $sataQuantity->quantity }}</option>
                         @endforeach 
                     </select>   
@@ -242,25 +242,25 @@
                             <div class="w-[80%]">
                                 <select required :name="'usb_ports[' + index + '][version]'" id="usbVersion">
                                     <option disabled selected hidden value="">Version</option>   
-                                    @foreach ($specs['usbVersions'] as $usbVersion)
+                                    @foreach ($moboSpecs['usbVersions'] as $usbVersion)
                                         <option value={{ $usbVersion->version}}>{{ $usbVersion->version }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'usb_ports[' + index + '][location]'" id="location">
                                     <option disabled selected hidden value="">Location</option>   
-                                    @foreach ($specs['locations'] as $location)
+                                    @foreach ($moboSpecs['locations'] as $location)
                                         <option value={{ $location->location}}>{{ $location->location }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'usb_ports[' + index + '][type]'" id="type">
                                     <option disabled selected hidden value="">LaneType</option>   
-                                    @foreach ($specs['types'] as $type)
+                                    @foreach ($moboSpecs['types'] as $type)
                                         <option value={{ $type->type }}>{{ $type->type  }}</option>
                                     @endforeach 
                                 </select> 
                                 <select required :name="'usb_ports[' + index + '][quantity]'" id="usbQuantity">
                                     <option disabled selected hidden value="">Quantity</option>   
-                                    @foreach ($specs['usbQuantities'] as $usbQuantity)
+                                    @foreach ($moboSpecs['usbQuantities'] as $usbQuantity)
                                         <option value={{ $usbQuantity->quantity}}>{{ $usbQuantity->quantity }}</option>
                                     @endforeach 
                                 </select>    
@@ -302,7 +302,7 @@
                 <label for="">Build Category</label>
                 <select name="build_category_id" id="build_category_id">
                     <option disabled selected hidden value="">Select build category</option>   
-                    @foreach ($specs['buildCategories'] as $buildCategory)
+                    @foreach ($moboSpecs['buildCategories'] as $buildCategory)
                         <option value="{{ $buildCategory->id }}">{{ $buildCategory->name }}</option>
                     @endforeach 
                 </select>  

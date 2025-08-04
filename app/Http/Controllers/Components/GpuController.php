@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Components;
 
 use App\Http\Controllers\Controller;
+use App\Models\BuildCategory;
 use App\Models\Hardware\Gpu;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,13 @@ class GpuController extends Controller
 {
     public function getGpuSpecs() 
     {
-
+        return [
+            'brands' => Gpu::select('brand')->distinct()->orderBy('brand')->get(),
+            'vram_gbs' => ['GDDR5', 'GDDR6', 'GDDR6X'],
+            'pcie_interfaces' => Gpu::select('pcie_interface')->distinct()->orderBy('pcie_interface')->get(),
+            'connectors_requireds' => Gpu::select('connectors_required')->distinct()->orderBy('connectors_required')->get(),
+            'buildCategories' => BuildCategory::select('id', 'name')->get(),
+        ];
     }
 
     public function getFormattedGpus() 
@@ -18,7 +25,7 @@ class GpuController extends Controller
         $gpus = Gpu::all();
         
         $gpus->each(function ($gpu) {
-            $gpu->component_type = 'motherboard';
+            $gpu->component_type = 'gpu';
         });
 
         return $gpus;

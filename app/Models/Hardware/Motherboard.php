@@ -35,18 +35,18 @@ class Motherboard extends Model
     }
 
     public function pcieSlots() {
-        return $this->hasMany(PcieSlots::class);
+        return $this->hasMany(MoboPcieSlot::class);
     }
 
     public function m2Slots() {
-        return $this->hasMany(M2Slots::class);
+        return $this->hasMany(MoboM2Slots::class);
     }
 
     public function sataPorts() {
-        return $this->hasMany(SataPorts::class);
+        return $this->hasMany(MoboSataPorts::class);
     }
 
     public function usbPorts() {
-        return $this->hasMany(UsbPorts::class);
+        return $this->hasMany(MoboUsbPorts::class);
     }
 }

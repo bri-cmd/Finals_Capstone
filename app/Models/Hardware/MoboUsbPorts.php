@@ -2,23 +2,22 @@
 
 namespace App\Models\Hardware;
 
-use App\Models\Hardware\Motherboard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class M2Slots extends Model
+class MoboUsbPorts extends Model
 {
-    /** @use HasFactory<\Database\Factories\M2SlotsFactory> */
+    /** @use HasFactory<\Database\Factories\UsbPortsFactory> */
     use HasFactory;
 
     protected $fillable = [
         'motherboard_id',
-        'length',
         'version',
-        'lane_type',
-        'supports_sata',
+        'location',
+        'type',
         'quantity',
     ];
+
 
     public function motherboard() {
         return $this->belongsTo(Motherboard::class);
