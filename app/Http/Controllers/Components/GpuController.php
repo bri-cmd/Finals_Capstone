@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BuildCategory;
 use App\Models\Hardware\Gpu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GpuController extends Controller
 {
@@ -52,7 +53,49 @@ class GpuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the request data
+        $validated = $request->validate([
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'memory_capacity' => 'required|integer|min:1|max:64',
+            'vram_gb' => 'required|string|max:255',
+            'power_draw_watts' => 'required|integer|min:1|max:450',
+            'recommended_psu_watt' => 'required|integer|min:1|max:850',
+            'length_mm' => 'required|integer|min:1|max:200',
+            'pcie_interface' => 'required|string|max:255',
+            'connectors_required' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer|min:1|max:255',
+            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'build_category_id' => 'required|exists:build_categories,id',
+        ]);
+
+        // VRAM_GB
+        if($validated['memory_capacity']) {
+            $validated['vram_gb'] .= "({$validated['vram_gb']} GB {$validated['vram_gb']})";
+        }
+
+        // Handle image upload
+        $validated['image'] = $request->file('image');
+        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
+        $validated['image'] = $validated['image']->storeAs('product_img', $filename, 'public');
+
+        // Handle 3D model upload
+        if ($request->hasFile('model_3d')) {
+            $model3d = $request->file('model_3d');
+            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
+            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
+        } else {
+            $validated['model_3d'] = null;
+        }
+
+        Gpu::create($validated);
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'GPU added',
+            'type' => 'success',
+        ]); 
     }
 
     /**

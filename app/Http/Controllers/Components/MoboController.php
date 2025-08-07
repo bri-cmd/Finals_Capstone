@@ -123,7 +123,7 @@ class MoboController extends Controller
             'max_ram_speed' => 'required|string|max:255',
             'wifi_onboard' => 'nullable|string|max:255',
             'price' => 'required|numeric',
-            'stock' => 'required|integer|max:255',
+            'stock' => 'required|integer|min:1|max:255',
             'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',

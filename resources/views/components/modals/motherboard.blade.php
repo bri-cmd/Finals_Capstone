@@ -6,7 +6,7 @@
     <h2 class="text-center">Motherboard</h2>
 </div>
 
-<form action="{{ route('staff.componentdetails.store', ['type' => 'motherboard']) }}" method="POST" class="new-component-form" enctype="multipart/form-data">
+<form action="{{ route('staff.componentdetails.motherboard.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
     <div class="form-container">
         {{-- SPECS --}}

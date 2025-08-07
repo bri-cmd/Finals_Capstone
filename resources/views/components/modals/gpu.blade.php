@@ -6,7 +6,8 @@
     <h2 class="text-center">GPU</h2>
 </div>
 
-<form action="" class="new-component-form">
+<form action="{{ route('staff.componentdetails.gpu.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
+    @csrf
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider gpu">
@@ -28,7 +29,7 @@
             <div>
                 <label for="">Video RAM GB</label>
                 <div class="w-[80%]">
-                    <input type="number" name="memory_capacity" placeholder="00 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    <input required type="number" name="memory_capacity" placeholder="00 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
                     <select required name="vram_gb" id="vram_gb">
                         <option disabled selected hidden value="">Select a memory type</option>
                         @foreach ($gpuSpecs['vram_gbs'] as $vram_gb)
@@ -40,17 +41,17 @@
 
             <div>
                 <label for="">Power Draw Watts</label>
-                <input type="number" name="power_draw_watts" placeholder="00 W TDP" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input required type="number" name="power_draw_watts" placeholder="00 W TDP" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
             
             <div>
                 <label  for="">Recommended PSU Watt</label>
-                <input type="number" name="recommended_psu_watt" placeholder="00 W" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input required type="number" name="recommended_psu_watt" placeholder="00 W" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
-                <label for="">Lenght MM</label>
-                <input type="number" name="length_mm" placeholder="00 mm" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <label for="">Length</label>
+                <input required type="number" name="length_mm" placeholder="00 mm" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
@@ -66,7 +67,7 @@
             <div>
                 <label for="">Connectors Required</label>
                 <select required name="connectors_required" id="connectors_required">
-                    <option disabled selected hidden value="">Select a PCIe interface</option>
+                    <option disabled selected hidden value="">Select connectors</option>
                     @foreach ($gpuSpecs['connectors_requireds'] as $connectors_required)
                         <option value="{{ $connectors_required->connectors_required }}">{{ $connectors_required->connectors_required }}</option>
                     @endforeach

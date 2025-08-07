@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ComponentDetailsController;
 use App\Http\Controllers\Components\CpuController;
+use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
@@ -51,7 +52,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // COMPONENT DETAILS
     Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
-    Route::post('component-details/{type}', [MoboController::class, 'store'])->name('componentdetails.store');
+    Route::post('component-details/motherboard', [MoboController::class, 'store'])->name('componentdetails.motherboard.store');
+    Route::post('component-details/gpu', [GpuController::class, 'store'])->name('componentdetails.gpu.store');
 
 });
 
