@@ -114,6 +114,10 @@
                     <div x-show="selectedComponent.component_type === 'gpu'">
                         @include('components.view.gpu')
                     </div>
+
+                    <div x-show="selectedComponent.component_type === 'case'">
+                        @include('components.view.case')
+                    </div>
                 </div>
             </div>
         </div>

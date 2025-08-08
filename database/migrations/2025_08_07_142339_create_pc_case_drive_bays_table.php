@@ -18,8 +18,6 @@ return new class extends Migration
             $table->decimal('size_inch',3,2)->nullable();
             $table->string('drive_type');
             $table->integer('quantity');
-            $table->string('is_combo')->nullable();
-            $table->string('requires_layout')->nullable();
         });
     }
 

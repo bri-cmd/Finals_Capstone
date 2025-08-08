@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Components\CaseController;
 use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
 use App\Models\BuildCategory;
@@ -18,9 +19,14 @@ class ComponentDetailsController extends Controller
     public function index() {
         $formattedMobos = app(MoboController::class)->getFormattedMobos();
         $formattedGpus = app(GpuController::class)->getFormattedGpus();
+        $getFormattedCases = app(CaseController::class)->getFormattedCases();
 
-        // MERGE COMPONENTS
-        $components = $formattedMobos->concat($formattedGpus);
+        // // MERGE COMPONENTS
+        $components = collect([
+                    ...$formattedMobos,
+                    ...$formattedGpus,
+                    ...$getFormattedCases,
+        ])->sortByDesc('created_at')->values();
 
         $motherboardSpecs = app(MoboController::class)->getMotherboardSpecs();
         $gpuSpecs = app(GpuController::class)->getGpuSpecs();

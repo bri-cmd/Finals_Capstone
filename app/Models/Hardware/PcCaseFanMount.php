@@ -6,14 +6,16 @@ use App\Models\Hardware\PcCase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PcCaseFormFactorSupport extends Model
+class PcCaseFanMount extends Model
 {
-    /** @use HasFactory<\Database\Factories\PcCaseFormFactorSupportFactory> */
+    /** @use HasFactory<\Database\Factories\PcCaseFanMountFactory> */
     use HasFactory;
 
     protected $fillable = [
         'pc_case_id',
-        'form_factor_support',
+        'location',
+        'size_mm',
+        'quantity',
     ];
 
     public function pcCase() {
