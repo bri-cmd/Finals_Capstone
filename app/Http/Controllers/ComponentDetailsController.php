@@ -8,6 +8,7 @@ use App\Http\Controllers\Components\MoboController;
 use App\Models\BuildCategory;
 use App\Models\Hardware\M2Slots;
 use App\Models\Hardware\Motherboard;
+use App\Models\Hardware\PcCase;
 use App\Models\Hardware\PcieSlots;
 use App\Models\Hardware\SataPorts;
 use App\Models\Hardware\UsbPorts;
@@ -30,10 +31,12 @@ class ComponentDetailsController extends Controller
 
         $motherboardSpecs = app(MoboController::class)->getMotherboardSpecs();
         $gpuSpecs = app(GpuController::class)->getGpuSpecs();
+        $caseSpecs = app(CaseController::class)->getCaseSpecs();
         
         return view('staff.componentdetails', compact(  'components',
                                                         'motherboardSpecs',
                                                         'gpuSpecs',
+                                                        'caseSpecs'
                                                     ));
     }
 

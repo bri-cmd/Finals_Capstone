@@ -37,11 +37,11 @@
         </div>
         <div>
             <p>Fan Mounts</p>
-            <p x-text="selectedComponent.model"></p>
+            <p x-html="selectedComponent.fan_display"></p>
         </div>
         <div>
             <p>Front USB Ports</p>
-            <p x-text="selectedComponent.model"></p>
+            <p x-html="selectedComponent.usb_display"></p>
         </div>
         <div>
             <p>Price </p>

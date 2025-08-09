@@ -42,6 +42,7 @@
                         :component="'modals.' . $type" 
                         :moboSpecs="$motherboardSpecs"
                         :gpuSpecs="$gpuSpecs"
+                        :caseSpecs="$caseSpecs"
                         >
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
