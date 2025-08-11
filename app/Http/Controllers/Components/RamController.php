@@ -3,10 +3,22 @@
 namespace App\Http\Controllers\Components;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hardware\Ram;
 use Illuminate\Http\Request;
 
 class RamController extends Controller
 {
+    public function getFormattedRams() 
+    {
+        $rams = Ram::all();
+
+        $rams->each(function ($ram) {
+            $ram->component_type = 'ram';
+        });
+
+        return $rams;
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -43,6 +43,7 @@
                         :moboSpecs="$motherboardSpecs"
                         :gpuSpecs="$gpuSpecs"
                         :caseSpecs="$caseSpecs"
+                        :psuSpecs="$psuSpecs"
                         >
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
@@ -118,6 +119,10 @@
 
                     <div x-show="selectedComponent.component_type === 'case'">
                         @include('components.view.case')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'psu'">
+                        @include('components.view.psu')
                     </div>
                 </div>
             </div>

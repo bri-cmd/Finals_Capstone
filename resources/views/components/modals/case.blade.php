@@ -215,12 +215,12 @@
         <div class="form-divider">
             <div>
                 <label for="">Price</label>
-                <input name="price" id="price" type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input required name="price" id="price" type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
             
             <div>
                 <label for="">Build Category</label>
-                <select name="build_category_id" id="build_category_id">
+                <select required name="build_category_id" id="build_category_id">
                     <option disabled selected hidden value="">Select build category</option>   
                     @foreach ($caseSpecs['buildCategories'] as $buildCategory)
                         <option value="{{ $buildCategory->id }}">{{ $buildCategory->name }}</option>
@@ -230,14 +230,14 @@
 
             <div>
                 <label for="">Stock</label>
-                <input name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
                 <label for="product-img">Upload product image</label>    
                 
                 <div class="product-img">
-                    <input type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+                    <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
                     <label for="image">

@@ -5,6 +5,7 @@ use App\Http\Controllers\Components\CaseController;
 use App\Http\Controllers\Components\CpuController;
 use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
+use App\Http\Controllers\Components\PsuController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
@@ -56,6 +57,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('component-details/motherboard', [MoboController::class, 'store'])->name('componentdetails.motherboard.store');
     Route::post('component-details/gpu', [GpuController::class, 'store'])->name('componentdetails.gpu.store');
     Route::post('component-details/case', [CaseController::class, 'store'])->name('componentdetails.case.store');
+    Route::post('component-details/psu', [PsuController::class, 'store'])->name('componentdetails.psu.store');
 
 });
 
