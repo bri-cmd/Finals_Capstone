@@ -44,6 +44,9 @@
                         :gpuSpecs="$gpuSpecs"
                         :caseSpecs="$caseSpecs"
                         :psuSpecs="$psuSpecs"
+                        :ramSpecs="$ramSpecs"
+                        :storageSpecs="$storageSpecs"
+                        :cpuSpecs="$cpuSpecs"
                         >
                         <button @click="componentModal = null; showAddModal = true;">
                             <x-icons.arrow class="new-component-arrow"/>
@@ -123,6 +126,18 @@
 
                     <div x-show="selectedComponent.component_type === 'psu'">
                         @include('components.view.psu')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'ram'">
+                        @include('components.view.ram')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'storage'">
+                        @include('components.view.storage')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'cpu'">
+                        @include('components.view.cpu')
                     </div>
                 </div>
             </div>

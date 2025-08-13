@@ -82,6 +82,9 @@ class CaseController extends Controller
                 return "{$port->quantity}x USB {$port->version} {$port->connector}";
             })->implode('<br>');
 
+            $case->price_display = '₱' . number_format($case->price, 2);
+
+
             $case->component_type = 'case';
         });
 
@@ -136,6 +139,8 @@ class CaseController extends Controller
             $validated['model_3d'] = null;
         }
 
+        // dd($validated); 
+
         $case = PcCase::create($validated);
 
         // Validate form factor support
@@ -144,6 +149,8 @@ class CaseController extends Controller
         ]);
 
         $formFactors = $request->input('form_factor');
+        // dd($formFactors); 
+
 
         // Store form factor
         foreach ($formFactors as $formData) {
@@ -200,6 +207,7 @@ class CaseController extends Controller
         ]);
 
         $fanMounts = $request->input('fan_mount');
+        // dd($fanMounts); 
 
         // Store fan mount
         foreach ($fanMounts as $fanData) {
@@ -230,7 +238,7 @@ class CaseController extends Controller
             ]);
         }
 
-         return redirect()->route('staff.componentdetails')->with([
+        return redirect()->route('staff.componentdetails')->with([
             'message' => 'Case added',
             'type' => 'success',
         ]); 

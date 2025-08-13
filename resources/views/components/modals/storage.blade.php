@@ -1,51 +1,64 @@
+@props(['storageSpecs'])
+
 <div class="new-component-header">
     {{ $slot }}
 
     <h2 class="text-center">Storage</h2>
 </div>
 
-<form action="" class="new-component-form">
+<form action="{{ route('staff.componentdetails.storage.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
+    @csrf
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider">
             <div>
                 <label for="">Brand</label>
-                <input type="text">
+                <select required name="brand" id="brand">
+                    <option disabled selected hidden value="">Select a brand</option>
+                    @foreach ($storageSpecs['brands'] as $brand)
+                        <option value="{{ $brand }}">{{ $brand }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
                 <label for="">Models</label>
-                <input type="text">
+                <input name="model" required type="text" placeholder="Enter Model">
             </div>
 
             <div>
                 <label for="">Storage Type</label>
-                <input type="text">
+                <select required name="storage_type" id="storage_type">
+                    <option disabled selected hidden value="">Select storage type</option>
+                    @foreach ($storageSpecs['storage_types'] as $storage_type)
+                        <option value="{{ $storage_type }}">{{ $storage_type }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
                 <label for="">Interface</label>
-                <input type="text">
+                <input name="interface" required type="text" placeholder="Enter interface">
             </div>
             
             <div>
                 <label for="">Capacity GB</label>
-                <input type="text">
+                <input required name="capacity_gb" id="capacity_gb" type="number" placeholder="000 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
                 <label for="">Form Factor</label>
-                <input type="text">
+                <input name="form_factor" required type="text" placeholder="Enter form factor">
             </div>
 
             <div>
                 <label for="">Read Speed Mbps</label>
-                <input type="text">
+                <input required name="read_speed_mbps" id="read_speed_mbps" type="number" placeholder="000 MB/s" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
                 <label for="">Write Speed Mbps</label>
-                <input type="text">
+                <input required name="write_speed_mbps" id="write_speed_mbps" type="number" placeholder="000 MB/s" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
         </div>
 
@@ -53,29 +66,56 @@
         <div class="form-divider">
             <div>
                 <label for="">Price</label>
-                <input type="text">
+                <input required name="price" id="price" type="number" step="0.01" placeholder="Enter price" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
             
             <div>
                 <label for="">Build Category</label>
-                <input type="text">
+                <select required name="build_category_id" id="build_category_id">
+                    <option disabled selected hidden value="">Select build category</option>   
+                    @foreach ($storageSpecs['buildCategories'] as $buildCategory)
+                        <option value="{{ $buildCategory->id }}">{{ $buildCategory->name }}</option>
+                    @endforeach 
+                </select>  
             </div>
 
             <div>
                 <label for="">Stock</label>
-                <input type="text">
+                <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
-                <label for="">Upload Image</label>
-                <input type="text">
+                <label for="product-img">Upload product image</label>    
+                
+                <div class="product-img">
+                    <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+
+                    {{-- upload icon --}}
+                    <label for="image">
+                        <x-icons.upload class="upload-product"/>    
+                    </label>
+
+                    {{-- show the file name --}}
+                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                </div>
             </div>
 
             <div>
-                <label for="">Upload 3d Model</label>
-                <input type="text">
+                <label for="product_img">Upload product 3d model</label>    
+                
+                <div class="product-img">
+                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
+
+                    {{-- upload icon --}}
+                    <label for="model_3d">
+                        <x-icons.upload class="upload-product"/>    
+                    </label>
+
+                    {{-- show the file name --}}
+                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                </div>
             </div>
-        </div>    
+        </div>      
     </div>
     
     <button>Add Component</button>

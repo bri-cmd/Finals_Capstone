@@ -26,6 +26,8 @@ class GpuController extends Controller
         $gpus = Gpu::all();
         
         $gpus->each(function ($gpu) {
+            $gpu->price_display = '₱' . number_format($gpu->price, 2);
+
             $gpu->component_type = 'gpu';
         });
 
@@ -89,6 +91,8 @@ class GpuController extends Controller
         } else {
             $validated['model_3d'] = null;
         }
+
+        // dd($validated); 
 
         Gpu::create($validated);
 

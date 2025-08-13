@@ -4,18 +4,13 @@ namespace App\Http\Controllers\Components;
 
 use App\Http\Controllers\Controller;
 use App\Models\BuildCategory;
-use App\Models\Hardware\M2Slots;
 use App\Models\Hardware\MoboM2Slots;
 use App\Models\Hardware\MoboPcieSlot;
 use App\Models\Hardware\MoboSataPorts;
 use App\Models\Hardware\MoboUsbPorts;
 use App\Models\Hardware\Motherboard;
-use App\Models\Hardware\PcieSlots;
-use App\Models\Hardware\SataPorts;
-use App\Models\Hardware\UsbPorts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 
 class MoboController extends Controller
 {
@@ -79,6 +74,9 @@ class MoboController extends Controller
             $mobo->usb_display = $mobo->usbPorts->map(function ($port) {
                 return "{$port->quantity}x USB {$port->version} {$port->type} ({$port->location})";
             })->implode('<br>');
+
+            $mobo->price_display = '₱' . number_format($mobo->price, 2);
+
 
             $mobo->component_type = 'motherboard';
             
@@ -216,7 +214,6 @@ class MoboController extends Controller
 
         $usbPorts = $request->input('usb_ports');
         // dd($usbPorts); 
-
 
         // Store Usb ports
         foreach ($usbPorts as $usbData) {

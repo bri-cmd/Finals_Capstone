@@ -62,7 +62,7 @@
         </div>
         <div>
             <p>Price </p>
-            <p x-text="selectedComponent.price"></p>
+            <p x-text="selectedComponent.price_display"></p>
         </div>
         <div>
             <p>Stock </p>

@@ -16,31 +16,37 @@
             <p x-text="selectedComponent.model"></p>
         </div>
         <div>
-            <p>VRAM GB</p>
-            <p x-text="selectedComponent.vram_gb"></p>
+            <p>Socket Type</p>
+            <p x-text="selectedComponent.socket_type"></p>
         </div>
         <div>
-            <p>Power Draw Watts</p>
-            <p x-text="selectedComponent.power_draw_watts"></p>
+            <p>Cores</p>
+            <p x-text="selectedComponent.cores"></p>
         </div>
         <div>
-            <p>Recommended PSU Watt</p>
-            <p x-text="selectedComponent.recommended_psu_watt"></p>
+            <p>Threads </p>
+            <p x-text="selectedComponent.threads"></p>
         </div>
         <div>
-            <p>Lenght</p>
-            <p x-text="selectedComponent.length_mm"></p>
+            <p>Base Clock</p>
+            <p x-text="selectedComponent.base_display"></p>
         </div>
         <div>
-            <p>PCIe Interface</p>
-            <p x-text="selectedComponent.pcie_interface"></p>
+            <p>Boost Clock</p>
+            <p x-text="selectedComponent.boost_display"></p>
         </div>
         <div>
-            <p>Connectors Required</p>
-            <p x-text="selectedComponent.connectors_required"></p>
+            <p>TDP</p>
+            <p x-text="selectedComponent.tdp_display"></p>
         </div>
-        
-    {{-- INVENTORY --}}
+        <div>
+            <p>Integerated Graphics</p>
+            <p x-html="selectedComponent.integrated_graphics"></p>
+        </div>
+        <div>
+            <p>Generation</p>
+            <p x-html="selectedComponent.generation"></p>
+        </div>
         <div>
             <p>Price </p>
             <p x-text="selectedComponent.price_display"></p>

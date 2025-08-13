@@ -16,31 +16,29 @@
             <p x-text="selectedComponent.model"></p>
         </div>
         <div>
-            <p>VRAM GB</p>
-            <p x-text="selectedComponent.vram_gb"></p>
+            <p>Storage Type</p>
+            <p x-text="selectedComponent.storage_type"></p>
         </div>
         <div>
-            <p>Power Draw Watts</p>
-            <p x-text="selectedComponent.power_draw_watts"></p>
+            <p>Interface</p>
+            <p x-text="selectedComponent.interface"></p>
         </div>
         <div>
-            <p>Recommended PSU Watt</p>
-            <p x-text="selectedComponent.recommended_psu_watt"></p>
+            <p>Capacity</p>
+            <p x-text="selectedComponent.capacity_display"></p>
         </div>
         <div>
-            <p>Lenght</p>
-            <p x-text="selectedComponent.length_mm"></p>
+            <p>Form Factor</p>
+            <p x-text="selectedComponent.form_factor"></p>
         </div>
         <div>
-            <p>PCIe Interface</p>
-            <p x-text="selectedComponent.pcie_interface"></p>
+            <p>Read Speed</p>
+            <p x-text="selectedComponent.read_display"></p>
         </div>
         <div>
-            <p>Connectors Required</p>
-            <p x-text="selectedComponent.connectors_required"></p>
+            <p>Write Speed</p>
+            <p x-text="selectedComponent.write_display"></p>
         </div>
-        
-    {{-- INVENTORY --}}
         <div>
             <p>Price </p>
             <p x-text="selectedComponent.price_display"></p>

@@ -33,10 +33,5 @@
             Cooler
         </button>
 
-        {{-- Modals --}}
-        <div x-show="showCPU" x-cloak x-transition class="modal">
-            <div class="add-component" @click.away="showCPU = false">
-                <x-modals.cpu />
-            </div>
-        </div>
+        
     </div>

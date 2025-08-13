@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Hardware;
 
+use App\Models\BuildCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,4 +10,27 @@ class Cpu extends Model
 {
     /** @use HasFactory<\Database\Factories\CpuFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'build_category_id',
+        'brand',
+        'model',
+        'socket_type',
+        'cores',
+        'threads',
+        'base_clock',
+        'boost_clock',
+        'tdp',
+        'integrated_graphics',
+        'generation',
+        'price',
+        'stock',
+        'image',
+        'model_3d',
+    ];
+
+    // DEFINE RELATIONSHIP
+    public function buildCategory() {
+        return $this->belongsTo(BuildCategory::class);
+    }
 }

@@ -36,6 +36,8 @@ class PsuController extends Controller
             $psu->pcie_display = "{$psu->pcie_connectors} {$modularity}";
             $psu->sata_display = "{$psu->sata_connectors} {$modularity}";
 
+            $psu->price_display = '₱' . number_format($psu->price, 2);
+
             $psu->component_type = 'psu';
         });
 

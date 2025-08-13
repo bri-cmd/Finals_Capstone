@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('base_clock',4,2);
             $table->decimal('boost_clock', 4,2);
             $table->integer('tdp');
+            $table->string('integrated_graphics');
             $table->string('generation');
             $table->decimal('price',10,2);
             $table->integer('stock');

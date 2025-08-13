@@ -6,6 +6,8 @@ use App\Http\Controllers\Components\CpuController;
 use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\Components\PsuController;
+use App\Http\Controllers\Components\RamController;
+use App\Http\Controllers\Components\StorageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
@@ -58,6 +60,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('component-details/gpu', [GpuController::class, 'store'])->name('componentdetails.gpu.store');
     Route::post('component-details/case', [CaseController::class, 'store'])->name('componentdetails.case.store');
     Route::post('component-details/psu', [PsuController::class, 'store'])->name('componentdetails.psu.store');
+    Route::post('component-details/ram', [RamController::class, 'store'])->name('componentdetails.ram.store');
+    Route::post('component-details/storage', [StorageController::class, 'store'])->name('componentdetails.storage.store');
+    Route::post('component-details/cpu', [CpuController::class, 'store'])->name('componentdetails.cpu.store');
 
 });
 

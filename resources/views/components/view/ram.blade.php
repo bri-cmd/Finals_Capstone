@@ -16,53 +16,36 @@
             <p x-text="selectedComponent.model"></p>
         </div>
         <div>
-            <p>Socket Type</p>
-            <p x-text="selectedComponent.socket_type"></p>
-        </div>
-        <div>
-            <p>Chipset</p>
-            <p x-text="selectedComponent.chipset"></p>
-        </div>
-        <div>
-            <p>Form Factor </p>
-            <p x-text="selectedComponent.form_factor"></p>
-        </div>
-        <div>
             <p>RAM Type</p>
             <p x-text="selectedComponent.ram_type"></p>
         </div>
         <div>
-            <p>Max RAM</p>
-            <p x-text="selectedComponent.max_ram + ' GB'"></p>
+            <p>Speed</p>
+            <p x-text="selectedComponent.speed_display"></p>
         </div>
         <div>
-            <p>Max RAM Speed</p>
-            <p x-text="selectedComponent.max_ram_speed"></p>
+            <p>Size per module</p>
+            <p x-text="selectedComponent.size_display"></p>
         </div>
         <div>
-            <p>PCIe Slots </p>
-            <p x-html="selectedComponent.pcie_display"></p>
+            <p>Total Capacity</p>
+            <p x-text="selectedComponent.capacity_display"></p>
         </div>
         <div>
-            <p>M.2 Slots </p>
-            <p x-html="selectedComponent.m2_display"></p>
+            <p>Module Count</p>
+            <p x-text="selectedComponent.module_count"></p>
         </div>
         <div>
-            <p>SATA Ports </p>
-            <p x-html="selectedComponent.sata_display"></p>
+            <p>ECC</p>
+            <p x-text="selectedComponent.is_ecc"></p>
         </div>
         <div>
-            <p>USB Ports </p>
-            <p x-html="selectedComponent.usb_display"></p>
-        </div>
-        <div>
-            <p>Wi-Fi Onboard </p>
-            <p x-text="selectedComponent.wifi_onboard ? selectedComponent.wifi_onboard : 'No'"></p>
-
+            <p>RGB</p>
+            <p X-text="selectedComponent.is_rgb ? selectedComponent.is_rgb : 'No'"></p>
         </div>
         <div>
             <p>Price </p>
-            <p x-text="selectedComponent.price"></p>
+            <p x-text="selectedComponent.price_display"></p>
         </div>
         <div>
             <p>Stock </p>
