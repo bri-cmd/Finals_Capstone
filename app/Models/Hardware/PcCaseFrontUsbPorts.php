@@ -13,9 +13,10 @@ class PcCaseFrontUsbPorts extends Model
 
     protected $fillable = [
         'pc_case_id',
-        'version',
-        'connector',
-        'quantity',
+        'usb_3_0_type-A',
+        'usb_2_0',
+        'usb-c',
+        'audio_jacks',
     ];
 
     public function pcCase() {

@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('pc_case_id')->constrained()->onDelete('cascade');
-            $table->decimal('size_inch',3,2)->nullable();
-            $table->string('drive_type');
-            $table->integer('quantity');
+            $table->integer('3_5_bays');
+            $table->integer('2_5_bays');
         });
     }
 

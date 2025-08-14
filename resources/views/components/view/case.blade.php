@@ -17,30 +17,30 @@
         </div>
         <div>
             <p>Form Factor Support</p>
-            <p x-html="selectedComponent.form_display"></p>
+            <p x-html="selectedComponent.form_factor_support"></p>
         </div>
         <div>
             <p>Max GPU Lenght</p>
-            <p x-text="selectedComponent.max_gpu_length_display"></p>
+            <p x-text="selectedComponent.max_gpu_length_mm + ' mm'"></p>
         </div>
         <div>
             <p>Max Cooler Height</p>
-            <p x-text="selectedComponent.max_cooler_height_display"></p>
+            <p x-text="selectedComponent.max_cooler_height_mm + ' mm'"></p>
         </div>
         <div>
             <p>Radiator Support</p>
             <p x-html="selectedComponent.radiator_display"></p>
         </div>
         <div>
-            <p>Drive Bays</p>
+            <p>No. of Drive Bays</p>
             <p x-html="selectedComponent.drive_display"></p>
         </div>
         <div>
-            <p>Fan Mounts</p>
-            <p x-html="selectedComponent.fan_display"></p>
+            <p>No  of Fan Mounts</p>
+            <p x-html="selectedComponent.fan_mounts"></p>
         </div>
         <div>
-            <p>Front USB Ports</p>
+            <p>No of Front USB Ports</p>
             <p x-html="selectedComponent.usb_display"></p>
         </div>
         <div>

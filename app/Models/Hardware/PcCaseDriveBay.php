@@ -13,9 +13,8 @@ class PcCaseDriveBay extends Model
 
     protected $fillable = [
         'pc_case_id',
-        'size_inch',
-        'drive_type',
-        'quantity',
+        '3_5_bays',
+        '2_5_bays',
     ];
 
     public function pcCase() {

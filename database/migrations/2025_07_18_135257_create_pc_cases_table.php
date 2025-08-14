@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
-            // $table->string('form_factor_support');
+            $table->string('form_factor_support');
             $table->integer('max_gpu_length_mm');
             $table->integer('max_cooler_height_mm');
             // $table->string('radiator_support');
             // $table->string('drive_bays');
-            // $table->integer('fan_mounts'); 
+            $table->integer('fan_mounts'); 
             // $table->integer('front_usb_ports');
             $table->decimal('price',10,2);
             $table->integer('stock');

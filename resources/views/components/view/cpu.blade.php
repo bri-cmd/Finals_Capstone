@@ -29,19 +29,19 @@
         </div>
         <div>
             <p>Base Clock</p>
-            <p x-text="selectedComponent.base_display"></p>
+            <p x-text="selectedComponent.base_clock + ' GHz'"></p>
         </div>
         <div>
             <p>Boost Clock</p>
-            <p x-text="selectedComponent.boost_display"></p>
+            <p x-text="selectedComponent.boost_clock + ' GHz'"></p>
         </div>
         <div>
             <p>TDP</p>
-            <p x-text="selectedComponent.tdp_display"></p>
+            <p x-text="selectedComponent.tdp + ' W'"></p>
         </div>
         <div>
             <p>Integerated Graphics</p>
-            <p x-html="selectedComponent.integrated_graphics"></p>
+            <p x-html="selectedComponent.integrated_display"></p>
         </div>
         <div>
             <p>Generation</p>

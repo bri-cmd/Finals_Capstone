@@ -22,6 +22,10 @@ class Motherboard extends Model
         'max_ram',
         'ram_slots',
         'max_ram_speed',
+        'pcie_slots',
+        'm2_slots',
+        'sata_ports',
+        'usb_ports',
         'wifi_onboard',
         'price',
         'stock',
@@ -32,21 +36,5 @@ class Motherboard extends Model
     // DEFINE RELATIONSHIP
     public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);
-    }
-
-    public function pcieSlots() {
-        return $this->hasMany(MoboPcieSlot::class);
-    }
-
-    public function m2Slots() {
-        return $this->hasMany(MoboM2Slots::class);
-    }
-
-    public function sataPorts() {
-        return $this->hasMany(MoboSataPorts::class);
-    }
-
-    public function usbPorts() {
-        return $this->hasMany(MoboUsbPorts::class);
     }
 }

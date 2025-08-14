@@ -25,7 +25,7 @@
         </div>
         <div>
             <p>Capacity</p>
-            <p x-text="selectedComponent.capacity_display"></p>
+            <p x-text="selectedComponent.capacity_gb + ' GB'"></p>
         </div>
         <div>
             <p>Form Factor</p>
@@ -33,11 +33,11 @@
         </div>
         <div>
             <p>Read Speed</p>
-            <p x-text="selectedComponent.read_display"></p>
+            <p x-text="selectedComponent.read_speed_mbps + ' MHz'"></p>
         </div>
         <div>
             <p>Write Speed</p>
-            <p x-text="selectedComponent.write_display"></p>
+            <p x-text="selectedComponent.write_speed_mbps + 'MHz'"></p>
         </div>
         <div>
             <p>Price </p>

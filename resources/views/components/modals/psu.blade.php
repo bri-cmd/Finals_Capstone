@@ -15,7 +15,7 @@
                 <select required name="brand" id="brand">
                     <option disabled selected hidden value="">Select a brand</option>
                     @foreach ($psuSpecs['brands'] as $brand)
-                        <option value="{{ $brand->brand }}">{{ $brand->brand }}</option>
+                        <option value="{{ $brand }}">{{ $brand }}</option>
                     @endforeach
                 </select>
             </div>
@@ -32,17 +32,12 @@
 
             <div>
                 <label for="">Efficiency Rating</label>
-                <div class="w-[80%]">
-                    <select required name="efficiency_rating" id="efficiency_rating">
-                        <option disabled selected hidden value="">Rating</option>
-                        @foreach ($psuSpecs['ratings'] as $rating)
-                            <option value="{{ $rating }}">{{ $rating }}</option>
-                        @endforeach
-                    </select>
-                    <input name="efficiency_percent" id="efficiency_percent" type="number" placeholder="Efficiency" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                    <input name="notes" type="text" placeholder="Notes">    
-                </div>
-                
+                <select required name="efficiency_rating" id="efficiency_rating">
+                    <option disabled selected hidden value="">Rating</option>
+                    @foreach ($psuSpecs['efficiency_ratings'] as $efficiency_rating)
+                        <option value="{{ $efficiency_rating }}">{{ $efficiency_rating }}</option>
+                    @endforeach
+                </select>
             </div>
             
             <div>
@@ -57,22 +52,12 @@
 
             <div>
                 <label for="">PCIe Connectors</label>
-                <select required name="pcie_connectors" id="pcie_connectors">
-                    <option disabled selected hidden value="">Select pcie connector</option>
-                    @foreach ($psuSpecs['pcies'] as $pcie)
-                        <option value="{{ $pcie }}">{{ $pcie }}</option>
-                    @endforeach
-                </select>
+                <input required name="pcie_connectors" id="pcie_connectors" type="number" placeholder="00 W" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
                 <label for="">Sata Connectors</label>
-                <select required name="sata_connectors" id="sata_connectors">
-                    <option disabled selected hidden value="">Select sata connector</option>
-                    @foreach ($psuSpecs['satas'] as $satas)
-                        <option value="{{ $satas }}">{{ $satas }}</option>
-                    @endforeach
-                </select>
+                <input required name="sata_connectors" id="sata_connectors" type="number" placeholder="00 W" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
         </div>
 

@@ -16,7 +16,7 @@
                 <select required name="brand" id="brand">
                     <option disabled selected hidden value="">Select a brand</option>
                     @foreach ($caseSpecs['brands'] as $brand)
-                        <option value="{{ $brand->brand }}">{{ $brand->brand }}</option>
+                        <option value="{{ $brand }}">{{ $brand }}</option>
                     @endforeach
                 </select>
             </div>
@@ -24,6 +24,16 @@
             <div>
                 <label for="">Model</label>
                 <input name="model" required type="text" placeholder="Enter Model">
+            </div>
+
+            <div>
+                <label for="">Form Factor Support</label>
+                <select required name="form_factor_support" id="form_factor_support">
+                    <option disabled selected hidden value="">Select a form factor support</option>
+                    @foreach ($caseSpecs['form_factor_supports'] as $form_factor_support)
+                        <option value="{{ $form_factor_support }}">{{ $form_factor_support }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
@@ -36,37 +46,29 @@
                 <input required name="max_cooler_height_mm" id="max_cooler_height_mm" type="number" placeholder="Enter Max Cooler Height" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            <div class="flex flex-col"
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div >
-                        <label for="">Form Factor Support <span x-text="index + 1"></span></label>
-                        <select required :name="'form_factor[' + index + '][form_factor_support]'" id="form_factor_support">
-                            <option disabled selected hidden value="">Select a form factor support</option>
-                            @foreach ($caseSpecs['form_factor_supports'] as $form_factor_support)
-                                <option value="{{ $form_factor_support->form_factor_support }}">{{ $form_factor_support->form_factor_support }}</option>
-                            @endforeach
-                        </select>
-                        
-                        <template x-if="index > 0">
-                            <button type="button"
-                                class="remove-add"
-                                @click="slots.splice(index, 1)">
-                                x
-                            </button>    
-                        </template>
-                    </div>
-                </template>
-                
-                {{-- ADD FORM FACTOR BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie">
-                    + Add Form Factor
-                </button>
-                
+            <div>
+                <label for="">Fan Mount</label>
+                <input required name="fan_mounts" id="fan_mounts" type="number" placeholder="00 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
+            
+            <div>
+                <label for="">Drive Bay</label>
+                <div class="w-[80%]">
+                    <input required name='3_5_bays' id='3_5_bays' type="number" placeholder='No. of 3.5" bays' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    <input required name='2_5_bays' id='2_5_bays' type="number" placeholder='No. of 2.5" bays' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                </div>
+            </div>
+
+            <div>
+                <label for="">Front USB Port</label>
+                <div class="w-[80%]">
+                    <input required name='usb_3_0_type-A' id='usb_3_0_type-A' type="number" placeholder='USB 3.0' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    <input required name='usb_2_0' id='usb_2_0' type="number" placeholder='USB 2.0' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    <input required name='usb-c' id='usb-c' type="number" placeholder='USB-C' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    <input required name='audio_jacks' id='audio_jacks' type="number" placeholder='Audio jacks' onkeydown="return !['e','E','+','-'].includes(event.key)">
+                </div>
+            </div>
+            
 
             <div class="flex flex-col"
                  x-data="{ slots:[{}] }">
@@ -99,113 +101,6 @@
                         @click="slots.push({})"
                         class="add-pcie">
                     + Add Radiator Support
-                </button>
-            </div>
-
-            <div class="flex flex-col"
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div >
-                        <label for="">Drive <br> Bays <span x-text="index + 1"></span></label>
-                        <div class="w-[80%]">
-                            <input required :name="'drive_bays[' + index + '][size_inch]'" id="size_inch" type="number" step="0.01" placeholder="Size 00 inch" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                            <select required :name="'drive_bays[' + index + '][drive_type]'" id="drive_type">
-                                <option disabled selected hidden value="">Drive Type</option>
-                                @foreach ($caseSpecs['drive_types'] as $drive_type)
-                                    <option value="{{ $drive_type }}">{{ $drive_type }}</option>
-                                @endforeach
-                            </select>
-                            <input :name="'drive_bays[' + index + '][quantity]'" id="quantity" type="number" step="0.01" placeholder="Quantity" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                        </div>
-                        <template x-if="index > 0">
-                            <button type="button"
-                                class="remove-add"
-                                @click="slots.splice(index, 1)">
-                                x
-                            </button>    
-                        </template>
-                    </div>
-                </template>
-                
-                {{-- ADD DRIVE BAYS BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie">
-                    + Add Drive Bay
-                </button>
-            </div>
-
-            <div class="flex flex-col"
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div >
-                        <label for="">Fan <br> Mounts <span x-text="index + 1"></span></label>
-                        <div class="w-[80%]">
-                            <select required :name="'fan_mount[' + index + '][location]'" id="fanlocation">
-                                <option disabled selected hidden value="">Location</option>
-                                @foreach ($caseSpecs['locations'] as $location)
-                                    <option value="{{ $location }}">{{ $location }}</option>
-                                @endforeach
-                            </select>
-                            <input required :name="'fan_mount[' + index + '][size_mm]'" id="size_mm" type="number" placeholder="Size 00 mm" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                            <input required :name="'fan_mount[' + index + '][quantity]'" placeholder="Quantity" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                        </div>
-                        <template x-if="index > 0">
-                            <button type="button"
-                                class="remove-add"
-                                @click="slots.splice(index, 1)">
-                                x
-                            </button>    
-                        </template>
-                    </div>
-                </template>
-                
-                {{-- ADD DRIVE BAYS BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie">
-                    + Add Fan Mount
-                </button>
-            </div>
-
-            <div class="flex flex-col"
-                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
-                          :key="index">
-                    <div >
-                        <label for="">Front USB <br> Ports <span x-text="index + 1"></span></label>
-                        <div class="w-[80%]">
-                            <select required :name="'front_usb[' + index + '][version]'" id="version">
-                                <option disabled selected hidden value="">Location</option>
-                                @foreach ($caseSpecs['versions'] as $version)
-                                    <option value="{{ $version }}">{{ $version }}</option>
-                                @endforeach
-                            </select>
-                            <select required :name="'front_usb[' + index + '][connector]'" id="connector">
-                                <option disabled selected hidden value="">Location</option>
-                                @foreach ($caseSpecs['connectors'] as $connector)
-                                    <option value="{{ $connector }}">{{ $connector }}</option>
-                                @endforeach
-                            </select>
-                            <input :name="'front_usb[' + index + '][quantity]'" id="quantity" type="number" step="0.01" placeholder="Quantity" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                        </div>
-                        <template x-if="index > 0">
-                            <button type="button"
-                                class="remove-add"
-                                @click="slots.splice(index, 1)">
-                                x
-                            </button>    
-                        </template>
-                    </div>
-                </template>
-                
-                {{-- ADD USB PORTS BUTTON --}}
-                <button type="button"
-                        @click="slots.push({})"
-                        class="add-pcie">
-                    + Add USB Ports
                 </button>
             </div>
 

@@ -23,12 +23,12 @@ return new class extends Migration
             $table->string('ram_type');
             $table->integer('max_ram');
             $table->integer('ram_slots');
-            $table->string('max_ram_speed');
-            // $table->integer('pcie_slots');
-            // $table->integer('m2_slots');
-            // $table->integer('sata_ports');
-            // $table->integer('usb_ports');
-            $table->string('wifi_onboard')->nullable();
+            $table->integer('max_ram_speed');
+            $table->integer('pcie_slots');
+            $table->integer('m2_slots');
+            $table->integer('sata_ports');
+            $table->integer('usb_ports');
+            $table->string('wifi_onboard');
             $table->decimal('price',10,2);
             $table->integer('stock');
             $table->string('image');

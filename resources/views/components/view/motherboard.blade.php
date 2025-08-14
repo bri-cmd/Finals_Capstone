@@ -36,29 +36,32 @@
             <p x-text="selectedComponent.max_ram + ' GB'"></p>
         </div>
         <div>
+            <p>No. of RAM Slots</p>
+            <p x-text="selectedComponent.ram_slots"></p>
+        </div>
+        <div>
             <p>Max RAM Speed</p>
-            <p x-text="selectedComponent.max_ram_speed"></p>
+            <p x-text="selectedComponent.max_ram_speed + ' MHz'"></p>
         </div>
         <div>
-            <p>PCIe Slots </p>
-            <p x-html="selectedComponent.pcie_display"></p>
+            <p>No. of PCIe Slots </p>
+            <p x-html="selectedComponent.pcie_slots"></p>
         </div>
         <div>
-            <p>M.2 Slots </p>
-            <p x-html="selectedComponent.m2_display"></p>
+            <p>No. of M.2 Slots </p>
+            <p x-html="selectedComponent.m2_slots"></p>
         </div>
         <div>
-            <p>SATA Ports </p>
-            <p x-html="selectedComponent.sata_display"></p>
+            <p>No. of SATA Ports </p>
+            <p x-html="selectedComponent.sata_ports"></p>
         </div>
         <div>
-            <p>USB Ports </p>
-            <p x-html="selectedComponent.usb_display"></p>
+            <p>No. of USB Ports </p>
+            <p x-html="selectedComponent.usb_ports"></p>
         </div>
         <div>
             <p>Wi-Fi Onboard </p>
-            <p x-text="selectedComponent.wifi_onboard ? selectedComponent.wifi_onboard : 'No'"></p>
-
+            <p x-text="selectedComponent.wifi_display"></p>
         </div>
         <div>
             <p>Price </p>

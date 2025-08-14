@@ -20,8 +20,10 @@ class PcCase extends Model
         'build_category_id',
         'brand',
         'model',
+        'form_factor_support',
         'max_gpu_length_mm',
         'max_cooler_height_mm',
+        'fan_mounts',
         'price',
         'stock',
         'image',
@@ -31,17 +33,9 @@ class PcCase extends Model
     public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);
     }
-
-    public function formFactors() {
-        return $this->hasMany(PcCaseFormFactorSupport::class);
-    }
     
     public function driveBays() {
         return $this->hasMany(PcCaseDriveBay::class);
-    }
-
-    public function fanMounts() {
-        return $this->hasMany(PcCaseFanMount::class);
     }
 
     public function usbPorts() {

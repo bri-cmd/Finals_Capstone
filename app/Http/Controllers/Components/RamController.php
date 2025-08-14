@@ -24,11 +24,8 @@ class RamController extends Controller
         $rams = Ram::all();
 
         $rams->each(function ($ram) {
-            $ram->speed_display = "{$ram->speed_mhz} MHz";
-
-            $ram->size_display = "{$ram->size_per_module_gb} GB";
-
-            $ram->capacity_display = "{$ram->total_capacity_gb} GB ({$ram->module_count}x{$ram->size_per_module_gb} GB)";
+            $ram->ecc_display = ($ram->is_ecc === 'false') ? 'No' : 'Yes';
+            $ram->rgb_display = ($ram->is_rgb === 'false') ? 'No' : 'Yes';
 
             $ram->price_display = '₱' . number_format($ram->price, 2);
 

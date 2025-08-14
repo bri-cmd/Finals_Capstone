@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('total_capacity_gb');
             $table->integer('module_count');
             $table->string('is_ecc');
-            $table->string('is_rgb')->nullable();
+            $table->string('is_rgb');
             $table->decimal('price',10,2);
             $table->integer('stock');
             $table->string('image');

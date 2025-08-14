@@ -17,7 +17,7 @@
         </div>
         <div>
             <p>Wattage</p>
-            <p x-text="selectedComponent.wattage_display"></p>
+            <p x-text="selectedComponent.wattage + ' W'"></p>
         </div>
         <div>
             <p>Efficiency Rating</p>
@@ -28,12 +28,12 @@
             <p x-text="selectedComponent.modular"></p>
         </div>
         <div>
-            <p>PCIe Display</p>
-            <p x-text="selectedComponent.pcie_display"></p>
+            <p>No. of PCIe Connector</p>
+            <p x-text="selectedComponent.pcie_connectors"></p>
         </div>
         <div>
-            <p>Sata Connectors</p>
-            <p x-text="selectedComponent.sata_display"></p>
+            <p>No. of Sata Connectors</p>
+            <p x-text="selectedComponent.sata_connectors"></p>
         </div>
         <div>
             <p>Price </p>

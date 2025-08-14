@@ -17,19 +17,19 @@
         </div>
         <div>
             <p>VRAM GB</p>
-            <p x-text="selectedComponent.vram_gb"></p>
+            <p x-text="selectedComponent.vram_gb + ' GB"></p>
         </div>
         <div>
             <p>Power Draw Watts</p>
-            <p x-text="selectedComponent.power_draw_watts"></p>
+            <p x-text="selectedComponent.power_draw_watts + ' W'"></p>
         </div>
         <div>
             <p>Recommended PSU Watt</p>
-            <p x-text="selectedComponent.recommended_psu_watt"></p>
+            <p x-text="selectedComponent.recommended_psu_watt + ' W'"></p>
         </div>
         <div>
             <p>Lenght</p>
-            <p x-text="selectedComponent.length_mm"></p>
+            <p x-text="selectedComponent.length_mm + ' mm'"></p>
         </div>
         <div>
             <p>PCIe Interface</p>

@@ -25,9 +25,7 @@ class CpuController extends Controller
         $cpus = Cpu::all();
 
         $cpus->each(function ($cpu) {
-            $cpu->base_display = "{$cpu->base_clock} GHz";
-            $cpu->boost_display = "Up to {$cpu->boost_clock} GHz";
-            $cpu->tdp_display = "{$cpu->tdp} W";
+            $cpu->integrated_display = ($cpu->integrated_graphics === 'false') ? 'No' : 'Yes';
             $cpu->price_display = '₱' . number_format($cpu->price, 2);
             $cpu->component_type = 'cpu';
         });

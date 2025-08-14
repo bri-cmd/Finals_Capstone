@@ -21,15 +21,15 @@
         </div>
         <div>
             <p>Speed</p>
-            <p x-text="selectedComponent.speed_display"></p>
+            <p x-text="selectedComponent.speed_mhz + ' MHz'"></p>
         </div>
         <div>
             <p>Size per module</p>
-            <p x-text="selectedComponent.size_display"></p>
+            <p x-text="selectedComponent.size_per_module_gb + ' GB'"></p>
         </div>
         <div>
             <p>Total Capacity</p>
-            <p x-text="selectedComponent.capacity_display"></p>
+            <p x-text="selectedComponent.total_capacity_gb + ' GB'"></p>
         </div>
         <div>
             <p>Module Count</p>
@@ -37,11 +37,11 @@
         </div>
         <div>
             <p>ECC</p>
-            <p x-text="selectedComponent.is_ecc"></p>
+            <p x-text="selectedComponent.ecc_display"></p>
         </div>
         <div>
             <p>RGB</p>
-            <p X-text="selectedComponent.is_rgb ? selectedComponent.is_rgb : 'No'"></p>
+            <p X-text="selectedComponent.rgb_display"></p>
         </div>
         <div>
             <p>Price </p>

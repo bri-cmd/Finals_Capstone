@@ -16,7 +16,7 @@
                 <select required name="brand" id="brand">
                     <option disabled selected hidden value="">Select a brand</option>
                     @foreach ($gpuSpecs['brands'] as $brand)
-                        <option value="{{ $brand->brand }}">{{ $brand->brand }}</option>
+                        <option value="{{ $brand }}">{{ $brand }}</option>
                     @endforeach
                 </select>
             </div>
@@ -28,15 +28,7 @@
 
             <div>
                 <label for="">Video RAM GB</label>
-                <div class="w-[80%]">
-                    <input required type="number" name="memory_capacity" placeholder="00 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
-                    <select required name="vram_gb" id="vram_gb">
-                        <option disabled selected hidden value="">Select a memory type</option>
-                        @foreach ($gpuSpecs['vram_gbs'] as $vram_gb)
-                            <option value="{{ $vram_gb }}">{{ $vram_gb }}</option>
-                        @endforeach
-                    </select>    
-                </div>
+                <input required type="number" name="vram_gb" placeholder="00 GB" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
@@ -59,7 +51,7 @@
                 <select required name="pcie_interface" id="pcie_interface">
                     <option disabled selected hidden value="">Select a PCIe interface</option>
                     @foreach ($gpuSpecs['pcie_interfaces'] as $pcie_interface)
-                        <option value="{{ $pcie_interface->pcie_interface }}">{{ $pcie_interface->pcie_interface }}</option>
+                        <option value="{{ $pcie_interface }}">{{ $pcie_interface }}</option>
                     @endforeach
                 </select> 
             </div>
@@ -69,7 +61,7 @@
                 <select required name="connectors_required" id="connectors_required">
                     <option disabled selected hidden value="">Select connectors</option>
                     @foreach ($gpuSpecs['connectors_requireds'] as $connectors_required)
-                        <option value="{{ $connectors_required->connectors_required }}">{{ $connectors_required->connectors_required }}</option>
+                        <option value="{{ $connectors_required }}">{{ $connectors_required }}</option>
                     @endforeach
                 </select> 
             </div>

@@ -14,11 +14,9 @@ class PsuController extends Controller
     public function getPsuSpecs()
     {
         return [
-            'brands' => Psu::select('brand')->distinct()->orderBy('brand')->get(),
-            'ratings' => ['80 PLUS Bronze', '80 PLUS Gold', '80 PLUS Titanium', ],
-            'modulars' => ['No', 'Semi-Modular', 'Fully Modular', ],
-            'pcies' => ['2x 8-pin (6+2)', '4× 8-pin (6+2)', '8× 8-pin (6+2)', ],
-            'satas' => ['6x SATA', '10× SATA', '12× SATA', ],
+            'brands' => ['EVGA', 'Corsair', 'Seasonic', 'SilverStone', ],
+            'efficiency_ratings' => ['80 PLUS Bronze', '80 PLUS Gold', '80 PLUS Titanium', ],
+            'modulars' => ['Non-Modular', 'Semi-Modular', 'Fully Modular', ],
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
 
         ];
@@ -30,12 +28,6 @@ class PsuController extends Controller
 
         // FORMATTING THE DATAS
         $psus->each(function ($psu) {
-            $psu->wattage_display = "{$psu->wattage} W continous";
-            
-            $modularity = strtolower($psu->modular) === 'no' ? ' ' : 'modular';
-            $psu->pcie_display = "{$psu->pcie_connectors} {$modularity}";
-            $psu->sata_display = "{$psu->sata_connectors} {$modularity}";
-
             $psu->price_display = '₱' . number_format($psu->price, 2);
 
             $psu->component_type = 'psu';
@@ -71,23 +63,15 @@ class PsuController extends Controller
             'model' => 'required|string|max:255',
             'wattage' => 'required|string|max:255',
             'efficiency_rating' => 'required|string|max:255',
-            'efficiency_percent' => 'required|string|max:255',
-            'notes' => 'nullable|string|max:255',
             'modular' => 'required|string|max:255',
-            'pcie_connectors' => 'required|string|max:255',
-            'sata_connectors' => 'required|string|max:255',
+            'pcie_connectors' => 'required|integer|max:255',
+            'sata_connectors' => 'required|integer|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
-
-        if ($validated['notes']) {
-            $validated['efficiency_rating'] .= " (up to {$validated['efficiency_percent']}% efficiency {$validated['notes']})";
-        } else {
-            $validated['efficiency_rating'] .= " (up to {$validated['efficiency_percent']} efficiency)";
-        }
 
         // Handle image upload
         $validated['image'] = $request->file('image');

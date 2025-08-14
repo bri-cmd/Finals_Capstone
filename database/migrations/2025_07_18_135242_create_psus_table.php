@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('wattage');
             $table->string('efficiency_rating');
             $table->string('modular');
-            $table->string('pcie_connectors');
-            $table->string('sata_connectors');
+            $table->integer('pcie_connectors');
+            $table->integer('sata_connectors');
             $table->decimal('price',10,2);
             $table->integer('stock');
             $table->string('image');

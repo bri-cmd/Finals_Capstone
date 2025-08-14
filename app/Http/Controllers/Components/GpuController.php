@@ -13,10 +13,9 @@ class GpuController extends Controller
     public function getGpuSpecs() 
     {
         return [
-            'brands' => Gpu::select('brand')->distinct()->orderBy('brand')->get(),
-            'vram_gbs' => ['GDDR5', 'GDDR6', 'GDDR6X'],
-            'pcie_interfaces' => Gpu::select('pcie_interface')->distinct()->orderBy('pcie_interface')->get(),
-            'connectors_requireds' => Gpu::select('connectors_required')->distinct()->orderBy('connectors_required')->get(),
+            'brands' => ['NVIDIA', 'MSI', 'Gigabyte', 'ASUS', ],
+            'pcie_interfaces' => ['PCIe 3.0 x16', 'PCIe 4.0 x16', ],
+            'connectors_requireds' => ['None', '1 x 8-pin PCIe', '1 x 16-pin PCIe', ],
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
         ];
     }
@@ -59,8 +58,7 @@ class GpuController extends Controller
         $validated = $request->validate([
             'brand' => 'required|string|max:255',
             'model' => 'required|string|max:255',
-            'memory_capacity' => 'required|integer|min:1|max:64',
-            'vram_gb' => 'required|string|max:255',
+            'vram_gb' => 'required|integer|max:255',
             'power_draw_watts' => 'required|integer|min:1|max:450',
             'recommended_psu_watt' => 'required|integer|min:1|max:850',
             'length_mm' => 'required|integer|min:1|max:200',
@@ -72,11 +70,6 @@ class GpuController extends Controller
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
-
-        // VRAM_GB
-        if($validated['memory_capacity']) {
-            $validated['vram_gb'] .= "({$validated['vram_gb']} GB {$validated['vram_gb']})";
-        }
 
         // Handle image upload
         $validated['image'] = $request->file('image');
