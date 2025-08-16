@@ -1,8 +1,6 @@
 @props(['moboSpecs'])
 {{-- <pre>{{ json_encode($ram_type) }}</pre> --}}
 <div class="new-component-header">
-    {{ $slot }}
-
     <h2 class="text-center">Motherboard</h2>
 </div>
 
@@ -126,32 +124,32 @@
             <div>
                 <label for="product-img">Upload product image</label>    
                 
-                <div class="product-img">
-                    <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+                <div x-data="{ filename: 'Upload product image' }" class="product-img">
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="custom-file"
+                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 
-                    {{-- upload icon --}}
                     <label for="image">
-                        <x-icons.upload class="upload-product"/>    
+                        <x-icons.upload class="upload-product"/>
                     </label>
 
-                    {{-- show the file name --}}
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
                 </div>
             </div>
 
             <div>
                 <label for="product_img">Upload product 3d model</label>    
                 
-                <div class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
+                <div x-data="{ filename: 'Upload product image' }" class="product-img">
+                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
+                        class="custom-file"
+                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 
-                    {{-- upload icon --}}
-                    <label for="model_3d">
-                        <x-icons.upload class="upload-product"/>    
+                    <label for="image">
+                        <x-icons.upload class="upload-product"/>
                     </label>
 
-                    {{-- show the file name --}}
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
                 </div>
             </div>
         </div>    
@@ -161,20 +159,3 @@
 
 </form>
 
-{{-- showing the name of the uploaded file --}}
-    <script>
-        function updateFileName(input) {
-            // GET THE SIBLING .FILENAME ELEMENT INSIDE THE SAME .PRODUCT-IMG CONTAINER
-            const container = input.closest('.product-img');
-            const fileNameDisplay = container.querySelector('.filename');
-            const file = input.files[0];
-
-            if (file) {
-                fileNameDisplay.textContent = file.name;
-                fileNameDisplay.classList.remove("text-gray-500");
-            } else {
-                fileNameDisplay.textContent = 'Upload product image';
-                fileNameDisplay.classList.add("text-gray-500");
-            }
-        }
-    </script>

@@ -7,6 +7,7 @@ use App\Models\BuildCategory;
 use App\Models\Hardware\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage as StorageFacade;
 
 class StorageController extends Controller
 {
@@ -69,15 +70,30 @@ class StorageController extends Controller
             'write_speed_mbps' => 'required|integer|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:1|max:255',
-            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
         // Handle image upload
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('product_img', $filename, 'public');
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+        //     // Upload to Google Drive
+        //     Storage::disk('google')->put($filename, file_get_contents($image));
+
+        //     // Optionally store the filename or a placeholder path
+        //     $validated['image'] = $filename;
+        // }
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $image) {
+                $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+                StorageFacade::disk('google')->put($filename, file_get_contents($image));
+                // Optionally store filenames in an array
+            }
+        }
+
 
         // Handle 3D model upload
         if ($request->hasFile('model_3d')) {
@@ -88,12 +104,12 @@ class StorageController extends Controller
             $validated['model_3d'] = null;
         }
 
-        // dd($validated);
+        // dd($request->all());
 
         Storage::create($validated);
 
         return redirect()->route('staff.componentdetails')->with([
-            'message' => 'Case added',
+            'message' => 'Storage added',
             'type' => 'success',
         ]); 
     }
@@ -109,9 +125,9 @@ class StorageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -120,6 +136,31 @@ class StorageController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $storage = Storage::findOrFail($id);
+
+        $storage->update([
+            'build_category_id' => $request->build_category_id,
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'storage_type' => $request->storage_type,
+            'interface' => $request->interface,
+            'capacity_gb' => $request->capacity_gb,
+            'form_factor' => $request->form_factor,
+            'read_speed_mbps' => $request->read_speed_mbps,
+            'write_speed_mbps' => $request->write_speed_mbps,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image' => $request->image,
+            'model_3d' => $request->model_3d,
+        ]);
+        // dd($request->all());
+
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'Storage updated',
+            'type' => 'success',
+        ]); 
+
     }
 
     /**
@@ -127,6 +168,6 @@ class StorageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
     }
 }

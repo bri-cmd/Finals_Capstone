@@ -1,18 +1,17 @@
 @props(['psuSpecs'])
 <div class="new-component-header">
-    {{ $slot }}
-
     <h2 class="text-center">PSU</h2>
 </div>
-
-<form action="{{ route('staff.componentdetails.psu.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
+<form 
+    action="{{ route('staff.componentdetails.psu.store') }}" 
+    method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider">
             <div>
                 <label for="">Brand</label>
-                <select required name="brand" id="brand">
+                <select required name="brand" id="brand" x-model="selectedComponent.brand">
                     <option disabled selected hidden value="">Select a brand</option>
                     @foreach ($psuSpecs['brands'] as $brand)
                         <option value="{{ $brand }}">{{ $brand }}</option>
@@ -22,7 +21,7 @@
 
              <div>
                 <label for="">Model</label>
-                <input name="model" required type="text" placeholder="Enter model">
+                <input name="model" required type="text" placeholder="Enter model" >
             </div>
 
             <div>
@@ -86,32 +85,32 @@
             <div>
                 <label for="product-img">Upload product image</label>    
                 
-                <div class="product-img">
-                    <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
+                <div x-data="{ filename: 'Upload product image' }" class="product-img">
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="custom-file"
+                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 
-                    {{-- upload icon --}}
                     <label for="image">
-                        <x-icons.upload class="upload-product"/>    
+                        <x-icons.upload class="upload-product"/>
                     </label>
 
-                    {{-- show the file name --}}
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
                 </div>
             </div>
 
             <div>
                 <label for="product_img">Upload product 3d model</label>    
                 
-                <div class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
+                <div x-data="{ filename: 'Upload product image' }" class="product-img">
+                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
+                        class="custom-file"
+                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 
-                    {{-- upload icon --}}
-                    <label for="model_3d">
-                        <x-icons.upload class="upload-product"/>    
+                    <label for="image">
+                        <x-icons.upload class="upload-product"/>
                     </label>
 
-                    {{-- show the file name --}}
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
+                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
                 </div>
             </div>
         </div>    

@@ -1,0 +1,109 @@
+@props(['cpuSpecs'])
+
+<div class="new-component-header">
+    <h2 class="text-center">CPU</h2>
+</div>
+
+<form x-bind:action="'/staff/component-details/cpu/' + selectedComponent.id" method="POST" class="new-component-form" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="_method" value="PUT">
+    <div class="form-container">
+        {{-- SPECS --}}
+        <div class="form-divider">
+            <div>
+                <label for="">Brand</label>
+                <select required name="brand" id="brand" x-model="selectedComponent.brand">
+                    <option disabled selected hidden value="">Select a brand</option>
+                    @foreach ($cpuSpecs['brands'] as $brand)
+                        <option value="{{ $brand }}">{{ $brand }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label for="">Models</label>
+                <input name="model" required type="text" x-model="selectedComponent.brand" placeholder="Enter Model">
+            </div>
+
+            <div>
+                <label for="">Socket Type</label>
+                <select required name="socket_type" id="socket_type" x-model="selectedComponent.brand">
+                    <option disabled selected hidden value="">Select a socket type</option>
+                    @foreach ($cpuSpecs['socket_types'] as $socket_type)
+                        <option value="{{ $socket_type }}">{{ $socket_type }}</option>
+                    @endforeach
+                </select>  
+            </div>
+
+            <div>
+                <label for="">Cores</label>
+                <input required name="cores" id="cores" type="number" placeholder="00" x-model="selectedComponent.brand" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+            
+            <div>
+                <label for="">Threads</label>
+                <input required name="threads" id="threads" type="number" placeholder="00" x-model="selectedComponent.brand" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+
+            <div>
+                <label for="">Base Clocks</label>
+                <input required name="base_clock" id="base_clock" type="number" step="0.01" x-model="selectedComponent.brand" placeholder="0.00 GHz" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+
+            <div>
+                <label for="">Boost Clocks</label>
+                <input required name="boost_clock" id="boost_clock" type="number" step="0.01" x-model="selectedComponent.brand" placeholder="0.00 GHz" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+
+            <div>
+                <label for="">TDP</label>
+                <input required name="tdp" id="tdp" type="number" placeholder="00 W" x-model="selectedComponent.brand" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+            
+            <div>
+                <label for="">Integrated Graphics</label>
+                <select required name="socket_type" id="socket_type">
+                    <option disabled selected hidden value="">Has integrated graphics</option>
+                    @foreach ($cpuSpecs['integrated_displays'] as $integrated_displays)
+                        <option value="{{ $integrated_displays }}">{{ $integrated_displays }}</option>
+                    @endforeach
+                </select>  
+            </div>
+
+            <div>
+                <label for="">Generation</label>
+                <select required name="generation" id="generation">
+                    <option disabled selected hidden value="">Select generation</option>
+                    @foreach ($cpuSpecs['generations'] as $generation)
+                        <option value="{{ $generation }}">{{ $generation }}</option>
+                    @endforeach
+                </select>  
+            </div>
+        </div>
+
+        {{-- INVENTORY --}}
+        <div class="form-divider">
+            <div>
+                <label for="">Price</label>
+                <input required name="price" id="price" type="number" step="0.01" placeholder="Enter price" x-model="selectedComponent.brand" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+            
+            <div>
+                <label for="">Build Category</label>
+                <select required name="build_category_id" id="build_category_id" x-model="selectedComponent.brand">
+                    <option disabled selected hidden value="">Select build category</option>   
+                    @foreach ($cpuSpecs['buildCategories'] as $buildCategory)
+                        <option value="{{ $buildCategory->id }}">{{ $buildCategory->name }}</option>
+                    @endforeach 
+                </select>  
+            </div>
+
+            <div>
+                <label for="">Stock</label>
+                <input required name="stock" id="stock" type="number" placeholder="Enter stock" x-model="selectedComponent.brand" onkeydown="return !['e','E','+','-'].includes(event.key)">
+            </div>
+        </div>        
+    </div>
+    
+    <button>Add Component</button>
+</form>

@@ -32,6 +32,4 @@
             <x-icons.addcomponents.cooling/>
             Cooler
         </button>
-
-        
     </div>

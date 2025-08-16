@@ -4,6 +4,13 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Storage;
+use Masbug\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use Masbug\Flysystem\GoogleDrive\GoogleDriveAdapterExt
+use League\Flysystem\Filesystem;
+use Google_Client;
+use Google\Service\Drive as Google_Service_Drive;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +40,18 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('components.icons.checkout', 'x-icons.checkout');
         Blade::component('components.icons.purchase', 'x-icons.purchase');
 
+        Storage::extend('google', function ($app, $config) {
+            $client = new Google_Client();
+            $client->setClientId($config['clientId']);
+            $client->setClientSecret($config['clientSecret']);
+            $client->refreshToken($config['refreshToken']);
+
+            $service = new Google_Service_Drive($client);
+            $adapter = new GoogleDriveAdapter($service, $config['folderId']);
+
+            return new Filesystem($adapter);
+        });
+
+        
     }
 }

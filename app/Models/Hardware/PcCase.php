@@ -4,8 +4,6 @@ namespace App\Models\Hardware;
 
 use App\Models\BuildCategory;
 use App\Models\Hardware\PcCaseDriveBay;
-use App\Models\Hardware\PcCaseFanMount;
-use App\Models\Hardware\PcCaseFormFactorSupport;
 use App\Models\Hardware\PcCaseFrontUsbPorts;
 use App\Models\Hardware\PcCaseRadiatorSupport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

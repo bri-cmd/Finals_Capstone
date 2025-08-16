@@ -9,6 +9,8 @@ use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\Components\PsuController;
 use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
+use App\Models\Hardware\Storage;
+use Illuminate\Http\Request;
 
 class ComponentDetailsController extends Controller
 {
@@ -51,7 +53,20 @@ class ComponentDetailsController extends Controller
                                                     ));
     }
 
-    public function store () {
+    public function delete (string $type, string $id) {
+        $modelMap = config('components'); // FOUND IN CONFIG FILE
 
+        if (!array_key_exists($type, $modelMap)) {
+            abort(404, "Unknown component type: {$type}");
+        }   
+
+        $model = $modelMap[$type];
+        $component = $model::findOrFail($id);
+        $component->delete();
+
+        return back()->with([
+            'message' => ucfirst($type) . ' has been deleted.',
+            'type' => 'success',
+        ]);
     }
 }

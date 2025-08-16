@@ -10,6 +10,7 @@ use App\Models\Hardware\MoboSataPorts;
 use App\Models\Hardware\MoboUsbPorts;
 use App\Models\Hardware\Motherboard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class MoboController extends Controller
@@ -93,9 +94,17 @@ class MoboController extends Controller
         ]);
 
         // Handle image upload
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('product_img', $filename, 'public');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+            // Upload to Google Drive
+            Storage::disk('google')->put($filename, file_get_contents($image));
+
+            // Optionally store the filename or a placeholder path
+            $validated['image'] = $filename;
+        }
+
 
         // Handle 3D model upload
         if ($request->hasFile('model_3d')) {
@@ -105,6 +114,12 @@ class MoboController extends Controller
         } else {
             $validated['model_3d'] = null;
         }
+
+//         foreach ($request->file('images') as $image) {
+//     $filename = time() . '_' . $image->getClientOriginalName();
+//     Storage::disk('google')->put($filename, file_get_contents($image));
+// }
+
 
         Motherboard::create($validated);
     

@@ -15,6 +15,8 @@ class CpuController extends Controller
         return [
             'brands' => ['Intel', 'AMD', ],
             'socket_types' => ['LGA 1700', 'AM4', 'AM5', ],
+            'integrated_displays' => ['Yes', 'No', ],
+            'generations' => ['12th Gen', 'Ryzen 5000 Series', '13th Gen', 'Ryzen 7000 Series', ],
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
 
         ];
@@ -119,6 +121,23 @@ class CpuController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $cpu = Cpu::findOrFail($id);
+
+        $cpu->update([
+            'build_category_id' => $request->build_category_id,
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'socket_type' => $request->socket_type,
+            'cores' => $request->cores,
+            'threads' => $request->threads,
+            'base_clock' => $request->base_clock,
+            'boost_clock' => $request->boost_clock,
+            'tdp' => $request->tdp,
+            'integrated_graphics' => $request->integrated_graphics,
+            'generation' => $request->generation,
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
     }
 
     /**

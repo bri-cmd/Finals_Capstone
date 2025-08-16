@@ -1,8 +1,6 @@
 @props(['caseSpecs'])
 
 <div class="new-component-header">
-    {{ $slot }}
-
     <h2 class="text-center">Case</h2>
 </div>
 

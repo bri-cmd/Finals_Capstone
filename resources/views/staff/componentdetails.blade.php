@@ -23,7 +23,7 @@
         {{-- ADD COMPONENT MODAL --}}
         <div x-show="showAddModal" x-cloak x-transition class="modal">
             <div class="add-component" @click.away="showAddModal = false">
-                <x-modals.addnewcomponent/>
+                @include('staff.componentdetails.add.addnewcomponent')
             </div>
         </div>
 
@@ -38,20 +38,19 @@
         @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case'] as $type)
             <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal modal-scroll">
                 <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
-                    <x-dynamic-component 
-                        :component="'modals.' . $type" 
-                        :moboSpecs="$motherboardSpecs"
-                        :gpuSpecs="$gpuSpecs"
-                        :caseSpecs="$caseSpecs"
-                        :psuSpecs="$psuSpecs"
-                        :ramSpecs="$ramSpecs"
-                        :storageSpecs="$storageSpecs"
-                        :cpuSpecs="$cpuSpecs"
-                        >
-                        <button @click="componentModal = null; showAddModal = true;">
-                            <x-icons.arrow class="new-component-arrow"/>
-                        </button>
-                    </x-dynamic-component>
+                    <button @click="componentModal = null; showAddModal = true;">
+                        <x-icons.arrow class="new-component-arrow"/>
+                    </button>
+                    @include('staff.componentdetails.add.' . $type, [
+                        'moboSpecs' => $motherboardSpecs,
+                        'gpuSpecs' => $gpuSpecs,
+                        'caseSpecs' => $caseSpecs,
+                        'psuSpecs' => $psuSpecs,
+                        'ramSpecs' => $ramSpecs,
+                        'storageSpecs' => $storageSpecs,
+                        'cpuSpecs' => $cpuSpecs,
+                        'mode' => 'add', 
+                    ])
                 </div>
             </div>
         @endforeach
@@ -82,7 +81,7 @@
             </table> 
         </div>
 
-        <div x-data="{ showViewModal: false, selectedComponent:{} }" class="overflow-y-scroll">
+        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" class="overflow-y-scroll">
             <table class="table">
                 <tbody>
                     @foreach ($components as $component)
@@ -96,12 +95,14 @@
                                 <button @click="showViewModal = true; selectedComponent = {{ $component->toJson() }};">
                                     <x-icons.view/>    
                                 </button>
-                                <button>
+                                <button @click="showEditModal = true; selectedComponent = {{ $component->toJson() }};">
                                     <x-icons.edit/>    
                                 </button>
-                                <button>
-                                    <x-icons.delete/>    
-                                </button>
+                                <form action="{{ route('staff.componentdetails.delete', ['type' =>$component->component_type, 'id' => $component->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" ><x-icons.delete /></button>
+                                </form>
                             </div>
                         </td>
                     </tr>    
@@ -113,31 +114,64 @@
             <div x-show="showViewModal" x-cloak x-transition class="modal modal-scroll">
                 <div class="view-component" @click.away="showViewModal = false">
                     <div x-show="selectedComponent.component_type === 'motherboard'">
-                        @include('components.view.motherboard')
+                        @include('staff.componentdetails.view.motherboard')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'gpu'">
-                        @include('components.view.gpu')
+                        @include('staff.componentdetails.view.gpu')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'case'">
-                        @include('components.view.case')
+                        @include('staff.componentdetails.view.case')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'psu'">
-                        @include('components.view.psu')
+                        @include('staff.componentdetails.view.psu')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'ram'">
-                        @include('components.view.ram')
+                        @include('staff.componentdetails.view.ram')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'storage'">
-                        @include('components.view.storage')
+                        @include('staff.componentdetails.view.storage')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'cpu'">
-                        @include('components.view.cpu')
+                        @include('staff.componentdetails.view.cpu')
+                    </div>
+                </div>
+            </div>
+
+            {{-- EDIT MODAL --}}
+            <div x-show="showEditModal" x-cloak x-transition class="modal modal-scroll">
+                <div class="new-component" @click.away="showEditModal = false">
+                    <div x-show="selectedComponent.component_type === 'motherboard'">
+                        @include('staff.componentdetails.view.motherboard')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'gpu'">
+                        @include('staff.componentdetails.view.gpu')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'case'">
+                        @include('staff.componentdetails.edit.case')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'psu'">
+                        @include('staff.componentdetails.add.psu')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'ram'">
+                        @include('staff.componentdetails.view.ram')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'storage'">
+                        @include('staff.componentdetails.edit.storage')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'cpu'">
+                        @include('staff.componentdetails.view.cpu')
                     </div>
                 </div>
             </div>
