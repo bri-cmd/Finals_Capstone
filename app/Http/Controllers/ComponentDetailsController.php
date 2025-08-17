@@ -9,48 +9,46 @@ use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\Components\PsuController;
 use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
+use App\Models\Hardware\Motherboard;
 use App\Models\Hardware\Storage;
 use Illuminate\Http\Request;
+use App\Services\GoogleDriveUploader; 
 
 class ComponentDetailsController extends Controller
 {
-    public function index() {
-        $formattedMobos = app(MoboController::class)->getFormattedMobos();
-        $formattedGpus = app(GpuController::class)->getFormattedGpus();
-        $getFormattedCases = app(CaseController::class)->getFormattedCases();
-        $getFormattedPsus = app(PsuController::class)->getFormattedPsus();
-        $getFormattedRams = app(RamController::class)->getFormattedRams();
-        $getFormattedStorages = app(StorageController::class)->getFormattedStorages();
-        $getFormattedCpus = app(CpuController::class)->getFormattedCpus();
-
-        // MERGE COMPONENTS
-        $components = collect([
-                    ...$formattedMobos,
-                    ...$formattedGpus,
-                    ...$getFormattedCases,
-                    ...$getFormattedPsus,
-                    ...$getFormattedRams,
-                    ...$getFormattedStorages,
-                    ...$getFormattedCpus,
+    private function getAllFormattedComponents()
+    {
+        return collect([
+            ...app(MoboController::class)->getFormattedMobos(),
+            ...app(GpuController::class)->getFormattedGpus(),
+            ...app(CaseController::class)->getFormattedCases(),
+            ...app(PsuController::class)->getFormattedPsus(),
+            ...app(RamController::class)->getFormattedRams(),
+            ...app(StorageController::class)->getFormattedStorages(),
+            ...app(CpuController::class)->getFormattedCpus(),
         ])->sortByDesc('created_at')->values();
+    }
 
-        $motherboardSpecs = app(MoboController::class)->getMotherboardSpecs();
-        $gpuSpecs = app(GpuController::class)->getGpuSpecs();
-        $caseSpecs = app(CaseController::class)->getCaseSpecs();
-        $psuSpecs = app(PsuController::class)->getPsuSpecs();
-        $ramSpecs = app(RamController::class)->getRamSpecs();
-        $storageSpecs = app(StorageController::class)->getStorageSpecs();
-        $cpuSpecs = app(CpuController::class)->getCpuSpecs();
+    private function getAllSpecs()
+    {
+        return [
+            'motherboardSpecs' => app(MoboController::class)->getMotherboardSpecs(),
+            'gpuSpecs' => app(GpuController::class)->getGpuSpecs(),
+            'caseSpecs' => app(CaseController::class)->getCaseSpecs(),
+            'psuSpecs' => app(PsuController::class)->getPsuSpecs(),
+            'ramSpecs' => app(RamController::class)->getRamSpecs(),
+            'storageSpecs' => app(StorageController::class)->getStorageSpecs(),
+            'cpuSpecs' => app(CpuController::class)->getCpuSpecs(),
+        ];
+    }
+
+    public function index() {
+        $components = $this->getAllFormattedComponents();
         
-        return view('staff.componentdetails', compact(  'components',
-                                                        'motherboardSpecs',
-                                                        'gpuSpecs',
-                                                        'caseSpecs',
-                                                        'psuSpecs',
-                                                        'ramSpecs',
-                                                        'storageSpecs',
-                                                        'cpuSpecs',
-                                                    ));
+        return view('staff.componentdetails', array_merge(
+            ['components' => $components],
+            $this->getAllSpecs()
+        ));
     }
 
     public function delete (string $type, string $id) {
@@ -62,11 +60,34 @@ class ComponentDetailsController extends Controller
 
         $model = $modelMap[$type];
         $component = $model::findOrFail($id);
+
+        $uploader = new GoogleDriveUploader();
+
+        if (is_array($component->image)) {
+            foreach ($component->image as $fileId) {
+                $uploader->delete($fileId);
+            }
+        }
+
         $component->delete();
 
         return back()->with([
             'message' => ucfirst($type) . ' has been deleted.',
             'type' => 'success',
         ]);
+    }
+
+    public function search (Request $request) {
+        $searchTerm = strtolower($request->input('search'));
+
+        $components = $this->getAllFormattedComponents()->filter(function ($component) use ($searchTerm) {
+            return str_contains(strtolower($component['name']), $searchTerm)
+                || str_contains(strtolower($component['brand']), $searchTerm);
+        });
+
+        return view('staff.componentdetails', array_merge(
+            ['components' => $components],
+            $this->getAllSpecs()
+        ));
     }
 }

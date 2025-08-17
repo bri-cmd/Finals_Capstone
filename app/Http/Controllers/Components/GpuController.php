@@ -7,6 +7,8 @@ use App\Models\BuildCategory;
 use App\Models\Hardware\Gpu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Services\GoogleDriveUploader;
+use Illuminate\Support\Facades\Config;
 
 class GpuController extends Controller
 {
@@ -66,23 +68,31 @@ class GpuController extends Controller
             'connectors_required' => 'required|string|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:1|max:255',
-            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'nullable|array',
+            'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
         // Handle image upload
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('product_img', $filename, 'public');
+        $uploader = new GoogleDriveUploader();
+        $filenames = [];
 
-        // Handle 3D model upload
-        if ($request->hasFile('model_3d')) {
-            $model3d = $request->file('model_3d');
-            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
-            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
+        if ($request->hasFile('image')) {
+            $folderMap = Config::get('googlefolders');
+            $type = $request->input('component_type');
+
+            $folderId = $folderMap[$type] ?? Config::get('filesystems.disks.google.folderId');
+            // $folderId = '1zm5zcTZCOAMAen1803mWMg1s7r1mcrTj';
+
+            foreach ($request->file('image') as $image) {
+                $fileId = $uploader->upload($image, $folderId);
+                $filenames[] = $fileId;
+            }
+
+            $validated['image'] = $filenames;
         } else {
-            $validated['model_3d'] = null;
+            $validated['image'] = null;
         }
 
         // dd($validated); 

@@ -29,6 +29,11 @@ class Cpu extends Model
         'model_3d',
     ];
 
+    // FETCHING IMAGE FROM DRIVE
+    protected $casts = [
+        'image' => 'array',
+    ];
+
     // DEFINE RELATIONSHIP
     public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);

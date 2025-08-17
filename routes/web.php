@@ -58,6 +58,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // COMPONENT DETAILS
     Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
+    Route::get('component-details/search', [ComponentDetailsController::class, 'search'])->name('componentdetails.search');
     Route::post('component-details/motherboard', [MoboController::class, 'store'])->name('componentdetails.motherboard.store');
     Route::post('component-details/gpu', [GpuController::class, 'store'])->name('componentdetails.gpu.store');
     Route::post('component-details/case', [CaseController::class, 'store'])->name('componentdetails.case.store');
@@ -68,7 +69,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::put('component-details/psu/{id}', [PsuController::class, 'update'])->name('componentdetails.psu.update');
     Route::put('component-details/storage/{id}', [StorageController::class, 'update'])->name('componentdetails.storage.update');;
     Route::put('component-details/case/{id}', [CaseController::class, 'update'])->name('componentdetails.case.update');;
-    Route::put('component-details/cpu/{id}', [CpuController::class, 'update'])->name('componentdetails.cpu.update');;
+    Route::put('component-details/cpu/{id}', [CpuController::class, 'update'])->name('componentdetails.cpu.update');
     Route::put('component-details/motherboard/{id}', [MoboController::class, 'update']);
 
     Route::delete('component-details/{type}/{id}', [ComponentDetailsController::class, 'delete'])->name('componentdetails.delete');

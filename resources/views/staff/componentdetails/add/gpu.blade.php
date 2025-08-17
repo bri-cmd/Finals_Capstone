@@ -6,6 +6,8 @@
 
 <form action="{{ route('staff.componentdetails.gpu.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
+    <input type="hidden" name="component_type" value="gpu">
+
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider gpu">
@@ -87,7 +89,7 @@
                 <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            <div>
+            {{-- <div>
                 <label for="product-img">Upload product image</label>    
                 
                 <div x-data="{ filename: 'Upload product image' }" class="product-img">
@@ -101,6 +103,11 @@
 
                     <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
                 </div>
+            </div> --}}
+
+            <div>
+                <label for="">Upload product image</label>
+                <input type="file" name="image[]" multiple accept="image/*">
             </div>
 
             <div>

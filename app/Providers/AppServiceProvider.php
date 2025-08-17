@@ -5,9 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
-use Masbug\Flysystem\GoogleDrive\GoogleDriveAdapter;
-use Masbug\Flysystem\GoogleDrive\GoogleDriveAdapterExt
-use League\Flysystem\Filesystem;
+use Masbug\Flysystem\GoogleDriveAdapter;
+use Illuminate\Filesystem\FilesystemAdapter;
+
 use Google_Client;
 use Google\Service\Drive as Google_Service_Drive;
 
@@ -48,9 +48,11 @@ class AppServiceProvider extends ServiceProvider
 
             $service = new Google_Service_Drive($client);
             $adapter = new GoogleDriveAdapter($service, $config['folderId']);
+            $flysystem = new \League\Flysystem\Filesystem($adapter);
 
-            return new Filesystem($adapter);
+            return new FilesystemAdapter($flysystem, $adapter, []);
         });
+
 
         
     }

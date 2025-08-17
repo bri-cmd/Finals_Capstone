@@ -7,11 +7,12 @@
         </button>
 
         <div>
-            <form action="">
+            <form action=" {{ route('staff.componentdetails.search') }}" method="GET">
                 <input 
                     type="text"
                     name="search"
                     placeholder="Search components"
+                    value="{{ request('search') }}"
                     class="search-bar"
                 >
                 <button type='submit'>

@@ -12,6 +12,8 @@ use App\Models\Hardware\Motherboard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Services\GoogleDriveUploader;
+use Illuminate\Support\Facades\Config;
 
 class MoboController extends Controller
 {
@@ -88,21 +90,31 @@ class MoboController extends Controller
             'wifi_onboard' => 'required|string|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:1|max:255',
-            'image' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'nullable|array',
+            'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
         // Handle image upload
+        $uploader = new GoogleDriveUploader();
+        $filenames = [];
+
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+            $folderMap = Config::get('googlefolders');
+            $type = $request->input('component_type');
 
-            // Upload to Google Drive
-            Storage::disk('google')->put($filename, file_get_contents($image));
+            $folderId = $folderMap[$type] ?? Config::get('filesystems.disks.google.folderId');
+            // $folderId = '1zm5zcTZCOAMAen1803mWMg1s7r1mcrTj';
 
-            // Optionally store the filename or a placeholder path
-            $validated['image'] = $filename;
+            foreach ($request->file('image') as $image) {
+                $fileId = $uploader->upload($image, $folderId);
+                $filenames[] = $fileId;
+            }
+
+            $validated['image'] = $filenames;
+        } else {
+            $validated['image'] = null;
         }
 
 

@@ -6,6 +6,7 @@
 
 <form action="{{ route('staff.componentdetails.storage.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
+    <input type="hidden" name="component_type" value="storage">
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider">

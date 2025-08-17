@@ -2,8 +2,14 @@
 <h2 class="text-center !relative">View</h2>
 <div class="view-container">
     {{-- IMAGE --}}
-    <div class="image-container">
-        <img :src="`/${selectedComponent.image}`" alt="Product Image" >
+    <div class="image-container" x-show="selectedComponent.image && selectedComponent.image.length">
+        <template x-for="fileId in selectedComponent.image">
+            <img :src="`https://drive.google.com/thumbnail?id=${fileId}`" class="image-container">
+        </template>
+    </div>
+
+    <div x-show="!selectedComponent.image || selectedComponent.image.length === 0">
+        <p>No image uploaded.</p>
     </div>
     {{-- SPECS --}}
     <div class="specs-container">

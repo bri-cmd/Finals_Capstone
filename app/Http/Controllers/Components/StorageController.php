@@ -8,6 +8,8 @@ use App\Models\Hardware\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage as StorageFacade;
+use App\Services\GoogleDriveUploader;
+use Illuminate\Support\Facades\Config;
 
 class StorageController extends Controller
 {
@@ -56,6 +58,7 @@ class StorageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
         // Validate the request data
@@ -70,36 +73,37 @@ class StorageController extends Controller
             'write_speed_mbps' => 'required|integer|max:255',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:1|max:255',
+            'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
             'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
+        
+        $uploader = new GoogleDriveUploader();
+        $filenames = [];
 
-        // Handle image upload
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-
-        //     // Upload to Google Drive
-        //     Storage::disk('google')->put($filename, file_get_contents($image));
-
-        //     // Optionally store the filename or a placeholder path
-        //     $validated['image'] = $filename;
-        // }
         if ($request->hasFile('image')) {
+            $folderMap = Config::get('googlefolders');
+            $type = $request->input('component_type');
+
+            $folderId = $folderMap[$type] ?? Config::get('filesystems.disks.google.folderId');
+            // $folderId = '1zm5zcTZCOAMAen1803mWMg1s7r1mcrTj';
+
             foreach ($request->file('image') as $image) {
-                $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-                StorageFacade::disk('google')->put($filename, file_get_contents($image));
-                // Optionally store filenames in an array
+                $fileId = $uploader->upload($image, $folderId);
+                $filenames[] = $fileId;
             }
+
+            $validated['image'] = $filenames;
+        } else {
+            $validated['image'] = null;
         }
 
-
-        // Handle 3D model upload
         if ($request->hasFile('model_3d')) {
             $model3d = $request->file('model_3d');
             $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
-            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
+
+            $validated['model_3d'] = $model3d->storeAs('models', $filename, 'public');
         } else {
             $validated['model_3d'] = null;
         }

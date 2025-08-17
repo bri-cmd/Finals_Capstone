@@ -6,6 +6,8 @@
 
 <form action="{{ route('staff.componentdetails.case.store') }}" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
+    <input type="hidden" name="component_type" value="case">
+
     <div class="form-container">
         {{-- SPECS --}}
         <div class="form-divider">
@@ -126,20 +128,23 @@
                 <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            <div>
+            {{-- <div>
                 <label for="product-img">Upload product image</label>    
                 
                 <div class="product-img">
                     <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
 
-                    {{-- upload icon --}}
                     <label for="image">
                         <x-icons.upload class="upload-product"/>    
                     </label>
 
-                    {{-- show the file name --}}
                     <p id="filename" class="filename text-gray-500">Upload product image</p>
                 </div>
+            </div> --}}
+
+            <div>
+                <label for="">Upload product image</label>
+                <input type="file" name="image[]" multiple accept="image/*">
             </div>
 
             <div>

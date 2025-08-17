@@ -28,6 +28,11 @@ class PcCase extends Model
         'model_3d',
     ];  
 
+    // FETCHING IMAGE FROM DRIVE
+    protected $casts = [
+        'image' => 'array',
+    ];
+
     public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);
     }
