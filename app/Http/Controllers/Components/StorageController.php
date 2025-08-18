@@ -18,6 +18,8 @@ class StorageController extends Controller
         return [
             'brands' => ['Kingston', 'Western Digital', 'Samsung', 'Seagate', ],
             'storage_types' => ['SSD', 'HDD', ],
+            'interfaces' => ['SATA', 'NVMe', ],
+            'form_factors' => ['2.5"', '3.5"', 'M.2', ],
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
 
         ];  
@@ -75,7 +77,7 @@ class StorageController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
         
@@ -154,8 +156,6 @@ class StorageController extends Controller
             'write_speed_mbps' => $request->write_speed_mbps,
             'price' => $request->price,
             'stock' => $request->stock,
-            'image' => $request->image,
-            'model_3d' => $request->model_3d,
         ]);
         // dd($request->all());
 

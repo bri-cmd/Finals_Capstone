@@ -70,7 +70,7 @@ class GpuController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
@@ -127,6 +127,26 @@ class GpuController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $gpu = Gpu::findOrFail($id);
+
+        $gpu->update([
+            'build_category_id' => $request->build_category_id,
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'vram_gb' => $request->vram_gb,
+            'power_draw_watts' => $request->power_draw_watts,
+            'recommended_psu_watt' => $request->recommended_psu_watt,
+            'length_mm' => $request->length_mm,
+            'pcie_interface' => $request->pcie_interface,
+            'connectors_required' => $request->connectors_required,
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'GPU updated',
+            'type' => 'success',
+        ]);
     }
 
     /**

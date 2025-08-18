@@ -11,9 +11,6 @@ use App\Http\Controllers\Components\StorageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAccountController;
-use App\Models\Hardware\Motherboard;
-use App\Models\Hardware\Psu;
-use Google\Service\CloudComposer\StorageConfig;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -66,12 +63,13 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('component-details/ram', [RamController::class, 'store'])->name('componentdetails.ram.store');
     Route::post('component-details/storage', [StorageController::class, 'store'])->name('componentdetails.storage.store');
     Route::post('component-details/cpu', [CpuController::class, 'store'])->name('componentdetails.cpu.store');
-    Route::put('component-details/psu/{id}', [PsuController::class, 'update'])->name('componentdetails.psu.update');
-    Route::put('component-details/storage/{id}', [StorageController::class, 'update'])->name('componentdetails.storage.update');;
-    Route::put('component-details/case/{id}', [CaseController::class, 'update'])->name('componentdetails.case.update');;
-    Route::put('component-details/cpu/{id}', [CpuController::class, 'update'])->name('componentdetails.cpu.update');
+    Route::put('component-details/psu/{id}', [PsuController::class, 'update']);
+    Route::put('component-details/storage/{id}', [StorageController::class, 'update']);
+    Route::put('component-details/case/{id}', [CaseController::class, 'update']);
+    Route::put('component-details/cpu/{id}', [CpuController::class, 'update']);
     Route::put('component-details/motherboard/{id}', [MoboController::class, 'update']);
-
+    Route::put('component-details/gpu/{id}', [GpuController::class, 'update']);
+    Route::put('component-details/ram/{id}', [RamController::class, 'update']);
     Route::delete('component-details/{type}/{id}', [ComponentDetailsController::class, 'delete'])->name('componentdetails.delete');
 });
 

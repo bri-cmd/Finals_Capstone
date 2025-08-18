@@ -9,10 +9,9 @@ use App\Http\Controllers\Components\MoboController;
 use App\Http\Controllers\Components\PsuController;
 use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
-use App\Models\Hardware\Motherboard;
-use App\Models\Hardware\Storage;
 use Illuminate\Http\Request;
-use App\Services\GoogleDriveUploader; 
+use App\Services\GoogleDriveUploader;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class ComponentDetailsController extends Controller
 {
@@ -32,7 +31,7 @@ class ComponentDetailsController extends Controller
     private function getAllSpecs()
     {
         return [
-            'motherboardSpecs' => app(MoboController::class)->getMotherboardSpecs(),
+            'moboSpecs' => app(MoboController::class)->getMotherboardSpecs(),
             'gpuSpecs' => app(GpuController::class)->getGpuSpecs(),
             'caseSpecs' => app(CaseController::class)->getCaseSpecs(),
             'psuSpecs' => app(PsuController::class)->getPsuSpecs(),
@@ -61,12 +60,18 @@ class ComponentDetailsController extends Controller
         $model = $modelMap[$type];
         $component = $model::findOrFail($id);
 
+        // DELETE IMAGE FROM DRIVE
         $uploader = new GoogleDriveUploader();
 
         if (is_array($component->image)) {
             foreach ($component->image as $fileId) {
                 $uploader->delete($fileId);
             }
+        }
+
+        // DELETE 3D MODEL
+        if ($component->model_3d) {
+            FacadesStorage::disk('public')->delete($component->model_3d);
         }
 
         $component->delete();

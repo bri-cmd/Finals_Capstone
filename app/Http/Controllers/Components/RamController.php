@@ -73,7 +73,7 @@ class RamController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
@@ -139,6 +139,27 @@ class RamController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $ram = Ram::findOrFail($id);
+
+        $ram->update([
+            'build_category_id' => $request->build_category_id,
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'ram_type' => $request->ram_type,
+            'speed_mhz' => $request->speed_mhz,
+            'size_per_module_gb' => $request->size_per_module_gb,
+            'total_capacity_gb' => $request->total_capacity_gb,
+            'module_count' => $request->module_count,
+            'is_ecc' => $request->is_ecc,
+            'is_rgb' => $request->is_rgb,
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'RAM updated',
+            'type' => 'success',
+        ]); 
     }
 
     /**

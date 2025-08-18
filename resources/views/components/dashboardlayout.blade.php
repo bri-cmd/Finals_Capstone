@@ -44,5 +44,7 @@
     <main class="main-content">
         {{ $slot }}
     </main>
+
+    
 </body>
 </html>

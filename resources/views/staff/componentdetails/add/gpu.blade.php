@@ -114,7 +114,7 @@
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
+                    <input type="file" id="model_3d" name="model_3d" accept=".glb"
                         class="custom-file"
                         @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 

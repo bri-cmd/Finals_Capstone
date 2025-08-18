@@ -43,14 +43,13 @@
                         <x-icons.arrow class="new-component-arrow"/>
                     </button>
                     @include('staff.componentdetails.add.' . $type, [
-                        'moboSpecs' => $motherboardSpecs,
+                        'moboSpecs' => $moboSpecs,
                         'gpuSpecs' => $gpuSpecs,
                         'caseSpecs' => $caseSpecs,
                         'psuSpecs' => $psuSpecs,
                         'ramSpecs' => $ramSpecs,
                         'storageSpecs' => $storageSpecs,
                         'cpuSpecs' => $cpuSpecs,
-                        'mode' => 'add', 
                     ])
                 </div>
             </div>
@@ -82,14 +81,15 @@
             </table> 
         </div>
 
-        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" class="overflow-y-scroll">
+        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" 
+             x-init="$watch('selectedComponent', value => window.selectedComponent = value)" class="overflow-y-scroll">
             <table class="table">
                 <tbody>
                     @foreach ($components as $component)
                     <tr>
                         <td>{{ $component->brand}} {{ $component->model }}</td>
                         <td>{{ $component->buildCategory->name}}</td>
-                        <td>{{ $component->price}}</td>
+                        <td>₱{{ number_format($component->price, 2) }}</td>
                         <td>{{ $component->stock}}</td>
                         <td class="align-middle text-center">
                             <div class="flex justify-center gap-2">
@@ -148,11 +148,11 @@
             <div x-show="showEditModal" x-cloak x-transition class="modal modal-scroll">
                 <div class="new-component" @click.away="showEditModal = false">
                     <div x-show="selectedComponent.component_type === 'motherboard'">
-                        @include('staff.componentdetails.view.motherboard')
+                        @include('staff.componentdetails.edit.motherboard')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'gpu'">
-                        @include('staff.componentdetails.view.gpu')
+                        @include('staff.componentdetails.edit.gpu')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'case'">
@@ -160,11 +160,11 @@
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'psu'">
-                        @include('staff.componentdetails.add.psu')
+                        @include('staff.componentdetails.edit.psu')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'ram'">
-                        @include('staff.componentdetails.view.ram')
+                        @include('staff.componentdetails.edit.ram')
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'storage'">
@@ -172,7 +172,7 @@
                     </div>
 
                     <div x-show="selectedComponent.component_type === 'cpu'">
-                        @include('staff.componentdetails.view.cpu')
+                        @include('staff.componentdetails.edit.cpu')
                     </div>
                 </div>
             </div>

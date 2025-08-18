@@ -92,7 +92,7 @@ class MoboController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
@@ -127,12 +127,6 @@ class MoboController extends Controller
             $validated['model_3d'] = null;
         }
 
-//         foreach ($request->file('images') as $image) {
-//     $filename = time() . '_' . $image->getClientOriginalName();
-//     Storage::disk('google')->put($filename, file_get_contents($image));
-// }
-
-
         Motherboard::create($validated);
     
         return redirect()->route('staff.componentdetails')->with([
@@ -164,6 +158,32 @@ class MoboController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $mobo = Motherboard::findOrFail($id);
+
+        $mobo->update([
+            'build_category_id' => $request->build_category_id,
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'socket_type' => $request->socket_type,
+            'chipset' => $request->chipset,
+            'form_factor' => $request->form_factor,
+            'ram_type' => $request->ram_type,
+            'max_ram' => $request->max_ram,
+            'ram_slots' => $request->ram_slots,
+            'max_ram_speed' => $request->max_ram_speed,
+            'pcie_slots' => $request->pcie_slots,
+            'm2_slots' => $request->m2_slots,
+            'sata_ports' => $request->sata_ports,
+            'usb_ports' => $request->usb_ports,
+            'wifi_onboard' => $request->wifi_onboard,
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'Motherboard updated',
+            'type' => 'success',
+        ]); 
     }
 
     /**

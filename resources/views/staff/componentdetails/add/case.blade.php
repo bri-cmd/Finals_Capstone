@@ -151,7 +151,7 @@
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds" class="custom-file" onchange="updateFileName(this)">
+                    <input type="file" id="model_3d" name="model_3d" accept=".glb" class="custom-file" onchange="updateFileName(this)">
 
                     {{-- upload icon --}}
                     <label for="model_3d">

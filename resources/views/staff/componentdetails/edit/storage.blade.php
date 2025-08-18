@@ -1,7 +1,5 @@
 @props(['storageSpecs'])
 
-{{-- <pre>{{ json_encode($selectedComponent->id) }}</pre> --}}
-
 <div class="new-component-header">
     <h2 class="text-center">Storage</h2>
 </div>
@@ -40,7 +38,12 @@
 
             <div>
                 <label for="">Interface</label>
-                <input name="interface" required type="text" x-model="selectedComponent.storage_type" placeholder="Enter interface">
+                <select required name="interface" id="interface" x-model="selectedComponent.storage_type">
+                    <option disabled selected hidden value="">Select interface</option>
+                    @foreach ($storageSpecs['interfaces'] as $interface)
+                        <option value="{{ $interface }}">{{ $interface }}</option>
+                    @endforeach
+                </select>
             </div>
             
             <div>
@@ -50,7 +53,12 @@
 
             <div>
                 <label for="">Form Factor</label>
-                <input name="form_factor" required type="text" x-model="selectedComponent.form_factor" placeholder="Enter form factor">
+                <select required name="form_factor" id="form_factor" x-model="selectedComponent.form_factor">
+                    <option disabled selected hidden value="">Select form factor</option>
+                    @foreach ($storageSpecs['form_factors'] as $form_factor)
+                        <option value="{{ $form_factor }}">{{ $form_factor }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
@@ -84,43 +92,6 @@
             <div>
                 <label for="">Stock</label>
                 <input required name="stock" id="stock" type="number" placeholder="Enter stock" x-model="selectedComponent.stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
-            </div>
-
-            <div>
-                <label for="product-img">Upload product image</label>    
-                
-                <div x-data="{ filename: @js($selectedComponent->image ?? 'Upload product image') }" class="product-img">
-                    <input type="file" id="image" name="image" accept="image/*"
-                        class="custom-file" 
-                        @change="filename = $event.target.files[0]?.name || 'Upload product image'; console.log('Filename:', filename);" />
-
-                    <label for="image">
-                        <x-icons.upload class="upload-product"/>
-                    </label>
-
-                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename" ></p>
-                </div>
-            </div>
-
-            <div>
-                <label for="">Upload image</label>
-                <input type="file">
-            </div>
-
-            <div>
-                <label for="product_img">Upload product 3d model</label>    
-                
-                <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
-                        class="custom-file"
-                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
-
-                    <label for="image">
-                        <x-icons.upload class="upload-product"/>
-                    </label>
-
-                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
-                </div>
             </div>
         </div>      
     </div>

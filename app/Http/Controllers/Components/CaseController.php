@@ -107,7 +107,7 @@ class CaseController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 

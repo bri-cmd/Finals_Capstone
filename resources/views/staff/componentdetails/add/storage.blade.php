@@ -37,7 +37,12 @@
 
             <div>
                 <label for="">Interface</label>
-                <input name="interface" required type="text" placeholder="Enter interface">
+                <select required name="interface" id="interface">
+                    <option disabled selected hidden value="">Select interface</option>
+                    @foreach ($storageSpecs['interfaces'] as $interface)
+                        <option value="{{ $interface }}">{{ $interface }}</option>
+                    @endforeach
+                </select>
             </div>
             
             <div>
@@ -47,7 +52,12 @@
 
             <div>
                 <label for="">Form Factor</label>
-                <input name="form_factor" required type="text" placeholder="Enter form factor">
+                <select required name="form_factor" id="form_factor">
+                    <option disabled selected hidden value="">Select form factor</option>
+                    @foreach ($storageSpecs['form_factors'] as $form_factor)
+                        <option value="{{ $form_factor }}">{{ $form_factor }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
@@ -108,7 +118,7 @@
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
+                    <input type="file" id="model_3d" name="model_3d" accept=".glb"
                         class="custom-file"
                         @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 

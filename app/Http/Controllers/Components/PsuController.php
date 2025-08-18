@@ -73,7 +73,7 @@ class PsuController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:obj,glb,fbx|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:10240',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
@@ -96,6 +96,15 @@ class PsuController extends Controller
             $validated['image'] = $filenames;
         } else {
             $validated['image'] = null;
+        }
+
+        // Handle 3D model upload
+        if ($request->hasFile('model_3d')) {
+            $model3d = $request->file('model_3d');
+            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
+            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
+        } else {
+            $validated['model_3d'] = null;
         }
 
         // dd($request->all()); 
@@ -122,10 +131,6 @@ class PsuController extends Controller
      */
     public function edit(string $id)
     {
-        //
-        // $psu = Psu::findOrFail($id);
-
-        // return view('staff.componentdetails.add.psu', compact('psu'));
 
     }
 
@@ -133,32 +138,30 @@ class PsuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-public function update(Request $request, $id)
-{
-    $psu = Psu::findOrFail($id);
-    // dd($request->all());
+    public function update(Request $request, $id)
+    {
+        $psu = Psu::findOrFail($id);
+        // dd($request->all());
 
-    $psu->update([
-        'brand' => $request->brand,
-        'model' => $request->model,
-        'wattage' => $request->wattage,
-        'efficiency_rating' => $request->efficiency_rating,
-        'modular' => $request->modular,
-        'pcie_connectors' => $request->pcie_connectors,
-        'sata_connectors' => $request->sata_connectors,
-        'price' => $request->price,
-        'stock' => $request->stock,
-        'image' => $request->image,
-        'model_3d' => $request->model_3d,
-        'build_category_id' => $request->build_category_id,
-    ]); 
+        $psu->update([
+            'brand' => $request->brand,
+            'model' => $request->model,
+            'wattage' => $request->wattage,
+            'efficiency_rating' => $request->efficiency_rating,
+            'modular' => $request->modular,
+            'pcie_connectors' => $request->pcie_connectors,
+            'sata_connectors' => $request->sata_connectors,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'build_category_id' => $request->build_category_id,
+        ]); 
 
-    return redirect()->route('staff.componentdetails')->with([
-        'message' => 'PSU updated',
-        'type' => 'success',
-    ]);
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'PSU updated',
+            'type' => 'success',
+        ]);
 
-}
+    }
 
 
 

@@ -104,22 +104,6 @@
                 <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            {{-- <div>
-                <label for="product-img">Upload product image</label>    
-                
-                <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="image" name="image" accept="image/*"
-                        class="custom-file"
-                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
-
-                    <label for="image">
-                        <x-icons.upload class="upload-product"/>
-                    </label>
-
-                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
-                </div>
-            </div> --}}
-
             <div>
                 <label for="">Upload product image</label>
                 <input type="file" name="image[]" multiple accept="image/*">
@@ -129,7 +113,7 @@
                 <label for="product_img">Upload product 3d model</label>    
                 
                 <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".obj,.fbx,.glb,.gltf,.stl,.dae,.3ds"
+                    <input type="file" id="model_3d" name="model_3d" accept=".glb"
                         class="custom-file"
                         @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
 
