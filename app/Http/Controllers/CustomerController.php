@@ -16,6 +16,10 @@ class CustomerController extends Controller
         return view('customer.dashboard', compact('userBuilds'));
     }
 
+    public function build() {
+        return view('build');
+    }
+
     public function update(Request $request) {
         /** @var \App\Models\User $user */
         $user = Auth::user();

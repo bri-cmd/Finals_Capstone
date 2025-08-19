@@ -148,19 +148,8 @@
             </div>
 
             <div>
-                <label for="product_img">Upload product 3d model</label>    
-                
-                <div class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".glb" class="custom-file" onchange="updateFileName(this)">
-
-                    {{-- upload icon --}}
-                    <label for="model_3d">
-                        <x-icons.upload class="upload-product"/>    
-                    </label>
-
-                    {{-- show the file name --}}
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
-                </div>
+                <label for="">Upload product 3d model</label>
+                <input type="file" name="model_3d" accept=".glb">
             </div>
         </div>      
     </div>

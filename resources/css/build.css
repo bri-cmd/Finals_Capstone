@@ -1,0 +1,89 @@
+/*  */
+.preview-section {
+    background-color: aliceblue;
+    width: 50%;
+}
+
+.buttons-section {
+    background-color: antiquewhite;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.buttons-section div {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid black;
+}
+
+.buttons-section div button {
+    width: 100%;
+}
+
+.buttons-section div button:hover {
+    background-color: var(--blue);
+}
+
+
+.catalog-section{
+    background-color: aqua;
+    width: 25%;
+}
+
+.catalog-button {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid black;
+}
+
+.catalog-button button {
+    margin: 0 4px;
+    padding: 8px;
+    font-size: 0.75rem;
+    
+}
+
+.catalog-button button:hover {
+    color: gray;
+}
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+}
+
+.catalog-title {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.catalog-filter button {
+    border: 1px solid black;
+}
+
+.catalog-list {
+    margin: 0 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.catalog-item {
+    display: flex;
+    background-color: aliceblue;
+}
+
+.catalog-item img {
+    width: 100px;
+    height: 1-0px;
+}
+
+.catalog-specs {
+    padding: 4px;
+}

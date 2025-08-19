@@ -73,7 +73,7 @@ class PsuController extends Controller
             'stock' => 'required|integer|min:1|max:255',
             'image' => 'nullable|array',
             'image.*' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'model_3d' => 'nullable|file|mimes:glb|max:10240',
+            'model_3d' => 'nullable|file|mimes:glb|max:20480',
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
@@ -108,6 +108,7 @@ class PsuController extends Controller
         }
 
         // dd($request->all()); 
+        
 
         Psu::create($validated);
 

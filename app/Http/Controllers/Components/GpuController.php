@@ -95,6 +95,15 @@ class GpuController extends Controller
             $validated['image'] = null;
         }
 
+        // Handle 3D model upload
+        if ($request->hasFile('model_3d')) {
+            $model3d = $request->file('model_3d');
+            $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
+            $validated['model_3d'] = $model3d->storeAs('product_3d', $filename, 'public');
+        } else {
+            $validated['model_3d'] = null;
+        }
+
         // dd($validated); 
 
         Gpu::create($validated);

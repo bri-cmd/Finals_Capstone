@@ -23,6 +23,8 @@
     <main class="main-content">
         <h1>Landing Page</h1>
         <a href="{{ route('login') }}" class="hover:text-pink-500">Click here to start testing</a>
+        <br>
+        <a href="{{ route('techboxx.build') }}" class="hover:text-pink-500">Click here to start building</a>
     </main>
 </body>
 </html>

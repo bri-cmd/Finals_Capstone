@@ -118,19 +118,8 @@
             </div>
 
             <div>
-                <label for="product_img">Upload product 3d model</label>    
-                
-                <div x-data="{ filename: 'Upload product image' }" class="product-img">
-                    <input type="file" id="model_3d" name="model_3d" accept=".glb"
-                        class="custom-file"
-                        @change="filename = $event.target.files[0]?.name || 'Upload product image'" />
-
-                    <label for="image">
-                        <x-icons.upload class="upload-product"/>
-                    </label>
-
-                    <p x-text="filename" :class="{ 'text-gray-500': filename === 'Upload product image' }" class="filename"></p>
-                </div>
+                <label for="">Upload product 3d model</label>
+                <input type="file" name="model_3d" accept=".glb">
             </div>
         </div>    
     </div>

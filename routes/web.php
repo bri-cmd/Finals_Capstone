@@ -34,6 +34,8 @@ Route::get('/email/verify', function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('techboxx/build', [CustomerController::class, 'build'])->name('techboxx.build');
+
 // ADMIN ROUTES
 Route::prefix('admin')->name('admin.')->group(function () {
     // DASHBOARD
