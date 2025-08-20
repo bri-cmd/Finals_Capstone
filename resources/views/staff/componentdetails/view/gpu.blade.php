@@ -2,21 +2,8 @@
 <h2 class="text-center !relative">View</h2>
 <div class="view-container" x-data="{ modelId: 'modelCanvas-gpu' }">
     {{-- IMAGE --}}
-    <div class="image-container" x-show="selectedComponent.image && selectedComponent.image.length">
-        <template x-for="fileId in selectedComponent.image">
-            <img :src="`https://drive.google.com/thumbnail?id=${fileId}`" class="image-container">
-        </template>
-
-        <div 
-            x-init="
-                $watch('selectedComponent', value => {
-                    if (document.getElementById(modelId)) {
-                        loadModel(modelId, value.model_3d);
-                    }
-                })
-            ">
-            <canvas :id="modelId" width="400" height="400"></canvas>
-        </div>
+    <div class="image-container">
+        <img :src="`/${selectedComponent.image}`" alt="Product Image" >
     </div>
 
     <div x-show="!selectedComponent.image || selectedComponent.image.length === 0">

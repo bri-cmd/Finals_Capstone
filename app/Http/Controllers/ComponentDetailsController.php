@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class ComponentDetailsController extends Controller
 {
-    private function getAllFormattedComponents()
+    public function getAllFormattedComponents()
     {
         return collect([
             ...app(MoboController::class)->getFormattedMobos(),
@@ -60,13 +60,9 @@ class ComponentDetailsController extends Controller
         $model = $modelMap[$type];
         $component = $model::findOrFail($id);
 
-        // DELETE IMAGE FROM DRIVE
-        $uploader = new GoogleDriveUploader();
-
-        if (is_array($component->image)) {
-            foreach ($component->image as $fileId) {
-                $uploader->delete($fileId);
-            }
+        // DELETE PRODUCT IMAGE
+        if ($component->image) {
+            FacadesStorage::disk('public')->delete($component->image);
         }
 
         // DELETE 3D MODEL

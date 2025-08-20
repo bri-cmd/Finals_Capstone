@@ -17,7 +17,10 @@ class CustomerController extends Controller
     }
 
     public function build() {
-        return view('build');
+        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
+
+
+        return view('build', compact('components'));
     }
 
     public function update(Request $request) {

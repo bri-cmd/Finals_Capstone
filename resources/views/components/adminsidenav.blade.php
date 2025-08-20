@@ -20,7 +20,7 @@
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
                 ['route' => '' , 'label' => 'Activity Logs', 'icon' => 'logs'],
-                ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
+                ['route' => route('techboxx.build') , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
             ],
             'Staff' => [
                 ['route' => route('staff.dashboard') , 'label' => 'Dashboard', 'icon' => 'dashboard'],
@@ -28,7 +28,7 @@
                 ['route' => route('staff.componentdetails') , 'label' => 'Component Details', 'icon' => 'component'],
                 ['route' => '' , 'label' => 'Software Details', 'icon' => 'software'],
                 ['route' => '' , 'label' => 'Inventory Report', 'icon' => 'inventory'],
-                ['route' => '' , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
+                ['route' => route('techboxx.build') , 'label' => 'Build', 'icon' => 'build', 'style' => 'last-nav'],
             ],
             'Customer' => [
                 ['route' => route('customer.dashboard'), 'label' => 'Profile', 'icon' => 'dashboard'],

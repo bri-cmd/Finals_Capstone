@@ -1,18 +1,62 @@
-/*  */
+/* 3D PREVIEW */
 .preview-section {
     background-color: aliceblue;
     width: 50%;
+    position: relative;
 }
 
+#sidebar {
+    position: absolute;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 10;
+    user-select: none;
+    /* border: 1px solid black; */
+}
+
+#components {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.draggable {
+    width: 100px;
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+#canvas-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+}
+
+/* BUTTONS */
 .buttons-section {
-    background-color: antiquewhite;
     width: 25%;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.buttons-section div {
+.buttons-section div:not(.generate-build) {
     width: 100%;
     height: 50px;
     display: flex;
@@ -20,18 +64,68 @@
     border: 1px solid black;
 }
 
-.buttons-section div button {
+.generate-button {
+    background-color: var(--blue);
+    font-weight: 500;
+    color: white;
+    border: 1px solid black;
+}
+
+.buttons-section div button,
+.buttons-section div input {
     width: 100%;
+}
+
+.buttons-section div input {
+    font-size: 0.75rem;
 }
 
 .buttons-section div button:hover {
     background-color: var(--blue);
+    border: 1px solid black;
+    color: white;
+    font-weight: 500;
 }
 
+.active {
+    background-color: var(--blue);
+    border: 1px solid black;
+    color: white;
+    font-weight: 500;
+}
 
+.buttons-section div:not(:last-child) button:hover {
+    transform: scale(1.05);
+}
+
+.generate-build {
+    position: absolute;
+    top: 43.6%;
+    width: 23.7%;
+    height: 51%;
+    /* overflow-y: scroll; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.generate-build button {
+    border: 1px solid black;
+}
+
+.generate-build button:hover {
+    opacity: 0.5;
+}
+
+/* CATALOG */
 .catalog-section{
-    background-color: aqua;
+    background-color: var(--blue);
     width: 25%;
+    border: 1px solid black;
 }
 
 .catalog-button {
@@ -44,7 +138,7 @@
     margin: 0 4px;
     padding: 8px;
     font-size: 0.75rem;
-    
+    color: white;
 }
 
 .catalog-button button:hover {
@@ -61,6 +155,7 @@
     display: flex;
     gap: 0.3rem;
     align-items: center;
+    color: white;
 }
 
 .catalog-filter button {
@@ -68,22 +163,28 @@
 }
 
 .catalog-list {
+    height: 85%;
     margin: 0 4px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow-y: scroll;
 }
 
 .catalog-item {
     display: flex;
-    background-color: aliceblue;
+    background-color: white;
+    height: 100%;
+    justify-content: space-evenly;
 }
 
-.catalog-item img {
-    width: 100px;
-    height: 1-0px;
+.catalog-image {
+    width: 40%;
+    height: 100%;
+    background-color: antiquewhite;
 }
 
 .catalog-specs {
     padding: 4px;
+    width: 60%;
 }

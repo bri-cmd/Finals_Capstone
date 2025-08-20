@@ -18,6 +18,20 @@
                         <button>{{ $name }}</button>
                     </form>
                 @endif
+                @if (auth()->user()->role === 'Staff')
+                    {{-- show custom content for logged-in customer --}}
+                    <form action="{{ route('staff.dashboard') }}">
+                        @csrf
+                        <button>{{ $name }}</button>
+                    </form>
+                @endif
+                @if (auth()->user()->role === 'Admin')
+                    {{-- show custom content for logged-in customer --}}
+                    <form action="{{ route('admin.dashboard') }}">
+                        @csrf
+                        <button>{{ $name }}</button>
+                    </form>
+                @endif
             @else
                 {{-- show sign in button if not authenticated --}}
                 <form action="{{ route('login') }}">

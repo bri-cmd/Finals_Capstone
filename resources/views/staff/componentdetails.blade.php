@@ -28,14 +28,6 @@
             </div>
         </div>
 
-        {{-- COMPONENT MODALS --}}
-        {{-- BASE CODE FOR THE FOREACH LOOP --}}
-        {{-- <div x-show="componentModal === 'cpu'" x-cloak x-transition class="modal">
-            <div class="add-component" @click.away="componentModal = null; showAddModal = true;">
-                <x-modals.cpu/>
-            </div>
-        </div> --}}
-
         @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case'] as $type)
             <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal modal-scroll">
                 <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
@@ -55,12 +47,6 @@
             </div>
         @endforeach
         
-        {{-- EDIT AREA (MODAL) --}}
-        {{-- <div class="modal modal-scroll">
-            <div class="new-component" @click.away="showAddModal = false">
-                <x-modals.ram/>
-            </div>
-        </div> --}}
     </div>
 
 

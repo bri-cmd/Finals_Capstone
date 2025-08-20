@@ -140,7 +140,7 @@
 
             <div>
                 <label for="">Upload product image</label>
-                <input type="file" name="image[]" multiple accept="image/*">
+                <input type="file" name="image" multiple accept="image/*">
             </div>
 
             <div>

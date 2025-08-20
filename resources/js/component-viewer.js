@@ -1,76 +1,165 @@
 import * as THREE from 'https://esm.sh/three@0.155.0';
+import { OrbitControls } from 'https://esm.sh/three@0.155.0/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://esm.sh/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
+import interact from 'https://esm.sh/interactjs@1.10.17';
 
-// Store Three.js stuff to global scope
-window.THREE = THREE;
-window.GLTFLoader = GLTFLoader;
 
-window.loadModel = function () {
-    const canvas = document.getElementById('modelCanvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setSize(canvas.width, canvas.height);
+let scene, camera, renderer, controls;
+let caseModel = null;
+let gpuModel = null;
+let gpuSlotPosition = null;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
-    camera.position.z = 5;
+init();
+animate();
 
-    const light = new THEE.HemisphereLight(0xffffff, 0x444444, 1.5);
-    scene.add(light);
+function init() {
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color('white');
 
-    const loader = new GLTFLoader();
+  const container = document.getElementById('canvas-container');
+  const width = container.clientWidth;
+  const height = container.clientHeight;
 
-    const modelPath = window.selectedComponent?.model_3d;
+  camera = new THREE.PerspectiveCamera(30, width/height, 0.1, 1000);
+  camera.position.set(20, 0, 0);
 
-    if (!modelPath) {
-        console.warn("No 3D model path found.");
-        return;
-    }
-    console.log("Model path from selectedComponent:", modelPath);
+  renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(width, height);
+  container.appendChild(renderer.domElement);
 
-    // loader.load(`/storage/${modelPath}`, function (gltf) {
-    //     const model = gltf.scene;
-    //     scene.add(model);
-    //     model.scale.setScalar(.5);
-    //     model.rotation.y = Math.PI;
+  controls = new OrbitControls(camera, renderer.domElement);
 
-    //     function animate() {
-    //         requestAnimationFrame(animate);
-    //         model.rotation.y += 0.005;
-    //         renderer.render(scene, camera);
-    //     }
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
 
-    //     animate();
-    // }, undefined, function (error) {
-    //     console.error("Error loading GLTF model:", error);
-    // });
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  directionalLight.position.set(2, 10, 5);
+  scene.add(directionalLight);
 
-    loader.load(`/storage/${modelPath}`, function (gltf) {
-    const model = gltf.scene;
-    
-    // Replace all materials with basic ones to avoid shader issues
-    model.traverse(function (child) {
-        if (child.isMesh) {
-            // Use a basic material to bypass shaders
-            child.material = new THREE.MeshBasicMaterial({
-                color: 0x00ff00, // simple green color
-                wireframe: true // optional, wireframe mode for debugging
-            });
+  // RESIZE LISTENER USING CONTAINER SIZE
+  window.addEventListener('resize', () => {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  });
+
+  setupDragAndDrop();
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+async function loadGLTFModel(url) {
+  const loader = new GLTFLoader();
+  const gltf = await loader.loadAsync(url);
+  return gltf.scene;
+}
+
+function setupDragAndDrop() {
+  let draggingId = null;
+  let draggingEl = null;
+
+  interact('.draggable').draggable({
+    listeners: {
+      start(event) {
+        draggingId = event.target.id;
+        draggingEl = event.target;
+        draggingEl.style.opacity = '0.5';
+      },
+      move(event) {
+        // optional visual feedback for dragging
+      },
+      end(event) {
+        draggingEl.style.opacity = '1';
+        const dropPos = getCanvasDropPosition(event.clientX, event.clientY);
+
+        if (dropPos && draggingId === 'case' && !caseModel) {
+          spawnCase(dropPos);
         }
-    });
-    
-    scene.add(model);
-    model.scale.setScalar(0.5);
-    model.rotation.y = Math.PI;
+        else if (dropPos && draggingId === 'gpu' && caseModel) {
+          spawnGPUAtSlot();
+        }
 
-    function animate() {
-        requestAnimationFrame(animate);
-        model.rotation.y += 0.005;
-        renderer.render(scene, camera);
+        draggingId = null;
+        draggingEl = null;
+      }
     }
+  });
+}
 
-    animate();
-}, undefined, function (error) {
-    console.error("Error loading GLTF model:", error);
-});
+function getCanvasDropPosition(clientX, clientY) {
+  const rect = renderer.domElement.getBoundingClientRect();
 
-};
+  if (
+    clientX < rect.left || clientX > rect.right ||
+    clientY < rect.top || clientY > rect.bottom
+  ) {
+    return null;
+  }
+
+  const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  const y = - ((clientY - rect.top) / rect.height) * 2 + 1;
+
+  const mouseVector = new THREE.Vector2(x, y);
+  const raycaster = new THREE.Raycaster();
+
+  raycaster.setFromCamera(mouseVector, camera);
+
+  const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const intersectionPoint = new THREE.Vector3();
+
+  raycaster.ray.intersectPlane(planeZ, intersectionPoint);
+
+  return intersectionPoint;
+}
+
+async function spawnCase(position) {
+  if (caseModel) return; // only one case at a time
+
+  try {
+    const model = await loadGLTFModel('/storage/case/Case.glb');
+    model.position.copy(position);
+    model.scale.setScalar(1); // Shrinks uniformly
+    scene.add(model);
+    caseModel = model;
+
+    // CONTROL THE ROTATION || FOCUS THE ROTATION ON THE MODEL
+    controls.target.copy(model.position);
+    controls.update();
+
+    const gpuSlot = model.getObjectByName('Slot_GPU');
+    if (gpuSlot) {
+      gpuSlotPosition = new THREE.Vector3();
+      gpuSlot.getWorldPosition(gpuSlotPosition);
+      console.log('GPU slot position:', gpuSlotPosition);
+    } else {
+      gpuSlotPosition = new THREE.Vector3(0, 0, 0);
+      console.warn('GPU slot not found in case model');
+    }
+  } catch (error) {
+    console.error('Failed to load case model', error);
+  }
+}
+
+async function spawnGPUAtSlot() {
+  if (!gpuSlotPosition) {
+    alert('GPU slot position unknown');
+    return;
+  }
+  if (gpuModel) {
+    scene.remove(gpuModel);
+    gpuModel = null;
+  }
+  try {
+    const model = await loadGLTFModel('/storage/cpu/casered.glb');
+    model.position.copy(gpuSlotPosition);
+    scene.add(model);
+    gpuModel = model;
+  } catch (error) {
+    console.error('Failed to load GPU model', error);
+  }
+}

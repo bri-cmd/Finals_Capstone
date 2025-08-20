@@ -128,23 +128,9 @@
                 <input required name="stock" id="stock" type="number" placeholder="Enter stock" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
-            {{-- <div>
-                <label for="product-img">Upload product image</label>    
-                
-                <div class="product-img">
-                    <input required type="file" id="image" name="image" accept="image/*" class="custom-file" onchange="updateFileName(this)">
-
-                    <label for="image">
-                        <x-icons.upload class="upload-product"/>    
-                    </label>
-
-                    <p id="filename" class="filename text-gray-500">Upload product image</p>
-                </div>
-            </div> --}}
-
             <div>
                 <label for="">Upload product image</label>
-                <input type="file" name="image[]" multiple accept="image/*">
+                <input type="file" name="image" multiple accept="image/*">
             </div>
 
             <div>
