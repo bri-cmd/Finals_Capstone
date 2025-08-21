@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ComponentDetailsController;
 use App\Http\Controllers\Components\CaseController;
 use App\Http\Controllers\Components\CpuController;
@@ -34,7 +35,10 @@ Route::get('/email/verify', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('techboxx/build', [CustomerController::class, 'build'])->name('techboxx.build');
+Route::get('techboxx/build', [BuildController::class, 'index'])->name('techboxx.build');
+Route::get('techboxx/build/amd', [BuildController::class, 'amd'])->name('techboxx.amd');
+Route::get('techboxx/build/intel', [BuildController::class, 'intel'])->name('techboxx.intel');
+Route::get('techboxx/build/generate', [BuildController::class, 'generate'])->name('techboxx.generate');
 
 // ADMIN ROUTES
 Route::prefix('admin')->name('admin.')->group(function () {

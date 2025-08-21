@@ -82,7 +82,7 @@ class ComponentDetailsController extends Controller
         $searchTerm = strtolower($request->input('search'));
 
         $components = $this->getAllFormattedComponents()->filter(function ($component) use ($searchTerm) {
-            return str_contains(strtolower($component['name']), $searchTerm)
+            return str_contains(strtolower($component['model']), $searchTerm)
                 || str_contains(strtolower($component['brand']), $searchTerm);
         });
 

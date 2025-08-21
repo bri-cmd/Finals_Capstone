@@ -44,17 +44,17 @@
         </section>
         <section class="buttons-section">
             <div>
-                <button><p>Custom Build</p></button>
-                <button><p>Generate Build</p></button>
+                <button id="customBuildBtn"><p>Custom Build</p></button>
+                <button id="generateBuildBtn"><p>Generate Build</p></button>
             </div>
             <div>
-                <button><p>AMD</p></button>
-                <button><p>Intel</p></button>
+                <button id="amdBtn"><p>AMD</p></button>
+                <button id="intelBtn"><p>Intel</p></button>
             </div>
             <div>
-                <button><p>General Use</p></button>
-                <button><p>Gaming</p></button>
-                <button><p>Graphics Intensive</p></button>
+                <button id="generalUseBtn"><p>General Use</p></button>
+                <button id="gamingBtn"><p>Gaming</p></button>
+                <button id="graphicsIntensiveBtn"><p>Graphics Intensive</p></button>
             </div>
             <div class="budget-section">
                 <button><p>Budget</p></button>
@@ -93,26 +93,78 @@
             </div>
             <div class="catalog-list">
                 @foreach ($components as $component)
-                <div class="catalog-item">
-                    <div class="catalog-image">
-                        @if (!empty($component->image))
-                            <img src="{{ asset('storage/' . $component->image )}}" alt="Product image">
-                        @else
-                            <p>No image uploaded.</p>
-                        @endif
+                    <div class="catalog-item">
+                        <div class="catalog-image">
+                            @if (!empty($component->image))
+                                <img src="{{ asset('storage/' . $component->image )}}" alt="Product image">
+                            @else
+                                <p>No image uploaded.</p>
+                            @endif
+                        </div>
+                        <div class="catalog-specs">
+                            <p>{{ ucfirst($component->component_type) }}</p>
+                            <p><strong>{{ $component->brand}} {{ $component->model }}</strong></p>
+                            <p>₱{{ number_format($component->price, 2) }}</p>
+                        </div>
                     </div>
-                    <div class="catalog-specs">
-                        <p>{{ ucfirst($component->component_type) }}</p>
-                        <p><strong>{{ $component->brand}} {{ $component->model }}</strong></p>
-                        <p>₱{{ number_format($component->price, 2) }}</p>
-                    </div>
-                </div>
                 @endforeach
             </div>
         </section>    
     </main>
     
     <script>
+        let filters = {
+            cpu: null,
+            useCase: null,
+            // budget: null,
+        }
+
+        document.getElementById('amdBtn').addEventListener('click', () => {
+            filters.cpu = 'AMD';
+        });
+
+        document.getElementById('intelBtn').addEventListener('click', () => {
+            filters.cpu = 'Intel';
+        });
+
+        document.getElementById('generalUseBtn').addEventListener('click', () => {
+            filters.useCase = 'General Use';
+        });
+
+        document.getElementById('gamingBtn').addEventListener('click', () => {
+            filters.useCase = 'Gaming';
+        });
+
+        document.getElementById('graphicsIntensiveBtn').addEventListener('click', () => {
+            filters.useCase = 'Graphics Intensive';
+        });
+
+        // SEND FILTERS TO BACKEND USING SESSION STORAGE
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            sessionStorage.setItem('filters', JSON.stringify(filters));
+
+            // Generate query parameters
+            const queryParams = new URLSearchParams(filters).toString();
+
+            window.location.href = `/techboxx/build/generate?${queryParams}`; // REDIRRECT TO GENERATE ROUTE
+        })
+
+
+        const catalogList = document.querySelector('.catalog-list');
+        const customBuildBtn = document.getElementById('customBuildBtn');
+        const generateBuildBtn = document.getElementById('generateBuildBtn');
+        const buildSection = document.getElementById('buildSection');
+
+        // SHOW CATALOG WHEN CUSTOM BUILD BUTTON IS CLICKED
+        customBuildBtn.addEventListener('click', () => {
+            catalogList.classList.remove('hidden');
+        })
+
+        // HIDE CATALOG WHEN GENERATE BUILD BUTTON IS CLICKED
+        generateBuildBtn.addEventListener('click', () => {
+            catalogList.classList.add('hidden');
+        })
+
         document.querySelectorAll('.buttons-section button').forEach(button => {
             button.addEventListener('click', () => {
                 // REMOVE ACTIVE CLASS FROM ALL THE BUTTONS IN THE SAVE GROUP (DIV)
@@ -129,7 +181,7 @@
             document.querySelector('.budget-section').classList.add('hidden');
 
             // SHOW BUILD SECTION
-            document.getElementById('buildSection').classList.remove('hidden');
+            buildSection.classList.remove('hidden');
         })
     </script>
     

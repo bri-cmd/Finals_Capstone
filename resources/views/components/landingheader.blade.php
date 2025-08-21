@@ -26,7 +26,7 @@
                 </form>
             @endauth
 
-            <form action="">
+            <form action="{{ route('techboxx.build')}}">
                 <button>Try the 3d PC Builder</button>
             </form>
         </div>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('psus', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('build_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
             $table->integer('wattage');
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('sata_connectors');
             $table->decimal('price',10,2);
             $table->integer('stock');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('model_3d')->nullable();
         });
     }

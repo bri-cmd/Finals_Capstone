@@ -16,13 +16,6 @@ class CustomerController extends Controller
         return view('customer.dashboard', compact('userBuilds'));
     }
 
-    public function build() {
-        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
-
-
-        return view('build', compact('components'));
-    }
-
     public function update(Request $request) {
         /** @var \App\Models\User $user */
         $user = Auth::user();

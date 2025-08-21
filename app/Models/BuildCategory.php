@@ -19,11 +19,30 @@ class BuildCategory extends Model
 
     public function motherboard() {
         return $this->hasMany(Motherboard::class);
-        return $this->hasMany(Gpu::class);
-        return $this->hasMany(PcCase::class);
-        return $this->hasMany(Psu::class);
-        return $this->hasMany(Ram::class);
-        return $this->hasMany(Storage::class);
+    }
+
+    public function cpus() {
         return $this->hasMany(Cpu::class);
+    }
+
+    public function case() {
+        return $this->hasMany(PcCase::class);
+    }
+
+    public function gpu() {
+        return $this->hasMany(Gpu::class);
+    }
+
+    public function psu() {
+        return $this->hasMany(Psu::class);
+
+    }
+
+    public function storage() {
+        return $this->hasMany(Storage::class);
+    }
+
+    public function ram() {
+        return $this->hasMany(Ram::class);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rams', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('build_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
             $table->string('ram_type');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('is_rgb');
             $table->decimal('price',10,2);
             $table->integer('stock');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('model_3d')->nullable();
         });
     }

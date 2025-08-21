@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cpus', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('build_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');
             $table->string('socket_type');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('generation');
             $table->decimal('price',10,2);
             $table->integer('stock');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('model_3d')->nullable();
         });
     }
