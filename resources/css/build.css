@@ -117,6 +117,18 @@ canvas {
 
 .generate-build button {
     border: 1px solid black;
+    text-align: left;
+    width: 100%;
+    padding: 8px;
+}
+
+.generate-build button p {
+    font-weight: 600;
+}
+
+.generate-build button p .selected-name {
+    display: block;
+    font-weight: normal;
 }
 
 .generate-build button:hover {
@@ -130,6 +142,10 @@ canvas {
     border: 1px solid black;
 }
 
+.catalog-button button.active {
+    border-bottom: 1px solid white;
+}
+
 .catalog-button {
     display: flex;
     gap: 1rem;
@@ -141,10 +157,7 @@ canvas {
     padding: 8px;
     font-size: 0.75rem;
     color: white;
-}
-
-.catalog-button button:hover {
-    color: gray;
+    border: 1px solid transparent;
 }
 
 .catalog-header {
@@ -178,8 +191,6 @@ canvas {
     display: flex;
     background-color: white;
     justify-content: space-evenly;
-
-
 }
 
 .catalog-item:hover {
@@ -203,4 +214,53 @@ canvas {
 .catalog-specs {
     padding: 4px;
     width: 60%;
+}
+
+.summary-section {
+}
+
+.summary-date {
+    text-align: center;
+    align-content: center;
+    height: 10%;
+    color: white;
+}
+
+.summary-date p {
+    font-weight: 600;
+}
+
+.summary-date p #buildDate {
+    font-weight: normal;
+}
+
+.summary-table {
+    background-color: white;
+    height: 80%;
+    margin: 5px;
+    padding: 0 0.5rem;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.summary-table table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.summary-table thead th {
+    background-color: transparent;
+    font-weight: 600;
+    color: #666;
+}
+
+.summary-table tbody td {
+    border-bottom: 1px solid black;
+}
+
+.summary-table td:nth-of-type(2),
+.summary-table td:nth-of-type(3) {
+    text-align: center;
 }

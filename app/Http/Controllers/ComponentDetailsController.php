@@ -18,13 +18,13 @@ class ComponentDetailsController extends Controller
     public function getAllFormattedComponents()
     {
         return collect([
+            ...app(CpuController::class)->getFormattedCpus(),
             ...app(MoboController::class)->getFormattedMobos(),
             ...app(GpuController::class)->getFormattedGpus(),
             ...app(CaseController::class)->getFormattedCases(),
             ...app(PsuController::class)->getFormattedPsus(),
             ...app(RamController::class)->getFormattedRams(),
             ...app(StorageController::class)->getFormattedStorages(),
-            ...app(CpuController::class)->getFormattedCpus(),
         ])->sortByDesc('created_at')->values();
     }
 
