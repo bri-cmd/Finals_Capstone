@@ -28,7 +28,7 @@
     <main class="main-content flex justify-evenly h-[91vh] gap-1">
         <section class="preview-section">
             <div id="sidebar">
-                <h3 class="mb-3">BUILD COMPONENTS</h3>
+                <h3 class="mb-3 text-center">BUILD COMPONENTS</h3>
                 <div id="components">
                     <div id="case" class="draggable"><p>PC Case</p></div>
                     <div id="gpu" class="draggable"><p>GPU</p></div>

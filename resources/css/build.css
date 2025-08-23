@@ -1,6 +1,6 @@
 /* 3D PREVIEW */
 .preview-section {
-    background-color: aliceblue;
+    border: 1px solid black;
     width: 50%;
     position: relative;
 }
@@ -8,24 +8,23 @@
 #sidebar {
     position: absolute;
     right: 0;
-    width: 200px;
+    width: 250px;
     height: 100%;
     padding: 20px;
     border-radius: 8px;
     z-index: 10;
     user-select: none;
-    /* border: 1px solid black; */
 }
 
 #components {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .draggable {
     width: 100px;
-    height: 40px;
+    height: 70px;
     margin-bottom: 10px;
     border-radius: 5px;
     cursor: grab;
@@ -33,10 +32,22 @@
     align-items: center;
     justify-content: center;
     border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    cursor: grab !important;
+}
+
+.draggable:active {
+  cursor: grabbing; /* Cursor when dragging */
+}
+
+.draggable img {
+    width: 50%;
+    height: 70%;
 }
 
 #canvas-container {
-    width: 100%;
+    width: 60%;
     height: 100%;
     position: relative;
 }
@@ -45,7 +56,6 @@ canvas {
     display: block;
     width: 100%;
     height: 100%;
-    border: 1px solid black;
 }
 
 /* BUTTONS */
@@ -105,7 +115,6 @@ canvas {
     top: 43.6%;
     width: 23.7%;
     height: 51%;
-    /* overflow-y: scroll; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -122,6 +131,7 @@ canvas {
     padding: 8px;
 }
 
+
 .generate-build button p {
     font-weight: 600;
 }
@@ -129,6 +139,7 @@ canvas {
 .generate-build button p .selected-name {
     display: block;
     font-weight: normal;
+    font-size: 0.65rem;
 }
 
 .generate-build button:hover {

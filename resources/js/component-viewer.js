@@ -59,12 +59,14 @@ async function loadGLTFModel(url) {
   return gltf.scene;
 }
 
+
 function setupDragAndDrop() {
   let draggingId = null;
   let draggingEl = null;
   let originalSlotMaterial = null;
-  let casemarker = null;
   let gpumarker = null;
+  let casemarker = null;
+  let wasDroppedSuccessfully = false; // Track if the drop was successful
 
   interact('.draggable').draggable({
     listeners: {
@@ -73,10 +75,13 @@ function setupDragAndDrop() {
         draggingEl = event.target;
         draggingEl.style.opacity = '0.5';
 
+        // Change the cursor to grabbing when drag starts
+        document.body.style.cursor = 'grabbing'; 
+
         if (draggingId === 'case' && !caseModel) {
           // Show a drop zone marker for the case
           casemarker = new THREE.Mesh(
-            new THREE.BoxGeometry(4, 4, 4), // Adjust size to match case model scale
+            new THREE.BoxGeometry(1, 1, 1), // Adjust size to match case model scale
             new THREE.MeshStandardMaterial({
               color: 0x0000ff,       // Blue casemarker
               emissive: 0x000066,
@@ -130,13 +135,35 @@ function setupDragAndDrop() {
       end(event) {
         draggingEl.style.opacity = '1';
 
+        // Reset the cursor to grab when dragging ends
+        document.body.style.cursor = 'grab'; 
+
         const dropPos = getCanvasDropPosition(event.clientX, event.clientY);
 
         // If the drop position is valid, spawn the models
         if (dropPos && draggingId === 'case' && !caseModel) {
           spawnCase(dropPos);
+          wasDroppedSuccessfully = true;  // Mark that the case was dropped successfully
         } else if (dropPos && draggingId === 'gpu' && caseModel) {
           spawnGPUAtSlot();
+          wasDroppedSuccessfully = true;  // Mark that the case was dropped successfully
+        }
+
+        // If drop was unsuccessful, remove the dragged model (if any)
+        if (!wasDroppedSuccessfully) {
+          if (draggingId === 'case' && caseModel) {
+            scene.remove(caseModel);  // Remove the case if it was dropped unsuccessfully
+            caseModel = null;
+          }
+          if (draggingId === 'gpu' && gpuModel) {
+            scene.remove(gpuModel);  // Remove the GPU if it was dropped unsuccessfully
+            gpuModel = null;
+          }
+
+          // Reset the marker to the center when the drop fails
+          if (casemarker) {
+            casemarker.position.set(0, 0, 0); // Reset position to center
+          }
         }
 
         // Revert the slot highlight after dragging ends
@@ -160,11 +187,11 @@ function setupDragAndDrop() {
         draggingId = null;
         draggingEl = null;
         originalSlotMaterial = null;
+        wasDroppedSuccessfully = false;
       }
     }
   });
 }
-
 
 function getCanvasDropPosition(clientX, clientY) {
   const rect = renderer.domElement.getBoundingClientRect();

@@ -102,17 +102,6 @@ document.querySelectorAll('.buttons-section button').forEach(button => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-    const showBuild = sessionStorage.getItem('showBuildSection');
-
-    if (showBuild === 'true') {
-        document.querySelector('.generate-button').classList.add('hidden');
-        document.querySelector('.budget-section').classList.add('hidden');
-        document.getElementById('buildSection').classList.remove('hidden');
-
-        // CLEAN UP SO IT DOESN'T PRESIST ON FUTURE RELOAD
-        sessionStorage.removeItem('showBuildSection');
-    }
-
     // RESTORE FILTERS STATE
     const savedFilters = sessionStorage.getItem('filters');
     if (savedFilters) {
@@ -179,7 +168,8 @@ document.querySelectorAll('.catalog-item').forEach(item => {
         const imageUrl = item.getAttribute('data-image');
 
         // STORE SELECTED COMPONENT
-        selectedComponents[type] = { name, price };
+        selectedComponents[type] = { name, price, imageUrl };
+        sessionStorage.setItem(type, JSON.stringify(selectedComponents));
 
         // FIND THE MATCHING BUTTON
         const targetButton = document.querySelector(`#buildSection button[data-type="${type}"]`);
@@ -194,8 +184,8 @@ document.querySelectorAll('.catalog-item').forEach(item => {
         const draggable = document.getElementById(type);
         if (draggable && imageUrl) {
             draggable.innerHTML = `
-                <img src="${imageUrl}" alt="${name}" class="draggable-image">
-                <p>${name}</p>
+                <img src="${imageUrl}" alt="${name}" >
+                <p>${type.toUpperCase()}</p>
                 `;
         }
 
