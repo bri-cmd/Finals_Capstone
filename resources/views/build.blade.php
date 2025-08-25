@@ -101,7 +101,8 @@
                              data-type="{{ strtolower($component->component_type) }}"
                              data-name="{{ ucfirst($component->brand )}} {{ ucfirst($component->model )}}"
                              data-price="{{ $component->price }}"
-                             data-image="{{ asset('storage/' . $component->image) }}">
+                             data-image="{{ asset('storage/' . $component->image) }}"
+                             data-model="{{ asset('storage/' . $component->model_3d) }}">
                             <div class="catalog-image">
                                 @if (!empty($component->image))
                                     <img src="{{ asset('storage/' . $component->image )}}" alt="Product image">

@@ -46,10 +46,7 @@
                 </div>
             </div>
         @endforeach
-        
     </div>
-
-
 
     {{-- TABLE --}}
     <section class="section-style !pl-0 !h-[65vh]">
@@ -170,7 +167,7 @@
 </x-dashboardlayout>
 
 {{-- 3D MODEL VIEW --}}
-<script type="module">
+{{-- <script type="module">
         import * as THREE from 'https://esm.sh/three@0.155.0';
         import { GLTFLoader } from 'https://esm.sh/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
 
@@ -224,4 +221,4 @@
     };
 
 
-</script>
+</script> --}}

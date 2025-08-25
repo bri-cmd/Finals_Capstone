@@ -30,7 +30,7 @@ class RamController extends Controller
             $ram->rgb_display = ($ram->is_rgb === 'false') ? 'No' : 'Yes';
 
             $ram->price_display = '₱' . number_format($ram->price, 2);
-
+            $ram->label = "{$ram->brand} {$ram->model}";
             $ram->component_type = 'ram';
         });
 

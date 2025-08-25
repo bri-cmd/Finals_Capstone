@@ -10,7 +10,9 @@ use App\Http\Controllers\Components\PsuController;
 use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +54,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('users.decline');
     Route::put('users/{id}/update', [UserAccountController::class, 'update']);
     Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('users.delete');
+
+    // SALES
+    Route::get('sales', [SalesController::class, 'index'])->name('sales');
 });
 
 // STAFF ROUTES
@@ -77,6 +82,14 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::put('component-details/gpu/{id}', [GpuController::class, 'update']);
     Route::put('component-details/ram/{id}', [RamController::class, 'update']);
     Route::delete('component-details/{type}/{id}', [ComponentDetailsController::class, 'delete'])->name('componentdetails.delete');
+
+    // INVENTORY REPORT
+    Route::get('inventory', [InventoryController::class, 'index'])->name('inventory');
+    Route::get('inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
+    Route::post('inventory/stock-in', [InventoryController::class, 'stockIn'])->name('inventory.stock-in');
+    Route::post('inventory/stock-out', [InventoryController::class, 'stockOut'])->name('inventory.stock-out');
+
+    
 });
 
 // CUSTOMER ROUTES

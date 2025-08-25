@@ -34,7 +34,7 @@ class StorageController extends Controller
             $storage->read_display = "Up to {$storage->read_speed_mbps} MB/s";
             $storage->write_display = "Up to {$storage->write_speed_mbps} MB/s";
             $storage->price_display = '₱' . number_format($storage->price, 2);
-
+            $storage->label = "{$storage->brand} {$storage->model}";
             $storage->component_type = 'storage';
         });
 

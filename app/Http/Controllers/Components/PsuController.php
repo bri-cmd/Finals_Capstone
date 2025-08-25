@@ -32,7 +32,7 @@ class PsuController extends Controller
         // FORMATTING THE DATAS
         $psus->each(function ($psu) {
             $psu->price_display = '₱' . number_format($psu->price, 2);
-
+            $psu->label = "{$psu->brand} {$psu->model}";
             $psu->component_type = 'psu';
         });
 

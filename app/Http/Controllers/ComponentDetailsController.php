@@ -28,7 +28,7 @@ class ComponentDetailsController extends Controller
         ])->sortByDesc('created_at')->values();
     }
 
-    private function getAllSpecs()
+    public function getAllSpecs()
     {
         return [
             'moboSpecs' => app(MoboController::class)->getMotherboardSpecs(),

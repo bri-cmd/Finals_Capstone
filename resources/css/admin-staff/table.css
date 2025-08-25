@@ -67,3 +67,12 @@
     align-items: center;
     margin-bottom: 1rem;
 }
+
+/* INVENTORY */
+.stockin-icon:hover {
+    color: var(--green);
+}
+
+.stockout-icon:hover {
+    color: var(--red);
+}

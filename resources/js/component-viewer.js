@@ -8,8 +8,34 @@ let scene, camera, renderer, controls;
 let caseModel = null;
 let gpuModel = null;
 let gpuSlotPosition = null;
+let selectedCaseModelUrl = null;
+let selectedGpuModelUrl = null;
+
+function setupCatalogClickHandlers() {
+  document.querySelectorAll('.catalog-item').forEach(item => {
+    item.addEventListener('click', async () => {
+      const modelUrl = item.getAttribute('data-model');
+      const type = item.getAttribute('data-type');
+
+      if (!modelUrl) {
+        alert('Model not available for this component.');
+        return;
+      }
+
+      if (type === 'case') {
+        selectedCaseModelUrl = modelUrl; // Save selected model
+        console.log('Selected model URL for dragging:', selectedCaseModelUrl);
+      } else if (type === 'motherboard') {
+        selectedGpuModelUrl = modelUrl;
+        console.log('Selected model URL for dragging:', selectedGpuModelUrl);
+      }
+
+    })
+  })
+}
 
 init();
+setupCatalogClickHandlers();
 animate();
 
 function init() {
@@ -96,7 +122,7 @@ function setupDragAndDrop() {
         }
 
         // If dragging GPU, highlight the GPU slot
-        if (draggingId === 'gpu' && caseModel) {
+        if (draggingId === 'motherboard' && caseModel) {
           const gpuSlot = caseModel.getObjectByName('Slot_GPU');
           if (gpuSlot) {
             // Save the original material and change to the highlighted one
@@ -132,7 +158,7 @@ function setupDragAndDrop() {
       move(event) {
         // Optional: Add extra visual feedback during dragging if necessary
       },
-      end(event) {
+      async end(event) {
         draggingEl.style.opacity = '1';
 
         // Reset the cursor to grab when dragging ends
@@ -142,9 +168,15 @@ function setupDragAndDrop() {
 
         // If the drop position is valid, spawn the models
         if (dropPos && draggingId === 'case' && !caseModel) {
-          spawnCase(dropPos);
-          wasDroppedSuccessfully = true;  // Mark that the case was dropped successfully
-        } else if (dropPos && draggingId === 'gpu' && caseModel) {
+          const modelUrl = selectedCaseModelUrl;
+
+          if (modelUrl) {
+            await spawnCase(dropPos, selectedCaseModelUrl);
+            wasDroppedSuccessfully = true;  // Mark that the case was dropped successfully
+          } else {
+            console.warn('No model Url provided for case');
+          }
+        } else if (dropPos && draggingId === 'motherboard' && caseModel) {
           spawnGPUAtSlot();
           wasDroppedSuccessfully = true;  // Mark that the case was dropped successfully
         }
@@ -155,7 +187,7 @@ function setupDragAndDrop() {
             scene.remove(caseModel);  // Remove the case if it was dropped unsuccessfully
             caseModel = null;
           }
-          if (draggingId === 'gpu' && gpuModel) {
+          if (draggingId === 'motherboard' && gpuModel) {
             scene.remove(gpuModel);  // Remove the GPU if it was dropped unsuccessfully
             gpuModel = null;
           }
@@ -219,11 +251,11 @@ function getCanvasDropPosition(clientX, clientY) {
   return intersectionPoint;
 }
 
-async function spawnCase(position) {
+async function spawnCase(position, modelUrl) {
   if (caseModel) return; // only one case at a time
 
   try {
-    const model = await loadGLTFModel('/storage/case/try5.glb');
+    const model = await loadGLTFModel(modelUrl);
     model.position.copy(position);
     model.scale.setScalar(1); // Shrinks uniformly
     scene.add(model);
@@ -252,12 +284,18 @@ async function spawnGPUAtSlot() {
     alert('GPU slot position unknown');
     return;
   }
+
+  if (!selectedGpuModelUrl) {
+    alert('Please select a GPU model first.');
+    return;
+  }
+
   if (gpuModel) {
     scene.remove(gpuModel);
     gpuModel = null;
   }
   try {
-    const model = await loadGLTFModel('/storage/cpu/MOBO3.glb');
+    const model = await loadGLTFModel(selectedGpuModelUrl);
     model.position.copy(gpuSlotPosition);
     scene.add(model);
     gpuModel = model;

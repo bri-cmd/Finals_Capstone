@@ -28,7 +28,7 @@ class GpuController extends Controller
         
         $gpus->each(function ($gpu) {
             $gpu->price_display = '₱' . number_format($gpu->price, 2);
-
+            $gpu->label = "{$gpu->brand} {$gpu->model}";
             $gpu->component_type = 'gpu';
         });
 

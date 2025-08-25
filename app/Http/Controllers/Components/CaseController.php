@@ -66,8 +66,7 @@ class CaseController extends Controller
             })->implode('<br>');
 
             $case->price_display = '₱' . number_format($case->price, 2);
-
-
+            $case->label = "{$case->brand} {$case->model}";
             $case->component_type = 'case';
         });
 

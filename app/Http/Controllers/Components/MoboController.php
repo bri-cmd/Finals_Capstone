@@ -44,6 +44,7 @@ class MoboController extends Controller
             }
             
             $mobo->price_display = '₱' . number_format($mobo->price, 2);
+            $mobo->label = "{$mobo->brand} {$mobo->model}";
             $mobo->component_type = 'motherboard';
             
             

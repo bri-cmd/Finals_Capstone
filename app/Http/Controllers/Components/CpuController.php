@@ -31,6 +31,7 @@ class CpuController extends Controller
         $cpus->each(function ($cpu) {
             $cpu->integrated_display = ($cpu->integrated_graphics === 'false') ? 'No' : 'Yes';
             $cpu->price_display = '₱' . number_format($cpu->price, 2);
+            $cpu->label = "{$cpu->brand} {$cpu->model}";
             $cpu->component_type = 'cpu';
         });
 
