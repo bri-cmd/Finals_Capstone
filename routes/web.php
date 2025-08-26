@@ -3,6 +3,7 @@
 use App\Http\Controllers\BuildController;
 use App\Http\Controllers\ComponentDetailsController;
 use App\Http\Controllers\Components\CaseController;
+use App\Http\Controllers\Components\CoolerController;
 use App\Http\Controllers\Components\CpuController;
 use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
@@ -74,6 +75,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('component-details/ram', [RamController::class, 'store'])->name('componentdetails.ram.store');
     Route::post('component-details/storage', [StorageController::class, 'store'])->name('componentdetails.storage.store');
     Route::post('component-details/cpu', [CpuController::class, 'store'])->name('componentdetails.cpu.store');
+    Route::post('component-details/cooler', [CoolerController::class, 'store'])->name('componentdetails.cooler.store');
     Route::put('component-details/psu/{id}', [PsuController::class, 'update']);
     Route::put('component-details/storage/{id}', [StorageController::class, 'update']);
     Route::put('component-details/case/{id}', [CaseController::class, 'update']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Components\CaseController;
+use App\Http\Controllers\Components\CoolerController;
 use App\Http\Controllers\Components\CpuController;
 use App\Http\Controllers\Components\GpuController;
 use App\Http\Controllers\Components\MoboController;
@@ -25,6 +26,7 @@ class ComponentDetailsController extends Controller
             ...app(PsuController::class)->getFormattedPsus(),
             ...app(RamController::class)->getFormattedRams(),
             ...app(StorageController::class)->getFormattedStorages(),
+            ...app(CoolerController::class)->getFormattedCoolers(),
         ])->sortByDesc('created_at')->values();
     }
 
@@ -38,6 +40,7 @@ class ComponentDetailsController extends Controller
             'ramSpecs' => app(RamController::class)->getRamSpecs(),
             'storageSpecs' => app(StorageController::class)->getStorageSpecs(),
             'cpuSpecs' => app(CpuController::class)->getCpuSpecs(),
+            'coolerSpecs' => app(CoolerController::class)->getCoolerSpecs(),
         ];
     }
 

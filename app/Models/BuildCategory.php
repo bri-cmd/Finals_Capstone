@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Hardware\Cooler;
 use App\Models\Hardware\Cpu;
 use App\Models\Hardware\Gpu;
 use App\Models\Hardware\Motherboard;
@@ -44,5 +45,9 @@ class BuildCategory extends Model
 
     public function ram() {
         return $this->hasMany(Ram::class);
+    }
+    
+    public function cooler() {
+        return $this->hasMany(Cooler::class);
     }
 }

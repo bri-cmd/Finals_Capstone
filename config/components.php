@@ -7,5 +7,6 @@
     'motherboard' => \App\Models\Hardware\Motherboard::class,
     'ram' => \App\Models\Hardware\Ram::class,
     'cpu' => \App\Models\Hardware\Cpu::class,
+    'cooler' => \App\Models\Hardware\Cooler::class,
 ];
 

@@ -80,9 +80,13 @@ class StorageController extends Controller
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
         
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('storage', $filename, 'public');
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image');
+            $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
+            $validated['image'] = $validated['image']->storeAs('storage', $filename, 'public');
+        } else {
+            $validated['image'] = null;
+        }
 
         if ($request->hasFile('model_3d')) {
             $model3d = $request->file('model_3d');

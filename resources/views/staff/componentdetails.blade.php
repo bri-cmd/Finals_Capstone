@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case'] as $type)
+        @foreach (['cpu', 'gpu', 'ram', 'motherboard', 'storage', 'psu', 'case', 'cooler'] as $type)
             <div x-show="componentModal === '{{ $type }}'" x-cloak x-transition class="modal modal-scroll">
                 <div class="new-component" @click.away="componentModal = null; showAddModal = true;">
                     <button @click="componentModal = null; showAddModal = true;">
@@ -42,6 +42,7 @@
                         'ramSpecs' => $ramSpecs,
                         'storageSpecs' => $storageSpecs,
                         'cpuSpecs' => $cpuSpecs,
+                        'coolerSpecs' => $coolerSpecs,
                     ])
                 </div>
             </div>

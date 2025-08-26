@@ -79,9 +79,13 @@ class CpuController extends Controller
         ]);
 
         // Handle image upload
-        $validated['image'] = $request->file('image');
-        $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-        $validated['image'] = $validated['image']->storeAs('cpu', $filename, 'public');
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image');
+            $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
+            $validated['image'] = $validated['image']->storeAs('cpu', $filename, 'public');
+        } else {
+            $validated['image'] = null;
+        }
 
         // Handle 3D model upload
         if ($request->hasFile('model_3d')) {
