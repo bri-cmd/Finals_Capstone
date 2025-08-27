@@ -83,6 +83,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::put('component-details/motherboard/{id}', [MoboController::class, 'update']);
     Route::put('component-details/gpu/{id}', [GpuController::class, 'update']);
     Route::put('component-details/ram/{id}', [RamController::class, 'update']);
+    Route::put('component-details/cooler/{id}', [CoolerController::class, 'update']);
     Route::delete('component-details/{type}/{id}', [ComponentDetailsController::class, 'delete'])->name('componentdetails.delete');
 
     // INVENTORY REPORT

@@ -27,8 +27,12 @@ class CoolerController extends Controller
         $coolers = Cooler::all();
 
         $coolers->each(function ($cooler) {
-            $cooler->component_type = 'cooler';
+            $cooler->socket_display = implode('<br>', $cooler->socket_compatibility ?? []);
 
+            // Format socket_compatibility as an array (for editing)
+            $cooler->socket_compatibility_array = $cooler->socket_compatibility ?? [];
+            $cooler->price_display = '₱' . number_format($cooler->price, 2);
+            $cooler->component_type = 'cooler';
         });
         return $coolers;
     }
@@ -52,7 +56,7 @@ class CoolerController extends Controller
             'build_category_id' => 'required|exists:build_categories,id',
         ]);
 
-        $validated['socket_compatibility'] = implode(',', $validated['socket_compatibility']);
+        $validated['socket_compatibility'] = $validated['socket_compatibility'];
 
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -77,6 +81,46 @@ class CoolerController extends Controller
 
         return redirect()->route('staff.componentdetails')->with([
             'message' => 'Cooler added',
+            'type' => 'success',
+        ]); 
+    }
+
+    public function update(Request $request, string $id) 
+    {
+        $cooler = Cooler::findOrFail($id);
+
+        // convert array -> string
+        $socketCompatibility = is_array($request->socket_compatibility) 
+            ? implode(',', $request->socket_compatibility) 
+            : $request->socket_compatibility;
+
+
+        // handle image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) 
+                        . '.' . $file->getClientOriginalExtension();
+            $imagePath = $file->storeAs('cooler', $filename, 'public');
+        } else {
+            $imagePath = $cooler->image; // keep old image if none uploaded
+        }
+
+        $cooler->update([
+            'brand' => $request->brand, 
+            'model' => $request->model,
+            'cooler_type' => $request->cooler_type,
+            'socket_compatibility' => $socketCompatibility,
+            'max_tdp' => $request->max_tdp,
+            'radiator_size_mm' => $request->radiator_size_mm,
+            'fan_count' => $request->fan_count,
+            'height_mm' => $request->height_mm,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image' => $imagePath,
+        ]);
+
+        return redirect()->route('staff.componentdetails')->with([
+            'message' => 'Cooler updated',
             'type' => 'success',
         ]); 
     }

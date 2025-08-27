@@ -65,8 +65,7 @@
             </table> 
         </div>
 
-        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" 
-             x-init="$watch('selectedComponent', value => window.selectedComponent = value)" class="overflow-y-scroll">
+        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" class="overflow-y-scroll">
             <table class="table">
                 <tbody>
                     @foreach ($components as $component)
@@ -125,6 +124,10 @@
                     <div x-show="selectedComponent.component_type === 'cpu'">
                         @include('staff.componentdetails.view.cpu')
                     </div>
+
+                    <div x-show="selectedComponent.component_type === 'cooler'">
+                        @include('staff.componentdetails.view.cooler')
+                    </div>
                 </div>
             </div>
 
@@ -157,6 +160,10 @@
 
                     <div x-show="selectedComponent.component_type === 'cpu'">
                         @include('staff.componentdetails.edit.cpu')
+                    </div>
+
+                    <div x-show="selectedComponent.component_type === 'cooler'">
+                        @include('staff.componentdetails.edit.cooler')
                     </div>
                 </div>
             </div>

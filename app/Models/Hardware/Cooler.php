@@ -30,6 +30,8 @@ class Cooler extends Model
     // FETCHING IMAGE FROM DRIVE
     protected $casts = [
         'image' => 'array',
+        'socket_compatibility' => 'array',
+
     ];
 
     // DEFINE RELATIONSHIP
