@@ -69,19 +69,5 @@ class BuildController extends Controller
         return view('build', compact('components'));
     }
 
-    public function amd() {
-        $cpu = Cpu::where('brand', 'AMD')->get();
-        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
-
-        // QUERY THAT FETCHES THE CPU BRAND THAT IS AMD
-        return view('build', compact('cpu','components'));
-    }
-
-    public function intel() {
-        $cpu = Cpu::where('brand', 'Intel')->get();
-        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
-
-        // QUERY THAT FETCHES THE CPU BRAND THAT IS AMD
-        return view('build', compact('cpu','components'));
-    }
+    
 }

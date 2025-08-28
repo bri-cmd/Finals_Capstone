@@ -25,6 +25,9 @@ function setupCatalogClickHandlers() {
       if (type === 'case') {
         selectedCaseModelUrl = modelUrl; // Save selected model
         console.log('Selected model URL for dragging:', selectedCaseModelUrl);
+
+        // SPAWNS CASE IN THE SCENE
+        spawnCase(new THREE.Vector3(0,0,0), selectedCaseModelUrl);
       } else if (type === 'motherboard') {
         selectedGpuModelUrl = modelUrl;
         console.log('Selected model URL for dragging:', selectedGpuModelUrl);
@@ -103,23 +106,6 @@ function setupDragAndDrop() {
 
         // Change the cursor to grabbing when drag starts
         document.body.style.cursor = 'grabbing'; 
-
-        if (draggingId === 'case' && !caseModel) {
-          // Show a drop zone marker for the case
-          casemarker = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1), // Adjust size to match case model scale
-            new THREE.MeshStandardMaterial({
-              color: 0x0000ff,       // Blue casemarker
-              emissive: 0x000066,
-              transparent: true,
-              opacity: 0.3
-            })
-          );
-
-          // Place casemarker at a default drop area (e.g. center of canvas)
-          casemarker.position.set(0, 0, 0);
-          scene.add(casemarker);
-        }
 
         // If dragging GPU, highlight the GPU slot
         if (draggingId === 'motherboard' && caseModel) {

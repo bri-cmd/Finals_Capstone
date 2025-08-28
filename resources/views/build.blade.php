@@ -30,7 +30,6 @@
             <div id="sidebar">
                 <h3 class="mb-3 text-center">BUILD COMPONENTS</h3>
                 <div id="components">
-                    <div id="case" class="draggable"><p>PC Case</p></div>
                     <div id="gpu" class="draggable"><p>GPU</p></div>
                     <div id="motherboard" class="draggable"><p>Motherboard</p></div>
                     <div id="cpu" class="draggable"><p>CPU</p></div>
@@ -38,10 +37,15 @@
                     <div id="ssd" class="draggable"><p>SDD</p></div>
                     <div id="psu" class="draggable"><p>PSU</p></div>    
                     <div id="ram" class="draggable"><p>RAM</p></div>    
+                    <div id="cooler" class="draggable"><p>Cooler</p></div>
                 </div>
             </div>
             <div id="canvas-container"></div>
-
+            <form action="{{ route('techboxx.build.extend') }}">
+                <button>
+                    <x-icons.expand />
+                </button>
+            </form>
         </section>
         <section class="buttons-section">
             <div data-group="buildType">
@@ -67,6 +71,7 @@
 
             {{-- THIS SECTION WILL SHOW WHEN GENERATE BUILD IS CLICKED --}}
             <div class="generate-build hidden" id="buildSection">
+                <button data-type=""><p>Chipset <span class="selected-name">None</span></p></button>
                 <button data-type="case"><p>Case <span class="selected-name">None</span></p></button>
                 <button data-type="gpu"><p>GPU <span class="selected-name">None</span></p></button>
                 <button data-type="motherboard"><p>Motherboard <span class="selected-name">None</span></p></button>
@@ -75,6 +80,7 @@
                 <button data-type="ssd"><p>SSD <span class="selected-name">None</span></p></button>
                 <button data-type="psu"><p>PSU <span class="selected-name">None</span></p></button>
                 <button data-type="ram"><p>RAM <span class="selected-name">None</span></p></button>
+                <button data-type="cooler"><p>Cooler <span class="selected-name">None</span></p></button>
             </div>
         </section>   
         <section class="catalog-section">
@@ -88,7 +94,7 @@
                 <div class="catalog-header">
                     <div class="catalog-title">
                         <p id="catalogTitle">Processor</p>
-                        <x-icons.info />
+                        <x-icons.info title="This is information about the processor"/>
                     </div> 
                     <div class="catalog-filter">
                         <button><p>filter</p></button>
@@ -102,7 +108,7 @@
                              data-name="{{ ucfirst($component->brand )}} {{ ucfirst($component->model )}}"
                              data-price="{{ $component->price }}"
                              data-image="{{ asset('storage/' . $component->image) }}"
-                             data-model="{{ asset('storage/' . $component->model_3d) }}">
+                             data-model="{{ isset($component->model_3d) ? asset('storage/' . $component->model_3d) : '' }}">
                             <div class="catalog-image">
                                 @if (!empty($component->image))
                                     <img src="{{ asset('storage/' . $component->image )}}" alt="Product image">

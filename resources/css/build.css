@@ -58,6 +58,18 @@ canvas {
     height: 100%;
 }
 
+.expand-icon {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 1000;
+}
+
+.expand-icon:hover {
+    opacity: .5;
+    cursor: pointer;
+}
+
 /* BUTTONS */
 .buttons-section {
     width: 25%;
@@ -118,6 +130,7 @@ canvas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+    overflow-y: scroll;
 }
 
 .hidden {

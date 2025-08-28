@@ -89,11 +89,7 @@ class CoolerController extends Controller
     {
         $cooler = Cooler::findOrFail($id);
 
-        // convert array -> string
-        $socketCompatibility = is_array($request->socket_compatibility) 
-            ? implode(',', $request->socket_compatibility) 
-            : $request->socket_compatibility;
-
+        $socket = $request['socket_compatibility'];
 
         // handle image upload
         if ($request->hasFile('image')) {
@@ -109,7 +105,7 @@ class CoolerController extends Controller
             'brand' => $request->brand, 
             'model' => $request->model,
             'cooler_type' => $request->cooler_type,
-            'socket_compatibility' => $socketCompatibility,
+            'socket_compatibility' => $socket,
             'max_tdp' => $request->max_tdp,
             'radiator_size_mm' => $request->radiator_size_mm,
             'fan_count' => $request->fan_count,

@@ -7,6 +7,7 @@
 <form x-bind:action="'/staff/component-details/cooler/' + selectedComponent.id" method="POST" class="new-component-form" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="component_type" value="cooler">
+    <input type="hidden" name="_method" value="PUT">
 
     <div class="form-container">
         {{-- SPECS --}}
@@ -38,11 +39,11 @@
 
             <div class="flex flex-col"
                 x-data="{ slots:[{}] }">
-                <template x-for="(slot, index) in slots" 
+                <template x-for="(slot, index) in selectedComponent.socket_compatibility" 
                           :key="index">
                     <div>
                         <label for="">Socket Compatibility <span x-text="index + 1"></span></label>
-                        <select required :name="'socket_compatibility[]'" id="socket_compatibility" x-model="selectedComponent.socket_compatibility">
+                        <select required :name="'socket_compatibility[]'" id="socket_compatibility" x-model="selectedComponent.socket_compatibility[index]">
                             <option disabled selected hidden value="">Select socket compatibility</option>
                             @foreach ($coolerSpecs['socket_compatibilities'] as $socket_compatibility)
                                 <option value="{{ $socket_compatibility }}">{{ $socket_compatibility }}</option>
@@ -52,7 +53,7 @@
                         <template x-if="index > 0">
                             <button type="button"
                                 class="remove-add"
-                                @click="slots.splice(index, 1)">
+                                @click="selectedComponent.socket_compatibility.splice(index, 1)">
                                 x
                             </button>    
                         </template>
@@ -61,7 +62,7 @@
                 
                 {{-- ADD SOCKET BUTTON --}}
                 <button type="button"
-                        @click="slots.push({})"
+                        @click="selectedComponent.socket_compatibility.push([])"
                         class="add-pcie">
                     + Add socket
                 </button>
@@ -74,7 +75,7 @@
 
             <div>
                 <label for="">Radiator Size</label>
-                <input required name="radiator_size_mm" id="radiator_size_mm" type="number" x-model="selectedComponent.radiator_size_mm" placeholder="00 mm (if liquid cooler)" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                <input name="radiator_size_mm" id="radiator_size_mm" type="number" x-model="selectedComponent.radiator_size_mm" placeholder="00 mm (if liquid cooler)" onkeydown="return !['e','E','+','-'].includes(event.key)">
             </div>
 
             <div>
