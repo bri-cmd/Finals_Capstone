@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hardware\Storage;
 use Illuminate\Http\Request;
 
 class BuildExtController extends Controller
@@ -12,7 +13,22 @@ class BuildExtController extends Controller
     public function index()
     {
         //
-        return view('buildExt');
+        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
+        $storages = Storage::get()->map(function ($storage) {
+                return (object)[
+                    'component_type' => strtolower($storage->storage_type), // 'hdd' or 'sdd'
+                    'brand'          => $storage->brand,
+                    'model'          => $storage->model,
+                    'label'          => "{$storage->brand} {$storage->model}",
+                    'price'          => $storage->price,
+                    'image'          => $storage->image,
+                    'buildCategory'  => $storage->buildCategory,
+            ];      
+        });
+
+        $components = $components->merge($storages);
+
+        return view('buildExt', compact('components'));
     }
 
     /**

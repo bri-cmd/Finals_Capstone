@@ -1,0 +1,165 @@
+.layout-container {
+    display: grid;
+    grid-template-areas: 
+        "steps compatibility"
+        "component component";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    height: 80vh;
+}
+
+.steps-section,
+.compatibility-section {
+    height: 330px;
+}
+.steps-section {
+    background-color: aliceblue;
+    grid-area: steps;
+    width: 40%;
+}
+
+.compatibility-section {
+    background-color: aliceblue;
+    grid-area: compatibility;
+    width: 40%;
+    position: relative;
+    left: 60%;
+}
+
+/* SLIDE UPWARD WHEN OPEN */
+.catalog-wrapper {
+    grid-area: component;
+    min-height: 470px;
+    transition: transform 0.5s ease;
+    top: 70%;
+    overflow: hidden;
+}
+
+/* When "open", move the whole wrapper up */
+.catalog-wrapper.open {
+    transform: translateY(-75%); /* or -50%, or whatever works */
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(53, 63, 84, 0.6) 0%,   /* #353F54 with 60% opacity */
+        rgba(34, 40, 52, 0.6) 100%  /* #222834 with 60% opacity */
+    );
+}
+
+/* MOVING EVERYTHING UP */
+.slide-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* INITIAL POSITIONS */
+.component-section {
+    flex: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(53, 63, 84, 0.6) 0%,   /* #353F54 with 60% opacity */
+        rgba(34, 40, 52, 0.6) 100%  /* #222834 with 60% opacity */
+    );
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    justify-content: space-between;
+    padding: 2%;
+    gap: 10px;
+    position: relative;
+    border-radius: 8px 8px 0 0; 
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+.component-section div {
+    background: linear-gradient(
+        to bottom,
+        #353F54 0%,
+        #222834 100%
+    );
+    height: 70px;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    
+}
+
+.component-active {
+    transform: skewX(-15deg) translateY(-10px);
+    transition: transform 0.3s ease;
+    background: linear-gradient(
+        to bottom,
+        #34C8E8 30%,
+        #4E4AF2 60%
+    ) !important;
+}
+
+.component-section div p {
+    text-align: center;
+    position: relative;
+    top: 100%;
+}
+
+.component-arrow {
+    position: absolute;
+    transform: rotate(-180deg);
+    transition: transform 0.3s ease; /* smooth animation */
+    width: 100%;
+    text-align: center;
+}
+
+.component-arrow.rotated {
+    transform: rotate(0deg); /* or 180deg depending on desired effect */
+}
+
+.component-arrow:hover {
+    opacity: .5;
+}
+
+.catalog-section {
+    flex: 1;
+    width: 100%;
+    overflow-y: scroll;
+    background-color: rgba(242, 242, 242, 0.9);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    border: none;
+    margin-top: 2px;
+}
+
+.build-catalog {
+    border: 1px solid white;
+    background-color: white;
+    height: 300px;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 20px;
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.3);
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.build-catalog:hover {
+    scale: 1.1;
+}
+
+.build-catalog img {
+    width: 100%;
+    height: 100px;
+    align-self: center;
+    background-color: aliceblue;
+}
+
+.build-catalog button {
+    border: 1px solid black;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.build-catalog button:hover {
+    background-color: black;
+    color: white;
+}

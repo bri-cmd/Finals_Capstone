@@ -46,7 +46,9 @@ class BuildController extends Controller
                 'component_type' => strtolower($storage->storage_type), // 'hdd' or 'sdd'
                 'brand'          => $storage->brand,
                 'model'          => $storage->model,
+                'label'          => "{$storage->brand} {$storage->model}",
                 'price'          => $storage->price,
+                'price_display'  => '₱' . number_format($storage->price, 2),
                 'image'          => $storage->image,
                 'buildCategory'  => $storage->buildCategory,
             ];

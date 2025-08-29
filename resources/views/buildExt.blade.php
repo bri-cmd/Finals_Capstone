@@ -29,22 +29,76 @@
         </div>
     </header>
 
-    <main class="main-content header">
+    <main class="main-content header overflow-hidden">
         <h2 class="text-center">YOUR PC</h2>
 
-        {{-- STEPS --}}
-        <section>
+        <div class="layout-container">
+            {{-- STEPS --}}
+            <section class="steps-section">
 
-        </section>
+            </section>
 
-        {{-- COMPATIBILITY --}}
-        <section>
+            {{-- COMPATIBILITY --}}
+            <section class="compatibility-section">
 
-        </section>
+            </section>
 
-        {{-- COMPONENTS --}}
-        <sectio class="">
+            {{-- COMPONENTS --}}
+            <section class="catalog-wrapper">
+                <div class="slide-container">
+                    <div class="component-section">
+                        <x-icons.arrow class="component-arrow" />
+                        <x-component data-type="case">Case</x-component>
+                        <x-component data-type="cpu">CPU</x-component>
+                        <x-component data-type="ram">RAM</x-component>
+                        <x-component data-type="ssd">SSD</x-component>
+                        <x-component data-type="motherboard">Motherboard</x-component>
+                        <x-component data-type="gpu">GPU</x-component>
+                        <x-component data-type="hdd">HDD</x-component>
+                        <x-component data-type="psu">PSU</x-component>
+                        <x-component data-type="cooler">Cooler</x-component>
+                    </div>
 
-        </section>
+                    <div class="catalog-section" id="catalogSection">
+                        @foreach ($components as $component)
+                            <x-buildcatalog :component="$component"/>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const arrow = document.querySelector('.component-arrow');
+            const wrapper = document.querySelector('.catalog-wrapper');
+            const componentButtons  = document.querySelectorAll('.component-section .component-button');
+            const catalogItems = document.querySelectorAll('#catalogSection .build-catalog');
+
+            arrow.addEventListener('click', () => {
+                wrapper.classList.toggle('open');
+                arrow.classList.toggle('rotated');
+            });
+
+            componentButtons .forEach(button => {
+                button.addEventListener('click', () => {
+                    componentButtons .forEach(c => c.classList.remove('component-active'));
+                    button.classList.add('component-active');
+
+                    const selectedType = button.getAttribute('data-type');
+
+                    catalogItems.forEach(item => {
+                        const itemType = item.getAttribute('data-type');
+
+                        if (itemType === selectedType) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none'
+                        }
+                    })
+                })
+            })
+        });
+    </script>
+
 </body>

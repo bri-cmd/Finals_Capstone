@@ -31,6 +31,7 @@ class CoolerController extends Controller
 
             // Format socket_compatibility as an array (for editing)
             $cooler->socket_compatibility_array = $cooler->socket_compatibility ?? [];
+            $cooler->label = "{$cooler->brand} {$cooler->model}";
             $cooler->price_display = '₱' . number_format($cooler->price, 2);
             $cooler->component_type = 'cooler';
         });
