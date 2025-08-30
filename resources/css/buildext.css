@@ -1,3 +1,24 @@
+/* 3D */
+.model-section {
+    background-color: #222834;
+    width: 50%;
+}
+
+#canvas-container {
+    width: 60%;
+    height: 80%;
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+canvas {
+    display: block;
+    width: 100% !important;
+    height: 80% !important;
+}
+
+/* LAYOUT */
 .layout-container {
     display: grid;
     grid-template-areas: 
@@ -55,6 +76,22 @@
 }
 
 /* INITIAL POSITIONS */
+.component-arrow {
+    position: absolute;
+    transform: rotate(-180deg);
+    transition: transform 0.3s ease; /* smooth animation */
+    width: 100%;
+    text-align: center;
+}
+
+.component-arrow.rotated {
+    transform: rotate(0deg); /* or 180deg depending on desired effect */
+}
+
+.component-arrow:hover {
+    opacity: .5;
+}
+
 .component-section {
     flex: 0;
     background: linear-gradient(
@@ -73,7 +110,7 @@
     z-index: 999;
 }
 
-.component-section div {
+.component-button {
     background: linear-gradient(
         to bottom,
         #353F54 0%,
@@ -82,7 +119,26 @@
     height: 70px;
     border-radius: 12px;
     transition: transform 0.3s ease;
-    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.component-button img {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    display: none; /* hidden until selected */
+}
+
+.component-button p {
+    text-align: center;
+    position: relative;
+    top: 70%;
 }
 
 .component-active {
@@ -93,28 +149,6 @@
         #34C8E8 30%,
         #4E4AF2 60%
     ) !important;
-}
-
-.component-section div p {
-    text-align: center;
-    position: relative;
-    top: 100%;
-}
-
-.component-arrow {
-    position: absolute;
-    transform: rotate(-180deg);
-    transition: transform 0.3s ease; /* smooth animation */
-    width: 100%;
-    text-align: center;
-}
-
-.component-arrow.rotated {
-    transform: rotate(0deg); /* or 180deg depending on desired effect */
-}
-
-.component-arrow:hover {
-    opacity: .5;
 }
 
 .catalog-section {
@@ -150,7 +184,7 @@
     width: 100%;
     height: 100px;
     align-self: center;
-    background-color: aliceblue;
+    object-fit: contain;
 }
 
 .build-catalog button {

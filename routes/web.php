@@ -41,6 +41,7 @@ require __DIR__.'/auth.php';
 
 Route::get('techboxx/build', [BuildController::class, 'index'])->name('techboxx.build');
 Route::get('techboxx/build/generate', [BuildController::class, 'generate'])->name('techboxx.generate');
+Route::post('techboxx/build/validate', [BuildController::class, 'validateBuild'])->name('techboxx.validate');
 Route::get('techboxx/build-extended', [BuildExtController::class, 'index'])->name('techboxx.build.extend');
 
 // ADMIN ROUTES

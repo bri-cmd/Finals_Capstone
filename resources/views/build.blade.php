@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Techboxx</title>
 
     @vite([
@@ -46,6 +47,10 @@
                     <x-icons.expand />
                 </button>
             </form>
+
+            {{-- VALIDATION BUTTON --}}
+            <button id="validateBuild">Validate Build</button>
+            <div id="validationResult"></div>
         </section>
         <section class="buttons-section">
             <div data-group="buildType">
@@ -108,7 +113,8 @@
                              data-name="{{ ucfirst($component->brand )}} {{ ucfirst($component->model )}}"
                              data-price="{{ $component->price }}"
                              data-image="{{ asset('storage/' . $component->image) }}"
-                             data-model="{{ isset($component->model_3d) ? asset('storage/' . $component->model_3d) : '' }}">
+                             data-model="{{ isset($component->model_3d) ? asset('storage/' . $component->model_3d) : '' }}"
+                             data-id="{{ $component->id }}">
                             <div class="catalog-image">
                                 @if (!empty($component->image))
                                     <img src="{{ asset('storage/' . $component->image )}}" alt="Product image">

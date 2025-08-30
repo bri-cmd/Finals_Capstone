@@ -288,3 +288,14 @@ canvas {
 .summary-table td:nth-of-type(3) {
     text-align: center;
 }
+
+
+
+#validateBuild {
+    border: 1px solid black;
+}
+
+#validateBuild:hover {
+    background-color: black;
+    color: white;
+}

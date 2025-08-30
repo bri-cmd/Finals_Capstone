@@ -11,7 +11,7 @@
         'resources\css\build.css',
         'resources\css\buildext.css',
         'resources\js\app.js',
-        'resources\js\component-viewer.js',
+        'resources\js\buildext.js',
         ])
     
 </head>
@@ -31,6 +31,10 @@
 
     <main class="main-content header overflow-hidden">
         <h2 class="text-center">YOUR PC</h2>
+
+        <section class="model-section">
+            <div id="canvas-container"></div>
+        </section>
 
         <div class="layout-container">
             {{-- STEPS --}}
@@ -68,37 +72,4 @@
             </section>
         </div>
     </main>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const arrow = document.querySelector('.component-arrow');
-            const wrapper = document.querySelector('.catalog-wrapper');
-            const componentButtons  = document.querySelectorAll('.component-section .component-button');
-            const catalogItems = document.querySelectorAll('#catalogSection .build-catalog');
-
-            arrow.addEventListener('click', () => {
-                wrapper.classList.toggle('open');
-                arrow.classList.toggle('rotated');
-            });
-
-            componentButtons .forEach(button => {
-                button.addEventListener('click', () => {
-                    componentButtons .forEach(c => c.classList.remove('component-active'));
-                    button.classList.add('component-active');
-
-                    const selectedType = button.getAttribute('data-type');
-
-                    catalogItems.forEach(item => {
-                        const itemType = item.getAttribute('data-type');
-
-                        if (itemType === selectedType) {
-                            item.style.display = '';
-                        } else {
-                            item.style.display = 'none'
-                        }
-                    })
-                })
-            })
-        });
-    </script>
-
 </body>

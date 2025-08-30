@@ -28,7 +28,7 @@ class CompatibilityService
     // GPU - CASE
     public function isGpuCompatiblewithCase(Gpu $gpu, PcCase $case): bool
     {
-        return $gpu->length_mm === $case->max_gpu_length_mm;
+        return $gpu->length_mm <= $case->max_gpu_length_mm;
     }
 
     // COOLER - CPU AND CASE

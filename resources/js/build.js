@@ -165,6 +165,7 @@ document.querySelectorAll('.catalog-item').forEach(item => {
         const type = item.getAttribute('data-type');
         const name = item.getAttribute('data-name');
         const price = parseFloat(item.getAttribute('data-price'));
+        const componentId = item.getAttribute('data-id');
         const imageUrl = item.getAttribute('data-image');
 
         // STORE SELECTED COMPONENT
@@ -178,6 +179,9 @@ document.querySelectorAll('.catalog-item').forEach(item => {
             if (span) {
                 span.textContent = name;
             }
+
+            // STORE SELECTED ID ON BUTTON FOR VALIDATIONS
+            targetButton.setAttribute('data-selected-id', componentId);
         }
 
         // UPDATE DRAGGABLE IMAGE
@@ -190,6 +194,38 @@ document.querySelectorAll('.catalog-item').forEach(item => {
         }
 
         updateSummaryTable();
+    })
+});
+
+// VALIDATION
+document.getElementById('validateBuild').addEventListener('click', () => {
+    const selections = {};
+    
+    document.querySelectorAll('#buildSection button').forEach(button=> {
+        const type = button.getAttribute('data-type');
+        const selectedId = button.getAttribute('data-selected-id');
+        if (selectedId) {
+            selections[type + "_id"] = selectedId;
+        }
+    });
+
+    // SEND TO BACKEND
+    fetch('/techboxx/build/validate', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json', 
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify(selections)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert('Compatibility issues:\n' + data.errors.join("\n"));
+        }
+        else {
+            alert("Build is valid!");
+        }
     })
 });
 
