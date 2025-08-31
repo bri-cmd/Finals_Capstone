@@ -98,7 +98,7 @@
             <div id="componentsSection">
                 <div class="catalog-header">
                     <div class="catalog-title">
-                        <p id="catalogTitle">Processor</p>
+                        <p id="catalogTitle">All Components</p>
                         <x-icons.info title="This is information about the processor"/>
                     </div> 
                     <div class="catalog-filter">
@@ -111,6 +111,7 @@
                         <div class="catalog-item" 
                              data-type="{{ strtolower($component->component_type) }}"
                              data-name="{{ ucfirst($component->brand )}} {{ ucfirst($component->model )}}"
+                             data-category="{{ $component->buildCategory->name}}"
                              data-price="{{ $component->price }}"
                              data-image="{{ asset('storage/' . $component->image) }}"
                              data-model="{{ isset($component->model_3d) ? asset('storage/' . $component->model_3d) : '' }}"

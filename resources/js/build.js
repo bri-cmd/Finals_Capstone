@@ -1,162 +1,204 @@
-let filters = {
-    cpu: null,
-    useCase: null,
-    budget: null,
-}
-let shouldAutoGenerate = true;
-
-document.getElementById('amdBtn').addEventListener('click', () => {
-    filters.cpu = 'AMD';
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    if (shouldAutoGenerate) tryAutoGenerate();
-});
-
-document.getElementById('intelBtn').addEventListener('click', () => {
-    filters.cpu = 'Intel';
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    if (shouldAutoGenerate) tryAutoGenerate();
-});
-
-document.getElementById('generalUseBtn').addEventListener('click', () => {
-    filters.useCase = 'General Use';
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    if (shouldAutoGenerate) tryAutoGenerate();
-});
-
-document.getElementById('gamingBtn').addEventListener('click', () => {
-    filters.useCase = 'Gaming';
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    if (shouldAutoGenerate) tryAutoGenerate();
-});
-
-document.getElementById('graphicsIntensiveBtn').addEventListener('click', () => {
-    filters.useCase = 'Graphics Intensive';
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    if (shouldAutoGenerate) tryAutoGenerate();
-});
-
-
-// SEND FILTERS TO BACKEND USING SESSION STORAGE
-document.getElementById('generateBtn').addEventListener('click', () => {
-    shouldAutoGenerate = true;
-    
-    const budgetValue = document.getElementById('budget').value;
-    if (budgetValue) {
-        filters.budget = parseFloat(budgetValue);
-    }
-
-    if (!budgetValue) {
-        alert('Please enter a budget');
-        return;
-    }
-
-    sessionStorage.setItem('filters', JSON.stringify(filters));
-    sessionStorage.setItem('showBuildSection', true);
-
-    // Generate query parameters
-    const queryParams = new URLSearchParams(filters).toString();
-
-    window.location.href = `/techboxx/build/generate?${queryParams}`; // REDIRRECT TO GENERATE ROUTE
-})
-
-const catalogList = document.querySelector('.catalog-list');
 const customBuildBtn = document.getElementById('customBuildBtn');
 const generateBuildBtn = document.getElementById('generateBuildBtn');
+const amdBtn = document.getElementById('amdBtn');
+const intelBtn = document.getElementById('intelBtn');
+const budgetSection = document.querySelector('.budget-section');
+const generateButton = document.querySelector('.generate-button');
+const generalUseBtn = document.getElementById('generalUseBtn');
+const gamingBtn = document.getElementById('gamingBtn');
+const graphicsIntensiveBtn = document.getElementById('graphicsIntensiveBtn');
+const budgetInput = document.getElementById('budget');
+const generateBtn = document.getElementById('generateBtn');
+const buildSectionButtons = document.querySelectorAll('#buildSection button');
+const catalogList = document.querySelector('.catalog-list');
+const catalogItem = document.querySelectorAll('.catalog-item');
 const buildSection = document.getElementById('buildSection');
 
-// SHOW CATALOG WHEN CUSTOM BUILD BUTTON IS CLICKED
-customBuildBtn.addEventListener('click', () => {
-    shouldAutoGenerate = true;
+let currentBrandFilter = '';     // e.g. "amd" or "intel"
+let currentCategoryFilter = '';  // e.g. "gaming"
+let currentTypeFilter = '';      // e.g. "cpu"
+let currentBudget = null;
 
-    document.querySelector('.generate-button').classList.add('hidden');
-    document.querySelector('.budget-section').classList.add('hidden');
+function applyAllFilters() {
+    catalogItem.forEach(item => {
+        const itemType = item.getAttribute('data-type');
+        const itemName = item.getAttribute('data-name').toLowerCase();
+        const itemCategory = item.getAttribute('data-category').toLowerCase();
+        const itemPrice = parseFloat(item.getAttribute('data-price'));
 
-    catalogList.classList.remove('hidden');
-    buildSection.classList.remove('hidden');
-})
+        let show = true;
 
-// HIDE CATALOG WHEN GENERATE BUILD BUTTON IS CLICKED
-generateBuildBtn.addEventListener('click', () => {
-    shouldAutoGenerate = false;
-
-    document.querySelector('.generate-button').classList.remove('hidden');
-    document.querySelector('.budget-section').classList.remove('hidden');
-
-    catalogList.classList.add('hidden');
-    buildSection.classList.add('hidden');
-})
-
-document.querySelectorAll('.buttons-section button').forEach(button => {
-    button.addEventListener('click', () => {
-        // REMOVE ACTIVE CLASS FROM ALL THE BUTTONS IN THE SAVE GROUP (DIV)
-        const siblings = button.parentElement.querySelectorAll('button');
-        siblings.forEach(btn => btn.classList.remove('active'));
-
-        button.classList.add('active');
-
-        const groupKey = button.parentElement.dataset.group;
-        if (groupKey) {
-            sessionStorage.setItem(`active-${groupKey}`, button.id);
-        };
-    });
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-    // RESTORE FILTERS STATE
-    const savedFilters = sessionStorage.getItem('filters');
-    if (savedFilters) {
-        try {
-            const parsed = JSON.parse(savedFilters);
-            if (parsed.cpu) filters.cpu = parsed.cpu;
-            if (parsed.useCase) filters.useCase = parsed.useCase;
-        } catch (e) {
-            console.error("Invalid filters in sessionStorage");
+        // Type filter (e.g. cpu, gpu, etc.)
+        if (currentTypeFilter && itemType !== currentTypeFilter) {
+            show = false;
         }
-    }
 
-    // RESTORE ACTIVE BUTTON STATES
-    const groups = ['buildType', 'cpuBrand', 'useCase'];
-    groups.forEach(group => {
-        const activeBtnId = sessionStorage.getItem(`active-${group}`);
-        if (activeBtnId) {
-            const button = document.getElementById(activeBtnId);
-            if (button) {
-                const siblings = button.parentElement.querySelectorAll('button');
-                siblings.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
+        // Brand filter (e.g. amd, intel, but only applies to CPU)
+        if (currentBrandFilter) {
+            const brand = currentBrandFilter.toLowerCase();
+            if (itemType === 'cpu' && !itemName.includes(brand)) {
+                show = false;
             }
         }
-    })
 
-});
+        // Category filter (e.g. gaming, general use, etc.)
+        if (currentCategoryFilter) {
+            const category = currentCategoryFilter.toLowerCase();
+            if (itemCategory !== category) {
+                show = false;
+            }
+        }
 
-// AUTO TRIGGER GENERATE FUNCTION
-function tryAutoGenerate() {
-    if (filters.cpu && filters.useCase) {
-        sessionStorage.setItem('filters', JSON.stringify(filters));
-        sessionStorage.setItem('showBuildSection', true);
+        // Budget filter
+        if (currentBudget !== null && itemPrice > currentBudget) {
+            show = false;
+        }
 
-        const queryParams = new URLSearchParams(filters).toString();
-        window.location.href = `/techboxx/build/generate?${queryParams}`; // REDIRRECT TO GENERATE ROUTE
-    }
+        item.classList.toggle('hidden', !show);
+    });
 }
 
-document.querySelectorAll('#buildSection button').forEach(button => {
+
+// FILTER CPU
+function filterCPUByBrand(brand) {
+    catalogItem.forEach(item => {
+        const type = item.getAttribute('data-type');
+        const name = item.getAttribute('data-name').toLowerCase();
+
+        if (type === 'cpu') {
+            if (name.includes(brand.toLowerCase())) {
+                item.classList.remove('hidden');
+            }
+            else {
+                item.classList.add('hidden');
+            }
+        }
+        else {
+            item.classList.remove('hidden');
+        }
+    })
+}
+
+// FILTER CATEGORY 
+function filterByBuildCategory(category) {
+    catalogItem.forEach(item => {
+        const build = item.getAttribute('data-category').toLowerCase();
+
+        if (build === category.toLowerCase()) {
+            item.classList.remove('hidden');
+        }
+        else {
+            item.classList.add('hidden');
+        }
+    })
+}
+
+customBuildBtn.addEventListener('click', function() {
+    currentBudget = null;
+
+    generateBuildBtn.classList.remove('active');
+    buildSection.classList.remove('hidden');
+
+    customBuildBtn.classList.add('active');
+    budgetSection.classList.add('hidden');
+    generateButton.classList.add('hidden');
+});
+
+generateBuildBtn.addEventListener('click', function() {
+    generateBuildBtn.classList.add('active');
+    buildSection.classList.add('hidden');
+
+    customBuildBtn.classList.remove('active');
+    budgetSection.classList.remove('hidden');
+    generateButton.classList.remove('hidden');
+});
+
+amdBtn.addEventListener('click', function() {
+    currentBrandFilter = 'amd';
+    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+    amdBtn.classList.add('active');
+
+    intelBtn.classList.remove('active');
+
+    applyAllFilters();
+});
+
+intelBtn.addEventListener('click', function() {
+    currentBrandFilter = 'intel';
+
+    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+    intelBtn.classList.add('active');
+
+    amdBtn.classList.remove('active');
+    
+    applyAllFilters();
+});
+
+generalUseBtn.addEventListener('click', function() {
+    currentCategoryFilter = 'general use';
+
+    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+    generalUseBtn.classList.add('active');
+
+    gamingBtn.classList.remove('active');
+    graphicsIntensiveBtn.classList.remove('active');
+
+    applyAllFilters();
+});
+
+gamingBtn.addEventListener('click', function() {
+    currentCategoryFilter = 'gaming';
+
+    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+    gamingBtn.classList.add('active');
+
+    generalUseBtn.classList.remove('active');
+    graphicsIntensiveBtn.classList.remove('active');
+    
+    applyAllFilters();
+});
+
+graphicsIntensiveBtn.addEventListener('click', function() {
+    currentCategoryFilter = 'graphics intensive';
+
+    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+    graphicsIntensiveBtn.classList.add('active');
+
+    gamingBtn.classList.remove('active');
+    generalUseBtn.classList.remove('active');
+
+    applyAllFilters();
+});
+
+generateBtn.addEventListener('click', () => {
+    const value = parseFloat(budgetInput.value);
+
+    if (!isNaN(value)) {
+        currentBudget = value;
+    } else {
+        currentBudget = null;
+    }
+
+    applyAllFilters();
+    
+    budgetSection.classList.add('hidden');
+    generateButton.classList.add('hidden');
+    buildSection.classList.remove('hidden');
+});
+
+
+buildSectionButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const type = button.getAttribute('data-type');
+        currentTypeFilter = button.getAttribute('data-type');
 
         // UPDATE CATALOG HEADER TITLE
         const catalogTitle = document.getElementById('catalogTitle');
-        catalogTitle.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+        catalogTitle.textContent = currentTypeFilter.charAt(0).toUpperCase() + currentTypeFilter.slice(1);
 
-        document.querySelectorAll('.catalog-item').forEach(item => {
-            const itemType = item.getAttribute('data-type');
-            if (itemType === type) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
-        })
+        buildSectionButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        applyAllFilters();
     })
 });
 
