@@ -13,6 +13,13 @@ use App\Models\Hardware\Storage;
 
 class CompatibilityService
 {
+    private array $caseSupportMap = [
+        'ATX' => ['ATX', 'Micro-ATX', 'Mini-ITX'],
+        'Micro-ATX' => ['Micro-ATX', 'Mini-ITX'],
+        'Mini-ITX' => ['Mini-ITX'],
+        'E-ATX' => ['E-ATX', 'ATX', 'Micro-ATX', 'Mini-ITX'],
+    ];
+
     // CPU - MOTHERBOARD
     public function isCpuCompatiblewithMotherboard(Cpu $cpu, Motherboard $motherboard): bool
     {
@@ -50,7 +57,9 @@ class CompatibilityService
     // MOTHERBOARD - CASE
     public function isMotherboardCompatiblewithCase(Motherboard $motherboard, PcCase $case): bool
     {
-        return $motherboard->form_factor === $case->form_factor_support;
+        $supported = $this->caseSupportMap[$case->form_factor_support] ?? [];
+
+        return in_array($motherboard->form_factor, $supported);
     }
 
     // STORAGE - MOTHERBOARD

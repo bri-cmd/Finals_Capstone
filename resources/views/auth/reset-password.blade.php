@@ -70,7 +70,7 @@
                 <input type="password" name="password">    
             </div>
             
-            <div">
+            <div>
                 <label for="password_confirmation">Confirm Password</label>
                 <input type="password" name="password_confirmation">  
             </div>

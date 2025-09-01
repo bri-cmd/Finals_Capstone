@@ -18,6 +18,20 @@ class BuildController extends Controller
     //
     public function index() {
         $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
+        $storages = Storage::get()->map(function ($storage) {
+                return (object)[
+                    'id' => $storage->id,
+                    'component_type' => strtolower($storage->storage_type), // 'hdd' or 'sdd'
+                    'brand'          => $storage->brand,
+                    'model'          => $storage->model,
+                    'label'          => "{$storage->brand} {$storage->model}",
+                    'price'          => $storage->price,
+                    'image'          => $storage->image,
+                    'buildCategory'  => $storage->buildCategory,
+            ];      
+        });
+
+        $components = $components->merge($storages);
 
         return view('build', compact('components'));
     }

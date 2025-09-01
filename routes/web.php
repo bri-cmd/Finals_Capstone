@@ -22,9 +22,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -98,7 +95,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
 // CUSTOMER ROUTES
 Route::prefix('customer')->name('customer.')->group(function () {
-    Route::get('customer/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard',[CustomerController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::put('profile', [CustomerController::class, 'update'])->name('profile.update');
 });
 

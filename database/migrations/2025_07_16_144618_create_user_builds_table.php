@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('storage_id');
             $table->string('ram_id');
             $table->string('psu_id');
+            $table->string('cooler_id');
             $table->string('total_price');
             $table->string('status');
         });
