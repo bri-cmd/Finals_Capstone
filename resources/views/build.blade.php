@@ -135,7 +135,8 @@
             
             {{-- SUMMARY --}}
             <div class="summary-section hidden" id="summarySection">
-                <div class="summary-date">
+                <p>testing</p>
+                {{-- <div class="summary-date">
                     <p>Build Date: <span id="buildDate">01/01/2025 </span></p>
                 </div>
                 <div class="summary-table">
@@ -151,7 +152,7 @@
                         <tbody id="summaryTableBody">
                         </tbody>
                     </table>
-                </div>
+                </div> --}}
             </div>
         </section>    
     </main>

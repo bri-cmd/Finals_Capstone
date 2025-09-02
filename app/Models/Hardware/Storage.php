@@ -3,6 +3,7 @@
 namespace App\Models\Hardware;
 
 use App\Models\BuildCategory;
+use App\Models\UserBuild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,5 +36,9 @@ class Storage extends Model
     // DEFINE RELATIONSHIP
     public function buildCategory() {
         return $this->belongsTo(BuildCategory::class);
+    }
+
+    public function userBuild() {
+        return $this->hasMany(UserBuild::class);
     }
 }

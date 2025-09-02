@@ -6,6 +6,7 @@ use App\Models\BuildCategory;
 use App\Models\Hardware\PcCaseDriveBay;
 use App\Models\Hardware\PcCaseFrontUsbPorts;
 use App\Models\Hardware\PcCaseRadiatorSupport;
+use App\Models\UserBuild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,5 +48,9 @@ class PcCase extends Model
 
     public function radiatorSupports() {
         return $this->hasMany(PcCaseRadiatorSupport::class);
+    }
+
+    public function userBuild() {
+        return $this->hasMany(UserBuild::class);
     }
 }

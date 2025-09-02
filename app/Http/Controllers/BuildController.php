@@ -12,6 +12,7 @@ use App\Models\Hardware\Ram;
 use App\Models\Hardware\Storage;
 use App\Services\CompatibilityService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BuildController extends Controller
 {
@@ -36,61 +37,30 @@ class BuildController extends Controller
         return view('build', compact('components'));
     }
 
-    public function generate(Request $request) {   
-        $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
-        
-        $cpuBrand = $request->query('cpu');
-        $useCase = $request->query('useCase');
-        $budget = $request->query('budget');
+    public function generateBuild(Request $request) {   
+        // Full path to your script
+        $scriptPath = base_path('python_scripts/test_python.py');
 
-        // RETRIEVE FILTERS FROM SESSION
-        $filters = session('filters', []);
-        
-        if ($cpuBrand) {
-            $components = $components->filter(function ($component) use ($cpuBrand) {
-                if ($component->component_type === 'cpu') {
-                    return $component->brand === $cpuBrand;
-                }
+        // Build the command with python interpreter
+        $command = escapeshellcmd("python $scriptPath");
 
-                // LEAVE THE NON-CPU COMPONENTS UNFILTERED
-                return true;
-            });
+        // Execute and capture output + errors
+        $output = shell_exec($command . " 2>&1");
+
+        // Debugging: log output if something goes wrong
+        // \Log::info("Python Output: " . $output);
+
+        // Decode JSON safely
+        $build = json_decode($output, true);
+
+        if (!$build) {
+            return response()->json([
+                'error' => 'Python script did not return valid JSON',
+                'raw_output' => $output
+            ], 500);
         }
 
-        // Fetch storages (HDD/SDD) and treat them as components
-        $storages = Storage::when($useCase, function ($query) use ($useCase) {
-            $query->whereHas('buildCategory', function ($q) use ($useCase) {
-                $q->where('name', $useCase);
-            });
-        })->get()->map(function ($storage) {
-            return (object)[
-                'id' => $storage->id,
-                'component_type' => strtolower($storage->storage_type), // 'hdd' or 'sdd'
-                'brand'          => $storage->brand,
-                'model'          => $storage->model,
-                'label'          => "{$storage->brand} {$storage->model}",
-                'price'          => $storage->price,
-                'price_display'  => '₱' . number_format($storage->price, 2),
-                'image'          => $storage->image,
-                'buildCategory'  => $storage->buildCategory,
-            ];
-        });
-
-        $components = $components->merge($storages);
-
-        if ($useCase) {
-            $components = $components->filter(function ($component) use ($useCase) {
-                return $component->buildCategory->name === $useCase;
-            });
-        }
-
-        if ($budget) {
-            $components = $components->filter(function ($component) use ($budget) {
-                return $component->price <= $budget;
-            });
-        }
-
-        return view('build', compact('components'));
+        return response()->json($build);
     }
 
     public function validateBuild(Request $request, CompatibilityService $compat) {

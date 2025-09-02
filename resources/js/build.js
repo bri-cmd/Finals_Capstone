@@ -7,7 +7,7 @@ const generateButton = document.querySelector('.generate-button');
 const generalUseBtn = document.getElementById('generalUseBtn');
 const gamingBtn = document.getElementById('gamingBtn');
 const graphicsIntensiveBtn = document.getElementById('graphicsIntensiveBtn');
-const budgetInput = document.getElementById('budget');
+const budget = document.getElementById('budget');
 const generateBtn = document.getElementById('generateBtn');
 const buildSectionButtons = document.querySelectorAll('#buildSection button');
 const catalogList = document.querySelector('.catalog-list');
@@ -115,7 +115,6 @@ generateBuildBtn.addEventListener('click', function() {
 
 amdBtn.addEventListener('click', function() {
     currentBrandFilter = 'amd';
-    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
     amdBtn.classList.add('active');
 
     intelBtn.classList.remove('active');
@@ -126,7 +125,6 @@ amdBtn.addEventListener('click', function() {
 intelBtn.addEventListener('click', function() {
     currentBrandFilter = 'intel';
 
-    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
     intelBtn.classList.add('active');
 
     amdBtn.classList.remove('active');
@@ -137,7 +135,6 @@ intelBtn.addEventListener('click', function() {
 generalUseBtn.addEventListener('click', function() {
     currentCategoryFilter = 'general use';
 
-    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
     generalUseBtn.classList.add('active');
 
     gamingBtn.classList.remove('active');
@@ -149,7 +146,6 @@ generalUseBtn.addEventListener('click', function() {
 gamingBtn.addEventListener('click', function() {
     currentCategoryFilter = 'gaming';
 
-    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
     gamingBtn.classList.add('active');
 
     generalUseBtn.classList.remove('active');
@@ -161,7 +157,6 @@ gamingBtn.addEventListener('click', function() {
 graphicsIntensiveBtn.addEventListener('click', function() {
     currentCategoryFilter = 'graphics intensive';
 
-    buildSectionButtons.forEach(btn => btn.classList.remove('active'));
     graphicsIntensiveBtn.classList.add('active');
 
     gamingBtn.classList.remove('active');
@@ -171,7 +166,7 @@ graphicsIntensiveBtn.addEventListener('click', function() {
 });
 
 generateBtn.addEventListener('click', () => {
-    const value = parseFloat(budgetInput.value);
+    const value = parseFloat(budget.value);
 
     if (!isNaN(value)) {
         currentBudget = value;
@@ -184,6 +179,31 @@ generateBtn.addEventListener('click', () => {
     budgetSection.classList.add('hidden');
     generateButton.classList.add('hidden');
     buildSection.classList.remove('hidden');
+
+    // DATA ANALYTICS
+    fetch("/techboxx/build/generate-build", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({})
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Build an HTML summary from the JSON response
+        let summaryHtml = "<h3>Recommended Build</h3><ul>";
+        for (const [key, value] of Object.entries(data)) {
+            summaryHtml += `<li><strong>${key.toUpperCase()}:</strong> ${value}</li>`;
+        }
+        summaryHtml += "</ul>";
+
+        // Insert into the summarySection
+        const summarySection = document.getElementById("summarySection");
+        summarySection.innerHTML = summaryHtml;
+        summarySection.classList.remove("hidden");
+    })
+    .catch(err => console.error("Error:", err));
 });
 
 

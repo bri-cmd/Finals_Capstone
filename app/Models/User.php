@@ -56,4 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function stock_history() {
         return $this->belongsTo(StockHistory::class);
     }
+
+    public function userBuild() {
+        return $this->hasMany(UserBuild::class);
+    }
 }
