@@ -38,11 +38,19 @@ class BuildController extends Controller
     }
 
     public function generateBuild(Request $request) {   
+        $category = $request->input('category');
+        $cpuBrand = $request->input('cpuBrand');
+        $userBudget = $request->input('userBudget');
+
         // Full path to your script
         $scriptPath = base_path('python_scripts/test_python.py');
 
         // Build the command with python interpreter
-        $command = escapeshellcmd("python $scriptPath");
+        $escapedCategory = escapeshellarg($category);
+        $escapedBrand = escapeshellarg($cpuBrand);
+        $escapedBudget = escapeshellarg($userBudget);
+
+        $command = escapeshellcmd("python $scriptPath $escapedCategory $escapedBrand $escapedBudget");
 
         // Execute and capture output + errors
         $output = shell_exec($command . " 2>&1");

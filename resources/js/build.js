@@ -187,10 +187,14 @@ generateBtn.addEventListener('click', () => {
             "Content-Type": "application/json",
             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({
+            category : currentCategoryFilter,
+            cpuBrand: currentBrandFilter,
+            useBudget: currentBudget
+        })
     })
     .then(res => res.json())
-    .then(data => {
+    .then(data => { 
         // Build an HTML summary from the JSON response
         let summaryHtml = "<h3>Recommended Build</h3><ul>";
         for (const [key, value] of Object.entries(data)) {
