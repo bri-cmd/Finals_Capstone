@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class CaseController extends Controller
 {
@@ -29,8 +30,12 @@ class CaseController extends Controller
     public function getFormattedCases()
     {
         $cases = PcCase::all();
-
-        $cases->each(function ($case) {
+        
+        $caseSales = DB::table('user_builds')
+                ->select('pc_case_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('pc_case_id')
+                ->pluck('sold_count', 'pc_case_id');
+        $cases->each(function ($case) use ($caseSales) {
             // RADIATOR SUPPORT
             $case->radiator_display = $case->radiatorSupports->groupBy('location')->map(function ($group, $location) {
                 $sizes = $group->pluck('size_mm')->unique()->sort()->implode(' / ');
@@ -68,6 +73,10 @@ class CaseController extends Controller
             $case->price_display = '₱' . number_format($case->price, 2);
             $case->label = "{$case->brand} {$case->model}";
             $case->component_type = 'case';
+
+            
+            $case->sold_count = $caseSales[$case->id] ?? 0;
+            
         });
 
         return $cases;

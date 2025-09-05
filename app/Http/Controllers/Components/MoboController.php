@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class MoboController extends Controller
 {
@@ -35,8 +36,13 @@ class MoboController extends Controller
     {
         $mobos = Motherboard::all();
 
+        $moboSales = DB::table('user_builds')
+                ->select('motherboard_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('motherboard_id')
+                ->pluck('sold_count', 'motherboard_id');
+
         // FORMATTING THE DATAS
-        $mobos->each(function ($mobo) {
+        $mobos->each(function ($mobo) use ($moboSales) {
             if($mobo->wifi_onboard === 'true'){
                 $mobo->wifi_display = 'Yes';
             } else {
@@ -47,6 +53,11 @@ class MoboController extends Controller
             $mobo->label = "{$mobo->brand} {$mobo->model}";
             $mobo->component_type = 'motherboard';
             
+            $moboSales = DB::table('user_builds')
+                ->select('motherboard_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('motherboard_id')
+                ->pluck('sold_count', 'motherboard_id');
+            $mobo->sold_count = $moboSales[$mobo->id] ?? 0;
             
         });
 

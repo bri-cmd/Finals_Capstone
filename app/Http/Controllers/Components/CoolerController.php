@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BuildCategory;
 use App\Models\Hardware\Cooler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 
@@ -26,7 +27,12 @@ class CoolerController extends Controller
     {
         $coolers = Cooler::all();
 
-        $coolers->each(function ($cooler) {
+        $coolerSales = DB::table('user_builds')
+                ->select('cooler_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('cooler_id')
+                ->pluck('sold_count', 'cooler_id');
+
+        $coolers->each(function ($cooler) use ($coolerSales) {
             $cooler->socket_display = implode('<br>', $cooler->socket_compatibility ?? []);
 
             // Format socket_compatibility as an array (for editing)
@@ -34,6 +40,9 @@ class CoolerController extends Controller
             $cooler->label = "{$cooler->brand} {$cooler->model}";
             $cooler->price_display = '₱' . number_format($cooler->price, 2);
             $cooler->component_type = 'cooler';
+
+            
+            $cooler->sold_count = $coolerSales[$cooler->id] ?? 0;
         });
         return $coolers;
     }

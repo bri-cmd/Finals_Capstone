@@ -45,8 +45,8 @@ cooler_df = pd.read_sql("SELECT id, brand, model, build_category_id, price FROM 
 cooler_map = {row.id: f"{row.brand} {row.model} {row.build_category_id} {row.price}" for row in cooler_df.itertuples()}
 
 # Storage
-storage_df = pd.read_sql("SELECT id, brand, model, build_category_id, price FROM storages", engine)
-storage_map = {row.id: f"{row.brand} {row.model} {row.build_category_id} {row.price}" for row in storage_df.itertuples()}
+storage_df = pd.read_sql("SELECT id, brand, model, build_category_id, price, storage_type FROM storages", engine)
+storage_map = {row.id: f"{row.brand} {row.model}{row.storage_type}  {row.build_category_id} {row.price}" for row in storage_df.itertuples()}
 
 lookup_maps = {
     "cpu": cpu_map,
@@ -86,8 +86,6 @@ if len(sys.argv) >= 3:
 
 # TWEAK HERE: Set user budget for component-based recommendations
 user_budget = None  # Set to None for no budget limit
-# user_budget = 50000  # Example: ₱50,000 budget
-# user_budget = 30000  # Example: ₱30,000 budget
 
 # Parse budget from command line (4th argument)
 if len(sys.argv) >= 4:
@@ -157,7 +155,6 @@ def get_best_recommendation_by_category():
             for category in unique_categories:
                 if category not in category_scores:
                     category_scores[category] = 0
-                # Weight by support and how "pure" the category is in this itemset
                 category_purity = categories_in_set.count(category) / len(categories_in_set)
                 category_scores[category] += support * category_purity
     
@@ -174,7 +171,6 @@ def get_best_recommendation_by_category():
     for col in component_types:
         comp_type = col.replace("_id", "")
         
-        # Find frequent items of this component type that belong to the selected category
         category_items = []
         
         for _, itemset_row in frequent_itemsets.iterrows():
@@ -184,7 +180,6 @@ def get_best_recommendation_by_category():
             for item in itemset:
                 if item.startswith(col) and item in component_to_category:
                     if component_to_category[item] == selected_category:
-                        # Special handling for CPU brand filtering
                         if comp_type == "cpu" and preferred_cpu_brand:
                             if item in component_to_brand:
                                 item_brand = component_to_brand[item]
@@ -194,35 +189,57 @@ def get_best_recommendation_by_category():
                         category_items.append((item, support))
         
         if category_items:
-            # Pick the one with highest support
             best_item = max(category_items, key=lambda x: x[1])[0]
             comp, comp_id = best_item.split(":")
             comp_id = int(comp_id)
+
+            # Get details from lookup map
+            details = lookup_maps[comp_type].get(comp_id, {})
             
-            # Get human-readable name without the category and price suffix
             full_name = lookup_maps[comp_type].get(comp_id, f"Unknown {comp_id}")
-            # Remove the category number and price from the end
-            clean_name = " ".join(full_name.split()[:-2])
-            recommendations[comp_type] = clean_name
-        else:
-            # Fallback: get any item of this type from the selected category
-            if comp_type == "cpu" and preferred_cpu_brand:
-                fallback_item = get_fallback_for_component_with_brand(comp_type, selected_category, preferred_cpu_brand)
+            clean_name = " ".join(full_name.split()[:-2])  # Clean name without category and price
+            
+            # Get the price for the component
+            price = component_to_price.get(f"{comp_type}_id:{comp_id}", 0)
+            
+            # Special handling for storage to include its type (SSD/HDD)
+            if comp_type == "storage":
+                storage_info = storage_map.get(comp_id, "").lower()
+                if "ssd" in storage_info:
+                    storage_type = "ssd"
+                elif "hdd" in storage_info:
+                    storage_type = "hdd"
+                else:
+                    storage_type = "unknown"
+
+                recommendations["storage"] = {
+                    "name": clean_name,
+                    "price": price,
+                    "type": storage_type
+                }
+
             else:
-                fallback_item = get_fallback_for_component(comp_type, selected_category)
-            recommendations[comp_type] = fallback_item
+                recommendations[comp_type] = {
+                    "name": clean_name,
+                    "price": price
+                }
+        else:
+            fallback_item = get_fallback_for_component(comp_type, selected_category)
+            recommendations[comp_type] = {
+                "name": fallback_item,
+                "price": 0
+            }
     
     return recommendations
 
+
+
 def get_recommendations_for_category(target_category, preferred_cpu_brand=None):
-    """Get recommendations for a specific category (useful for testing)"""
     recommendations = {}
     component_types = ["pc_case_id", "motherboard_id", "cpu_id", "gpu_id", "storage_id", "ram_id", "psu_id", "cooler_id"]
     
     for col in component_types:
         comp_type = col.replace("_id", "")
-        
-        # Find frequent items of this component type that belong to the target category
         category_items = []
         
         for _, itemset_row in frequent_itemsets.iterrows():
@@ -232,118 +249,122 @@ def get_recommendations_for_category(target_category, preferred_cpu_brand=None):
             for item in itemset:
                 if item.startswith(col) and item in component_to_category:
                     if component_to_category[item] == target_category:
-                        # Special handling for CPU brand filtering
                         if comp_type == "cpu" and preferred_cpu_brand:
                             if item in component_to_brand:
                                 item_brand = component_to_brand[item]
                                 if item_brand.lower() != preferred_cpu_brand.lower():
-                                    continue  # Skip this CPU, wrong brand
-                        
+                                    continue
                         category_items.append((item, support))
         
         if category_items:
-            # Pick the one with highest support
             best_item = max(category_items, key=lambda x: x[1])[0]
             comp, comp_id = best_item.split(":")
             comp_id = int(comp_id)
             
-            # Get human-readable name without the category and price suffix
             full_name = lookup_maps[comp_type].get(comp_id, f"Unknown {comp_id}")
             clean_name = " ".join(full_name.split()[:-2])
-            recommendations[comp_type] = clean_name
-        else:
-            # Fallback: get any item of this type from the target category
-            if comp_type == "cpu" and preferred_cpu_brand:
-                fallback_item = get_fallback_for_component_with_brand(comp_type, target_category, preferred_cpu_brand)
+            price = component_to_price.get(f"{comp_type}_id:{comp_id}", 0)
+            
+            if comp_type == "storage":
+                storage_info = storage_map.get(comp_id, "").lower()
+                if "ssd" in storage_info:
+                    storage_type = "ssd"
+                elif "hdd" in storage_info:
+                    storage_type = "hdd"
+                else:
+                    storage_type = "unknown"
+
+                recommendations["storage"] = {
+                    "name": clean_name,
+                    "price": price,
+                    "type": storage_type
+                }
+
             else:
-                fallback_item = get_fallback_for_component(comp_type, target_category)
-            recommendations[comp_type] = fallback_item
+                recommendations[comp_type] = {"name": clean_name, "price": price}
+        else:
+            fallback_item = get_fallback_for_component(comp_type, target_category)
+            recommendations[comp_type] = {"name": fallback_item, "price": 0}
     
     return recommendations
 
 def get_budget_recommendations(user_budget, target_category=None, preferred_cpu_brand=None, budget_tolerance=0.05):
-    """Get recommendations within user's budget by selecting cheaper alternatives if needed"""
-    
     print(f"User Budget: ₱{user_budget:,.2f}")
     
-    # First, get the best recommendations ignoring budget
     if target_category:
         initial_recommendations = get_recommendations_for_category(target_category, preferred_cpu_brand)
     else:
         initial_recommendations = get_best_recommendation_by_category()
     
-    # Calculate total price and get component details
     component_details = {}
     total_price = 0
-    
     component_types = ["pc_case", "motherboard", "cpu", "gpu", "storage", "ram", "psu", "cooler"]
     
     for comp_type in component_types:
         if comp_type in initial_recommendations and initial_recommendations[comp_type]:
-            # Find the component ID from the recommendation
-            comp_id = find_component_id_by_name(comp_type, initial_recommendations[comp_type])
+            rec = initial_recommendations[comp_type]
+            comp_name = rec["name"] if isinstance(rec, dict) else rec
+            comp_id = find_component_id_by_name(comp_type, comp_name)
             if comp_id:
                 price = component_to_price.get(f"{comp_type}_id:{comp_id}", 0)
                 category = component_to_category.get(f"{comp_type}_id:{comp_id}", 0)
-                
+                rec = initial_recommendations[comp_type]
+                comp_name = rec["name"] if isinstance(rec, dict) else rec
+
                 component_details[comp_type] = {
-                    "name": initial_recommendations[comp_type],
+                    "name": comp_name,
                     "id": comp_id,
                     "price": price,
                     "category": category
                 }
+
                 total_price += price
     
     print(f"Initial total price: ₱{total_price:,.2f}")
     
-    # If over budget, try to find cheaper alternatives
     if total_price > user_budget:
         print(f"Over budget by ₱{total_price - user_budget:,.2f}, finding cheaper alternatives...")
-        
-        # Sort components by price (most expensive first) to optimize
-        sorted_components = sorted(component_details.items(), 
-                                 key=lambda x: x[1]["price"], reverse=True)
-        
+        sorted_components = sorted(component_details.items(), key=lambda x: x[1]["price"], reverse=True)
         for comp_type, details in sorted_components:
             if total_price <= user_budget * (1 + budget_tolerance):
                 break
-                
-            # Find cheaper alternatives in the same category
             cheaper_alternative = find_cheaper_alternative(
-                comp_type, details["category"], details["price"], 
+                comp_type, details["category"], details["price"],
                 preferred_cpu_brand if comp_type == "cpu" else None
             )
-            
             if cheaper_alternative:
-                old_price = details["price"]
-                new_price = cheaper_alternative["price"]
-                savings = old_price - new_price
-                
+                savings = details["price"] - cheaper_alternative["price"]
                 if savings > 0:
-                    print(f"  Replacing {comp_type}: {details['name']} (₱{old_price:,.2f}) → {cheaper_alternative['name']} (₱{new_price:,.2f}) [Save ₱{savings:,.2f}]")
-                    
+                    print(f"  Replacing {comp_type}: {details['name']} (₱{details['price']:,.2f}) → {cheaper_alternative['name']} (₱{cheaper_alternative['price']:,.2f}) [Save ₱{savings:,.2f}]")
                     component_details[comp_type] = cheaper_alternative
                     total_price -= savings
     
-    # Build final recommendations with prices
     final_recommendations = {}
     final_total = 0
-    
     for comp_type in component_types:
         if comp_type in component_details:
             detail = component_details[comp_type]
-            final_recommendations[comp_type] = {
-                "name": detail["name"],
-                "price": detail["price"]
-            }
+            if comp_type == "storage":
+                storage_info = storage_map.get(detail["id"], "").lower()
+                if "ssd" in storage_info:
+                    storage_type = "ssd"
+                elif "hdd" in storage_info:
+                    storage_type = "hdd"
+                else:
+                    storage_type = "unknown"
+
+                final_recommendations["storage"] = {
+                    "name": detail["name"],
+                    "price": detail["price"],
+                    "type": storage_type
+                }
+
+            else:
+                final_recommendations[comp_type] = {"name": detail["name"], "price": detail["price"]}
             final_total += detail["price"]
         else:
-            final_recommendations[comp_type] = {
-                "name": None,
-                "price": 0
-            }
+            final_recommendations[comp_type] = {"name": None, "price": 0}
     
-    # Add summary
     final_recommendations["budget_summary"] = {
         "user_budget": user_budget,
         "total_price": final_total,
@@ -353,14 +374,16 @@ def get_budget_recommendations(user_budget, target_category=None, preferred_cpu_
     
     return final_recommendations
 
+
 def find_component_id_by_name(comp_type, comp_name):
     """Find component ID by matching the name"""
     comp_map = lookup_maps[comp_type]
     for comp_id, comp_info in comp_map.items():
         # Remove category and price from the end to get clean name
         clean_name = " ".join(comp_info.split()[:-2])
-        if clean_name == comp_name:
+        if clean_name.strip().lower() == comp_name.strip().lower():
             return comp_id
+
     return None
 
 def find_cheaper_alternative(comp_type, target_category, max_price, preferred_brand=None):
@@ -419,13 +442,11 @@ def get_fallback_for_component(comp_type, target_category):
     return None
 
 def get_fallback_recommendations():
-    """Original logic as fallback"""
     recommendations = {}
     component_types = ["pc_case_id", "motherboard_id", "cpu_id", "gpu_id", "storage_id", "ram_id", "psu_id", "cooler_id"]
     
     for col in component_types:
         filtered = frequent_itemsets[frequent_itemsets['itemsets'].astype(str).str.contains(col)]
-        
         if not filtered.empty:
             top_item = filtered.sort_values("support", ascending=False).iloc[0]
             item = list(top_item['itemsets'])[0]
@@ -434,12 +455,33 @@ def get_fallback_recommendations():
             comp_id = int(comp_id)
             
             full_name = lookup_maps[comp_type].get(comp_id, f"Unknown {comp_id}")
-            clean_name = " ".join(full_name.split()[:-2])  # Remove category and price
-            recommendations[comp_type] = clean_name
+            clean_name = " ".join(full_name.split()[:-2])
+            
+            if comp_type == "storage":
+                storage_info = storage_map.get(comp_id, "").lower()
+                if "ssd" in storage_info:
+                    storage_type = "ssd"
+                elif "hdd" in storage_info:
+                    storage_type = "hdd"
+                else:
+                    storage_type = "unknown"
+
+                recommendations["storage"] = {
+                    "name": clean_name,
+                    "price": component_to_price.get(f"{comp_type}_id:{comp_id}", 0),
+                    "type": storage_type
+                }
+            else:
+                recommendations[comp_type] = {
+                    "name": clean_name,
+                    "price": component_to_price.get(f"{comp_type}_id:{comp_id}", 0)
+                }
+
         else:
             recommendations[col.replace("_id", "")] = None
     
     return recommendations
+
 
 # ---------- GET RECOMMENDATIONS ----------
 # BUDGET-BASED RECOMMENDATIONS (calculates individual component prices)

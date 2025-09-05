@@ -197,3 +197,17 @@ canvas {
     background-color: black;
     color: white;
 }
+
+.view-specs {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.details {
+    width: 50%;
+    height: 50%;
+    background-color: aliceblue;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);    
+}

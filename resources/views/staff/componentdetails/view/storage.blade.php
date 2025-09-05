@@ -1,6 +1,6 @@
 {{-- <pre x-text="JSON.stringify(selectedComponent, null, 2)"></pre> --}}
 <h2 class="text-center !relative">View</h2>
-<div class="view-container" x-data="{ modelId: 'modelCanvas-storage' }">
+<div class="view-container">
     {{-- IMAGE --}}
     <div class="image-container">
         <img :src="`/${selectedComponent.image}`" alt="Product Image" >

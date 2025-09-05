@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage as StorageFacade;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class StorageController extends Controller
 {
@@ -29,13 +30,17 @@ class StorageController extends Controller
     {
         $storages = Storage::all();
 
-        $storages->each(function ($storage) {
-            $storage->capacity_display = "{$storage->capacity_gb} GB";
-            $storage->read_display = "Up to {$storage->read_speed_mbps} MB/s";
-            $storage->write_display = "Up to {$storage->write_speed_mbps} MB/s";
+        $storageSales = DB::table('user_builds')
+                ->select('storage_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('storage_id')
+                ->pluck('sold_count', 'storage_id');
+
+        $storages->each(function ($storage) use ($storageSales) {
             $storage->price_display = '₱' . number_format($storage->price, 2);
             $storage->label = "{$storage->brand} {$storage->model}";
             $storage->component_type = 'storage';
+
+            $storage->sold_count = $storageSales[$storage->id] ?? 0;
         });
 
         return $storages;
@@ -83,7 +88,7 @@ class StorageController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image');
             $filename = time() . '_' . Str::slug(pathinfo($validated['image']->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $validated['image']->getClientOriginalExtension();
-            $validated['image'] = $validated['image']->storeAs('storage', $filename, 'public');
+            $validated['image'] = $validated['image']->storeAs('storages', $filename, 'public');
         } else {
             $validated['image'] = null;
         }
@@ -92,7 +97,7 @@ class StorageController extends Controller
             $model3d = $request->file('model_3d');
             $filename = time() . '_' . Str::slug(pathinfo($model3d->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $model3d->getClientOriginalExtension();
 
-            $validated['model_3d'] = $model3d->storeAs('storage', $filename, 'public');
+            $validated['model_3d'] = $model3d->storeAs('storages', $filename, 'public');
         } else {
             $validated['model_3d'] = null;
         }

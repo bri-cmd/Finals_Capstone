@@ -9,10 +9,14 @@ const gamingBtn = document.getElementById('gamingBtn');
 const graphicsIntensiveBtn = document.getElementById('graphicsIntensiveBtn');
 const budget = document.getElementById('budget');
 const generateBtn = document.getElementById('generateBtn');
+const loadingSpinner = document.getElementById('loadingSpinner');
 const buildSectionButtons = document.querySelectorAll('#buildSection button');
 const catalogList = document.querySelector('.catalog-list');
 const catalogItem = document.querySelectorAll('.catalog-item');
 const buildSection = document.getElementById('buildSection');
+const summarySection = document.getElementById('summarySection');
+const summaryTableBody = document.getElementById("summaryTableBody");
+
 
 let currentBrandFilter = '';     // e.g. "amd" or "intel"
 let currentCategoryFilter = '';  // e.g. "gaming"
@@ -179,6 +183,13 @@ generateBtn.addEventListener('click', () => {
     budgetSection.classList.add('hidden');
     generateButton.classList.add('hidden');
     buildSection.classList.remove('hidden');
+    loadingSpinner.classList.remove('hidden');
+
+    const formattedBudget = currentBudget?.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) || "any";
+    const category = currentCategoryFilter || "any category";
+    const brand = currentBrandFilter || "any";
+
+    loadingText.textContent = `Getting recommendations for ${category} with ${brand} CPU within ${formattedBudget} budget\nUser Budget: ${formattedBudget}`;
 
     // DATA ANALYTICS
     fetch("/techboxx/build/generate-build", {
@@ -195,19 +206,64 @@ generateBtn.addEventListener('click', () => {
     })
     .then(res => res.json())
     .then(data => { 
-        // Build an HTML summary from the JSON response
-        let summaryHtml = "<h3>Recommended Build</h3><ul>";
-        for (const [key, value] of Object.entries(data)) {
-            summaryHtml += `<li><strong>${key.toUpperCase()}:</strong> ${value}</li>`;
-        }
-        summaryHtml += "</ul>";
+        loadingSpinner.classList.add('hidden');
 
-        // Insert into the summarySection
-        const summarySection = document.getElementById("summarySection");
-        summarySection.innerHTML = summaryHtml;
+        console.log(data);
+        summaryTableBody.innerHTML = '';
+
+        Object.values(data).forEach(item => {
+            let row = '';
+            row += `<tr>`;
+            row += `<td><p>${item.name}</p></td>`;
+            row += `<td><p>1</p></td>`;
+            row += `<td><p>${item.price.toFixed(2)}</p></td>`;
+            row += `<tr/>`;
+
+            summaryTableBody.innerHTML += row;
+        })
         summarySection.classList.remove("hidden");
+        document.getElementById('summaryTab').classList.add('active');
+        componentsSection.classList.add("hidden");
+
+        Object.entries(data).forEach(([key, item]) => {
+            console.log([key, item]);
+            let buttonSelector = null;
+
+            if (key === 'pc_case') {
+                key = 'case';
+            }
+
+            if (key === 'storage') {
+                // Use item.type (either 'ssd' or 'hdd') to match the correct button
+                buttonSelector = `button[data-type="${item.type}"]`;
+            } else {
+                // For other types of items, match by the key
+                buttonSelector = `button[data-type="${key}"]`;
+            }
+
+            const button = document.querySelector(buttonSelector);
+            if (button) {
+                const selectedName = button.querySelector('.selected-name');
+                if (selectedName) {
+                    // Update the button text for storage based on its type
+                    if (key === 'storage') {
+                        if (item.type === 'ssd') {
+                            selectedName.textContent = `${item.name}`;
+                        } else if (item.type === 'hdd') {
+                            selectedName.textContent = `${item.name}`;
+                        }
+                    } else {
+                        // For non-storage items, just set the name
+                        selectedName.textContent = item.name;
+                    }
+                }
+            }
+        })
     })
-    .catch(err => console.error("Error:", err));
+    .catch(err => {
+        console.error("Error:", err);
+        loadingSpinner.classList.add('hidden');
+    });
 });
 
 
@@ -221,6 +277,12 @@ buildSectionButtons.forEach(button => {
 
         buildSectionButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
+        catalogList.classList.remove('hidden');
+
+        summarySection.classList.add("hidden");
+        document.getElementById('summaryTab').classList.remove('active');
+        componentsSection.classList.remove("hidden");
+        document.getElementById('componentsTab').classList.add('active');
 
         applyAllFilters();
     })

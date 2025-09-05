@@ -12,10 +12,12 @@
         'resources\css\buildext.css',
         'resources\js\app.js',
         'resources\js\buildext.js',
+        'resources\css\admin-staff\modal.css',
         ])
     
 </head>
-<body class="flex">
+<body class="flex"
+      x-data="{ showViewModal: false, selectedComponent:{} }">
     @if (session('message'))
         <x-message :type="session('type')">
             {{ session('message') }}
@@ -69,7 +71,45 @@
                         @endforeach
                     </div>
                 </div>
+
+                
             </section>
         </div>
     </main>
+
+    <div x-show="showViewModal" x-cloak x-transition class="modal view-specs modal-scroll">
+        <div class="view-component" @click.away="showViewModal = false">
+            <div x-show="selectedComponent.component_type === 'motherboard'">
+                @include('staff.componentdetails.view.motherboard')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'gpu'">
+                @include('staff.componentdetails.view.gpu')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'case'">
+                @include('staff.componentdetails.view.case')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'psu'">
+                @include('staff.componentdetails.view.psu')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'ram'">
+                @include('staff.componentdetails.view.ram')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'ssd' || selectedComponent.component_type === 'hdd'">
+                @include('staff.componentdetails.view.storage')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'cpu'">
+                @include('staff.componentdetails.view.cpu')
+            </div>
+
+            <div x-show="selectedComponent.component_type === 'cooler'">
+                @include('staff.componentdetails.view.cooler')
+            </div>
+        </div>
+    </div>
 </body>

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class RamController extends Controller
 {
@@ -25,13 +26,21 @@ class RamController extends Controller
     {
         $rams = Ram::all();
 
-        $rams->each(function ($ram) {
+        $ramSales = DB::table('user_builds')
+                ->select('ram_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('ram_id')
+                ->pluck('sold_count', 'ram_id');
+
+        $rams->each(function ($ram) use ($ramSales) {
             $ram->ecc_display = ($ram->is_ecc === 'false') ? 'No' : 'Yes';
             $ram->rgb_display = ($ram->is_rgb === 'false') ? 'No' : 'Yes';
 
             $ram->price_display = '₱' . number_format($ram->price, 2);
             $ram->label = "{$ram->brand} {$ram->model}";
             $ram->component_type = 'ram';
+
+            
+            $ram->sold_count = $ramSales[$ram->id] ?? 0;
         });
 
         return $rams;

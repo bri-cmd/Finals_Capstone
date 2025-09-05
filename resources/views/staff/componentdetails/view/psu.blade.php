@@ -1,6 +1,6 @@
 <h2 class="text-center !relative">View</h2>
 {{-- <div class="view-container"> --}}
-<div class="view-container" x-data="{ modelId: 'modelCanvas-psu' }">
+<div class="view-container">
     {{-- IMAGE --}}
     <div class="image-container">
         <img :src="`/${selectedComponent.image}`" alt="Product Image" >

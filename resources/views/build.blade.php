@@ -25,8 +25,16 @@
     @endif
 
     <x-buildheader :name="Auth::user()?->first_name" />
+    
+    <div id="loadingSpinner" class="hidden">
+        <div class="spinner-message">
+            <pre id="loadingText">Loading...</pre>
+        </div>
+    </div>
 
     <main class="main-content flex justify-evenly h-[91vh] gap-1">
+        
+
         <section class="preview-section">
             <div id="sidebar">
                 <h3 class="mb-3 text-center">BUILD COMPONENTS</h3>
@@ -73,6 +81,7 @@
             <div class="generate-button">
                 <button id="generateBtn"><p>Generate Build</p></button>
             </div>
+            
 
             {{-- THIS SECTION WILL SHOW WHEN GENERATE BUILD IS CLICKED --}}
             <div class="generate-build hidden" id="buildSection">
@@ -151,10 +160,8 @@
                         <tbody id="summaryTableBody">
                         </tbody>
                     </table>
-                    
                 </div>
                 <div class="build-details">
-                    <p>jhgfdddrwrewre</p>
                 </div>
             </div>
         </section>    

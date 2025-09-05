@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class GpuController extends Controller
 {
@@ -25,11 +26,19 @@ class GpuController extends Controller
     public function getFormattedGpus() 
     {
         $gpus = Gpu::all();
+
+        $gpuSales = DB::table('user_builds')
+                ->select('gpu_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('gpu_id')
+                ->pluck('sold_count', 'gpu_id');
         
-        $gpus->each(function ($gpu) {
+        $gpus->each(function ($gpu) use ($gpuSales) {
             $gpu->price_display = '₱' . number_format($gpu->price, 2);
             $gpu->label = "{$gpu->brand} {$gpu->model}";
             $gpu->component_type = 'gpu';
+
+            
+            $gpu->sold_count = $gpuSales[$gpu->id] ?? 0;
         });
 
         return $gpus;

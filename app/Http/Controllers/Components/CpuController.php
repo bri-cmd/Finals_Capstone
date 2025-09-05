@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class CpuController extends Controller
 {
@@ -28,11 +29,19 @@ class CpuController extends Controller
     {
         $cpus = Cpu::all();
 
-        $cpus->each(function ($cpu) {
+        $cpuSales = DB::table('user_builds')
+                ->select('cpu_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('cpu_id')
+                ->pluck('sold_count', 'cpu_id');
+
+        $cpus->each(function ($cpu) use ($cpuSales) {
             $cpu->integrated_display = ($cpu->integrated_graphics === 'false') ? 'No' : 'Yes';
             $cpu->price_display = '₱' . number_format($cpu->price, 2);
             $cpu->label = "{$cpu->brand} {$cpu->model}";
             $cpu->component_type = 'cpu';
+
+            
+            $cpu->sold_count = $cpuSales[$cpu->id] ?? 0;
         });
 
         return $cpus;

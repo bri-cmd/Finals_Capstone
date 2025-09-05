@@ -16,13 +16,20 @@ class BuildExtController extends Controller
         $components = app(ComponentDetailsController::class)->getAllFormattedComponents();
         $storages = Storage::get()->map(function ($storage) {
                 return (object)[
-                    'component_type' => strtolower($storage->storage_type), // 'hdd' or 'sdd'
-                    'brand'          => $storage->brand,
-                    'model'          => $storage->model,
-                    'label'          => "{$storage->brand} {$storage->model}",
-                    'price'          => $storage->price,
-                    'image'          => $storage->image,
-                    'buildCategory'  => $storage->buildCategory,
+                    'component_type'  => strtolower($storage->storage_type), // 'hdd' or 'sdd'
+                    'brand'           => $storage->brand,
+                    'model'           => $storage->model,
+                    'storage_type'    => $storage->storage_type,
+                    'interface'       => $storage->interface,
+                    'capacity_gb'     => $storage->capacity_gb,
+                    'form_factor'     => $storage->form_factor,
+                    'read_speed_mbps' => $storage->read_speed_mbps,
+                    'write_speed_mbps'=> $storage->write_speed_mbps,
+                    'label'           => "{$storage->brand} {$storage->model}",
+                    'price'           => $storage->price,
+                    'image'           => $storage->image,
+                    'buildCategory'   => $storage->buildCategory,
+                    'sold_count'      => $storage->sold_count,
             ];      
         });
 

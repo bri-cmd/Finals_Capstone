@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class PsuController extends Controller
 {
@@ -29,11 +30,19 @@ class PsuController extends Controller
     {
         $psus = Psu::all();
 
+        $psuSales = DB::table('user_builds')
+                ->select('psu_id', DB::raw('COUNT(*) as sold_count'))
+                ->groupBy('psu_id')
+                ->pluck('sold_count', 'psu_id');
+
         // FORMATTING THE DATAS
-        $psus->each(function ($psu) {
+        $psus->each(function ($psu) use ($psuSales) {
             $psu->price_display = '₱' . number_format($psu->price, 2);
             $psu->label = "{$psu->brand} {$psu->model}";
             $psu->component_type = 'psu';
+
+            
+            $psu->sold_count = $psuSales[$psu->id] ?? 0;
         });
 
         return $psus;
