@@ -1,7 +1,7 @@
 <header class="header">
     <div>
         <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
-        <h2>Madoxx.qwe</h2>    
+        <a href="{{ route('home') }}"><h2>Madoxx.qwe</h2></a>  
     </div>
     
     <div class="gap-3">

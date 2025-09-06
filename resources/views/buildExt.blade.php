@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Techboxx</title>
 
     @vite([
@@ -27,12 +28,15 @@
     <header>
         <div class="header-logo">
             <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
-            <h2>Madoxx.qwe</h2>    
+            <a href="{{ route('home') }}"><h2>Madoxx.qwe</h2></a>  
         </div>
     </header>
 
     <main class="main-content header overflow-hidden">
-        <h2 class="text-center">YOUR PC</h2>
+        <form action="" class="build-name">
+            <input type="text" value="YOUR PC">
+
+        </form>
 
         <section class="model-section">
             <div id="canvas-container"></div>
@@ -41,12 +45,27 @@
         <div class="layout-container">
             {{-- STEPS --}}
             <section class="steps-section">
-
+                <div>
+                    <h4>VIRTUAL PC BUILD GUIDE</h4>
+                    <p>1. Install the PSU (Power Supply Unit)</p>
+                    <p>2. Install the Motherboard</p>
+                    <p>3. Install the CPU</p>
+                    <p>4. Install the RAM</p>
+                    <p>5. Install the SSD</p>
+                    <p>6. Install the HDD</p>
+                    <p>7. Install the GPU</p>
+                    <p>8. Close the Case</p>
+                    <p>9. Power On</p>
+                </div>
             </section>
 
             {{-- COMPATIBILITY --}}
             <section class="compatibility-section">
+                <div>
+                    <h4>COMPATIBILITY CHECK</h4>
+                    <button id="validateBuild">Validate Build</button>
 
+                </div>
             </section>
 
             {{-- COMPONENTS --}}
@@ -71,8 +90,6 @@
                         @endforeach
                     </div>
                 </div>
-
-                
             </section>
         </div>
     </main>

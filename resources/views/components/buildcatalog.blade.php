@@ -1,7 +1,7 @@
 @props(['component'])
 
 <div class="build-catalog" 
-     
+     data-id="{{ $component->id }}"
      data-type="{{ $component->component_type }}"
      data-image="{{ asset('storage/' . str_replace('\\', '/', $component->image)) }}"
      data-model="{{ isset($component->model_3d) ? asset('storage/' . $component->model_3d) : '' }}">
@@ -14,5 +14,4 @@
     <button @click="showViewModal = true; selectedComponent = {{ json_encode($component, JSON_HEX_APOS | JSON_HEX_QUOT) }}">
         See specs
     </button>
-    
 </div>

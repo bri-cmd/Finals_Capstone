@@ -109,7 +109,7 @@
                     <tr>
                         <td>{{ $userBuild->build_name }}</td>
                         <td class="text-center !pr-[2.5%]">View</td>
-                        <td class="text-center !pr-[1.5%]">{{ $userBuild->created_at->format('Y-m-d') }}</td>
+                        <td class="text-center !pr-[1.5%]">{{ $userBuild->created_at ? $userBuild->created_at->format('Y-m-d') : 'N/A' }}</td>
                         <td class="text-center">₱ {{ $userBuild->total_price }}</td>
                         <td class="text-center !pr-[.6%]">{{ $userBuild->status }}</td>
                         <td class="text-center">Order</td>

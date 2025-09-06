@@ -50,4 +50,8 @@ class BuildCategory extends Model
     public function cooler() {
         return $this->hasMany(Cooler::class);
     }
+
+    public function software() {
+        return $this->hasMany(Software::class);
+    }
 }

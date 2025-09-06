@@ -1,7 +1,7 @@
 <header class="header">
     <div class="header-logo">
         <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
-        <h2>Madoxx.qwe</h2>    
+        <a href="{{ route('home') }}"><h2>Madoxx.qwe</h2></a>  
     </div>
     <div class="header-nav">
         <div class="header-link">

@@ -15,6 +15,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SoftwareDetailsController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
 
@@ -90,7 +91,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('inventory/stock-in', [InventoryController::class, 'stockIn'])->name('inventory.stock-in');
     Route::post('inventory/stock-out', [InventoryController::class, 'stockOut'])->name('inventory.stock-out');
 
-    
+    // SOFTWARE DETAILS
+    Route::get('software-details', [SoftwareDetailsController::class, 'index'])->name('software-details');
 });
 
 // CUSTOMER ROUTES

@@ -19,6 +19,32 @@ canvas {
 }
 
 /* LAYOUT */
+.build-name {
+    background-color: transparent; 
+    font-size: 1.5rem;
+    width: 100%;
+    text-align: center;
+    outline: none;
+}
+
+.build-name input{
+    border: none !important;
+    outline: none !important;
+    background-color: transparent;
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+.build-name input:focus{
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;  /* Remove any box-shadow on focus */
+
+}
+
 .layout-container {
     display: grid;
     grid-template-areas: 
@@ -34,14 +60,26 @@ canvas {
 .compatibility-section {
     height: 330px;
 }
+
 .steps-section {
-    background-color: aliceblue;
     grid-area: steps;
     width: 40%;
 }
 
+.steps-section div,
+.compatibility-section div {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.steps-section div h4,
+.compatibility-section div h4 {
+    text-align: center;
+}
+
 .compatibility-section {
-    background-color: aliceblue;
     grid-area: compatibility;
     width: 40%;
     position: relative;

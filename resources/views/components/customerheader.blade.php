@@ -1,7 +1,7 @@
 <header class="customerHeader">
     <div class="header-logo">
         <img src="{{ asset('images\Logo.png') }}" alt="Logo" class="logo">
-        <h2>Madoxx.qwe</h2>    
+        <a href="{{ route('home') }}"><h2>Madoxx.qwe</h2></a>  
     </div>
     
     <div x-data="{ open: false }" class="customerHeader-profile">

@@ -285,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             const itemType = item.getAttribute('data-type');
             const imageUrl = item.getAttribute('data-image');
+            const selectedId = item.getAttribute('data-id');
 
             // FIND MATCHING COMPONENT BUTTON
             const targetButton = document.querySelector(`.component-button[data-type="${itemType}"]`);
@@ -292,7 +293,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imgTag = targetButton.querySelector('img');
                 imgTag.src = imageUrl;
                 imgTag.style.display = 'block';
+
+                // Set the selected ID on the button to indicate the item has been selected
+                targetButton.setAttribute('data-selected-id', selectedId);
             }
         });
+    });
+
+    // VALIDATION
+    document.getElementById('validateBuild').addEventListener('click', () => {
+        const selections = {};
+        console.log(selections);
+        
+        document.querySelectorAll('.component-button').forEach(button=> {
+            const type = button.getAttribute('data-type');
+            const selectedId = button.getAttribute('data-selected-id');
+            if (selectedId) {
+                selections[type + "_id"] = selectedId;
+            }
+        });
+
+        // SEND TO BACKEND
+        fetch('/techboxx/build/validate', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(selections)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                alert('Compatibility issues:\n' + data.errors.join("\n"));
+            }
+            else {
+                alert("Build is valid!");
+            }
+        })
     });
 });

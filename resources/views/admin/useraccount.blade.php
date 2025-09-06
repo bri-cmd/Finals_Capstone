@@ -1,5 +1,5 @@
 <x-dashboardlayout>
-    <div class="flex">
+    <div class="flex gap-4">
         {{-- add new staff/admin --}}
         <section class="section-style">
             <h2 class="section-header">Add New Admin / Staff</h2>
@@ -9,22 +9,22 @@
                 
                 <div class="input-label">
                     <label for="first_name">First name</label>
-                    <input type="text" name="first_name">
+                    <input required type="text" name="first_name">
                 </div>
                 
                 <div class="input-label">
                     <label for="last_name">Last Name</label>
-                    <input type="text" name="last_name">
+                    <input required type="text" name="last_name">
                 </div>
 
                 <div class="input-label">
                     <label for="email">Email</label>
-                    <input type="email" name="email">
+                    <input required type="email" name="email">
                 </div>
 
                 <div class="input-label">
                     <label for="password">Password</label>
-                    <input type="text" name="password">
+                    <input required type="text" name="password">
                 </div>
 
                 <div class="input-label">
@@ -38,13 +38,13 @@
                 <button class="form-button">Add</button>
 
                 {{-- validation error --}}
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li class="text-red-500 text-xs">{{ $error }}</li>
                         @endforeach
                     </ul>
-                @endif
+                @endif --}}
             </form>   
             
         </section>
