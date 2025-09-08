@@ -49,8 +49,10 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-sm">
-                            @foreach($cart as $id => $item)
-                                @php $itemTotal = $item['price'] * $item['quantity']; @endphp
+                            @foreach($cart as $item)
+                                @php
+                                    $itemTotal = $item->product ? $item->product->price * $item->quantity : 0;
+                                @endphp
                                 <tr class="hover:bg-gray-50 transition">
                                     <!-- Checkbox -->
                                     <td class="p-4 text-center">
@@ -62,14 +64,14 @@
                                     <td class="p-4">
                                         <div class="flex items-center gap-4">
                                             <img
-                                                src="{{ $item['image'] ?? 'https://via.placeholder.com/72' }}"
-                                                alt="{{ $item['name'] }}"
+                                                src="{{ $item->product->image ?? 'https://via.placeholder.com/72' }}"
+                                                alt="{{ $item->product->brand }} {{ $item->product->model }}"
                                                 class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border border-gray-200 shadow-sm"
                                             />
                                             <div>
-                                                <div class="font-semibold text-gray-800">{{ $item['name'] }}</div>
-                                                @if(!empty($item['sku']))
-                                                    <div class="text-xs text-gray-500">SKU: {{ $item['sku'] }}</div>
+                                                <div class="font-semibold text-gray-800">{{ $item->product->brand }} {{ $item->product->model }}</div>
+                                                @if($item->product->sku)
+                                                    <div class="text-xs text-gray-500">SKU: {{ $item->product->sku }}</div>
                                                 @endif
                                             </div>
                                         </div>
@@ -77,25 +79,25 @@
 
                                     <!-- Category -->
                                     <td class="p-4 text-gray-600">
-                                        {{ $item['category'] ?? '—' }}
+                                        {{ ucfirst($item->product_type) ?? '—' }}
                                     </td>
 
                                     <!-- Price -->
                                     <td class="p-4 text-center text-gray-800">
-                                        ₱{{ number_format($item['price'], 2) }}
+                                        ₱{{ number_format($item->product->price, 2) }}
                                     </td>
 
                                     <!-- Quantity -->
                                     <td class="p-4 text-center">
-                                        <form action="{{ route('cart.update', $id) }}" method="POST" 
-                                              class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden shadow-sm">
+                                        <form action="{{ route('cart.update', $item->id) }}" method="POST" 
+                                            class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden shadow-sm">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" name="action" value="decrease"
                                                     class="h-9 w-9 grid place-items-center text-gray-700 hover:bg-gray-100">
                                                 <span class="text-lg leading-none">−</span>
                                             </button>
-                                            <span class="px-4 font-semibold text-gray-900 select-none">{{ $item['quantity'] }}</span>
+                                            <span class="px-4 font-semibold text-gray-900 select-none">{{ $item->quantity }}</span>
                                             <button type="submit" name="action" value="increase"
                                                     class="h-9 w-9 grid place-items-center text-gray-700 hover:bg-gray-100">
                                                 <span class="text-lg leading-none">+</span>
@@ -105,7 +107,7 @@
 
                                     <!-- Remove -->
                                     <td class="p-4 text-center">
-                                        <form action="{{ route('cart.remove', $id) }}" method="POST" onsubmit="return confirm('Remove this item?')">
+                                        <form action="{{ route('cart.remove', $item->id) }}" method="POST" onsubmit="return confirm('Remove this item?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -116,6 +118,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>
@@ -177,66 +180,71 @@
     </div>
 
     <script>
-    const selectAll = document.getElementById('select-all');
-    const checkboxes = document.querySelectorAll('.item-checkbox');
-    const summaryTotal = document.getElementById('cart-summary-total');
+        const selectAll = document.getElementById('select-all');
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        const summaryTotal = document.getElementById('cart-summary-total');
 
-    // Load saved checkbox states
-    const savedChecked = JSON.parse(localStorage.getItem('checkedItems') || '[]');
-    checkboxes.forEach((cb, index) => {
-        if (savedChecked.includes(index)) {
-            cb.checked = true;
-        }
-    });
-    updateTotal();
+        // Cart items from Blade (JS representation of the cart items)
+        const cartItems = @json($cart);
 
-    function updateTotal() {
-        let total = 0;
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                total += parseFloat(cb.dataset.total);
-            }
-        });
-        summaryTotal.textContent = '₱' + total.toLocaleString(undefined, {minimumFractionDigits: 2});
-
-        // Save checked indexes in localStorage
-        const checkedIndexes = [];
-        checkboxes.forEach((cb, i) => {
-            if (cb.checked) checkedIndexes.push(i);
-        });
-        localStorage.setItem('checkedItems', JSON.stringify(checkedIndexes));
-    }
-
-    selectAll?.addEventListener('change', (e) => {
-        checkboxes.forEach(cb => cb.checked = e.target.checked);
-        updateTotal();
-    });
-
-    checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
-
-    const checkoutForm = document.getElementById('checkout-form');
-    const selectedItemsInput = document.getElementById('selected-items');
-
-    checkoutForm?.addEventListener('submit', (e) => {
-        const selectedIds = [];
-
+        // Load saved checkbox states
+        const savedChecked = JSON.parse(localStorage.getItem('checkedItems') || '[]');
         checkboxes.forEach((cb, index) => {
-            if (cb.checked) {
-                // match checkbox index with cart item key
-                const itemId = Object.keys(@json($cart))[index]; 
-                selectedIds.push(itemId);
+            if (savedChecked.includes(index)) {
+                cb.checked = true;
             }
         });
+        updateTotal();
 
-        if (selectedIds.length === 0) {
-            e.preventDefault();
-            alert("Please select at least one item before checkout.");
-            return;
+        function updateTotal() {
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parseFloat(cb.dataset.total);
+                }
+            });
+            summaryTotal.textContent = '₱' + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+            // Save checked indexes in localStorage
+            const checkedIndexes = [];
+            checkboxes.forEach((cb, i) => {
+                if (cb.checked) checkedIndexes.push(i);
+            });
+            localStorage.setItem('checkedItems', JSON.stringify(checkedIndexes));
         }
 
-        // Put IDs into hidden input
-        selectedItemsInput.value = JSON.stringify(selectedIds);
-    });
+        // Handle Select All
+        selectAll?.addEventListener('change', (e) => {
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
+            updateTotal();
+        });
+
+        // Update total when checkboxes change
+        checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
+
+        const checkoutForm = document.getElementById('checkout-form');
+        const selectedItemsInput = document.getElementById('selected-items');
+
+        checkoutForm?.addEventListener('submit', (e) => {
+            const selectedIds = [];
+
+            checkboxes.forEach((cb, index) => {
+                if (cb.checked) {
+                    // Now use the item ID directly from the cart item (not the index)
+                    const itemId = cartItems[index].id;
+                    selectedIds.push(itemId);
+                }
+            });
+
+            if (selectedIds.length === 0) {
+                e.preventDefault();
+                alert("Please select at least one item before checkout.");
+                return;
+            }
+
+            // Put IDs into hidden input
+            selectedItemsInput.value = JSON.stringify(selectedIds);
+        });
 
     </script>
 

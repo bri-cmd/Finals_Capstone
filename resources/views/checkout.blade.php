@@ -40,68 +40,44 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-sm">
-                        @foreach($items as $id => $item)
-                            @php $itemTotal = $item['price'] * $item['quantity']; @endphp
+                        @foreach($selectedItems as $item)
+                            @php
+                                $itemTotal = $item->product ? $item->product->price * $item->quantity : 0;
+                            @endphp
                             <tr class="hover:bg-gray-50 transition">
                                 <!-- Product -->
                                 <td class="p-4">
                                     <div class="flex items-center gap-4">
-                                        <img
-                                            src="{{ $item['image'] ?? 'https://via.placeholder.com/72' }}"
-                                            alt="{{ $item['name'] }}"
-                                            class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border border-gray-200 shadow-sm"
-                                        />
+                                        <img src="{{ $item->product->image ?? 'https://via.placeholder.com/72' }}" 
+                                            alt="{{ $item->product->brand }} {{ $item->product->model }}" 
+                                            class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg border border-gray-200 shadow-sm" />
                                         <div>
-                                            <div class="font-semibold text-gray-800">{{ $item['name'] }}</div>
-                                            @if(!empty($item['sku']))
-                                                <div class="text-xs text-gray-500">SKU: {{ $item['sku'] }}</div>
+                                            <div class="font-semibold text-gray-800">{{ $item->product->brand }} {{ $item->product->model }}</div>
+                                            @if($item->product->sku)
+                                                <div class="text-xs text-gray-500">SKU: {{ $item->product->sku }}</div>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
-
-                                <!-- Category -->
-                                <td class="p-4 text-gray-600">
-                                    {{ $item['category'] ?? '—' }}
-                                </td>
-
-                                <!-- Price -->
-                                <td class="p-4 text-center text-gray-800">
-                                    ₱{{ number_format($item['price'], 2) }}
-                                </td>
-
-                                <!-- Quantity -->
+                                <td class="p-4 text-gray-600">{{ ucfirst($item->product_type) ?? '—' }}</td>
+                                <td class="p-4 text-center text-gray-800">₱{{ number_format($item->product->price, 2) }}</td>
                                 <td class="p-4 text-center">
-                                    <form action="{{ route('cart.update', $id) }}" method="POST" 
-                                        class="inline-flex items-center rounded-full border border-gray-300 overflow-hidden shadow-sm">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" name="action" value="decrease"
-                                                class="h-9 w-9 grid place-items-center text-gray-700 hover:bg-gray-100">
-                                            <span class="text-lg leading-none">−</span>
-                                        </button>
-                                        <span class="px-4 font-semibold text-gray-900 select-none">{{ $item['quantity'] }}</span>
-                                        <button type="submit" name="action" value="increase"
-                                                class="h-9 w-9 grid place-items-center text-gray-700 hover:bg-gray-100">
-                                            <span class="text-lg leading-none">+</span>
-                                        </button>
-                                    </form>
+                                    <span class="px-4 font-semibold text-gray-900 select-none">{{ $item->quantity }}</span>
                                 </td>
-
-                                <!-- Item Total -->
-                                <td class="p-4 text-center font-semibold text-gray-900">
-                                    ₱{{ number_format($itemTotal, 2) }}
-                                </td>
+                                <td class="p-4 text-center font-semibold text-gray-900">₱{{ number_format($itemTotal, 2) }}</td>
                             </tr>
                         @endforeach
+
                     </tbody>
                 </table>
             </div>
 
             <!-- Order Total (below table, aligned right) -->
             <div class="flex justify-end items-center text-sm font-semibold text-gray-900 mb-6">
-                @php $grandTotal = collect($items)->sum(fn($i) => $i['price'] * $i['quantity']); @endphp
-                <span class="mr-2">Order Total ({{ collect($items)->sum('quantity') }} items):</span>
+                @php
+                    $grandTotal = collect($selectedItems)->sum(fn($i) => $i->product->price * $i->quantity);
+                @endphp
+                <span class="mr-2">Order Total ({{ collect($selectedItems)->sum('quantity') }} items):</span>
                 <span class="text-lg font-bold">₱{{ number_format($grandTotal, 2) }}</span>
             </div>
 

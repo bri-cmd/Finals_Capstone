@@ -8,10 +8,16 @@
     @vite([
         'resources/css/app.css',
         'resources/css/landingpage/header.css',
-        'resources/js/app.js'
+        'resources/js/app.js',
     ])
 </head>
 <body class="flex">
+
+    @if (session('message'))
+        <x-message :type="session('type')">
+            {{ session('message') }}
+        </x-message>
+    @endif
 
     <!-- Fixed landing header -->
     <x-landingheader :name="Auth::user()?->first_name" />
@@ -68,7 +74,7 @@
                         <li>
                             <a href="{{ route('catalogue', array_merge(request()->except('page'), ['category' => $cat])) }}"
                             class="hover:underline {{ request('category') === $cat ? 'text-blue-600 font-semibold' : '' }}">
-                                {{ $cat }}
+                                {{ ucfirst($cat) }}
                             </a>
                         </li>
                     @empty
