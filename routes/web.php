@@ -16,6 +16,7 @@ use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SoftwareDetailsController;
@@ -96,6 +97,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
     // SOFTWARE DETAILS
     Route::get('software-details', [SoftwareDetailsController::class, 'index'])->name('software-details');
+
+    // ORDER
+    Route::get('order', [OrderController::class, 'index'])->name('order');
 });
 
 // CUSTOMER ROUTES

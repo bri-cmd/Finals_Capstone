@@ -87,3 +87,19 @@ main {
     border-radius: 4px;
     width: 70%;
 }
+
+/* ORDER */
+.order-tab {
+    display: flex;
+    gap: 4px;
+    width: 50%;
+}
+
+.order-tab button {
+    border: 1px solid black;
+    width: 50%;
+}
+
+.order-tab button:hover {
+    background-color: var(--gray);
+}

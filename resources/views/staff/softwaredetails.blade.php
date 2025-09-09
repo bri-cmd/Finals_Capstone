@@ -35,20 +35,6 @@
                     <div class="input-label">
                         <label for="">CPU</label>
                         <input required type="text">
-                        <div>
-                            <select name="category" id="category" class="pt-0 pb-0 pl-1">
-                                <option disabled selected hidden value="">Select build category</option>   
-                                @foreach ($buildCategories as $category)
-                                    <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                @endforeach
-                            </select>
-                            <select name="category" id="category" class="pt-0 pb-0 pl-1">
-                                <option disabled selected hidden value="">Select build category</option>   
-                                @foreach ($buildCategories as $category)
-                                    <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                     </div>   
 
                     <div class="input-label">

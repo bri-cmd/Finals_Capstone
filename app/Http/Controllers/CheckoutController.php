@@ -15,7 +15,7 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty!');
         }
 
-        $grandTotal = collect($cart)->sum(fn($i) => $i['price'] * $i['quantity']);
+        $grandTotal = collect($cart)->sum(fn($i) => $i[' price'] * $i['quantity']);
 
         // 1️⃣ insert into orders
         $orderId = DB::table('orders')->insertGetId([

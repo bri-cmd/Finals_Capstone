@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
             // UserVerificationSeeder::class, 
             // UserBuildSeeder::class
 
-            UserBuildSeeder::class
+            // UserBuildSeeder::class
+            OrderedBuildSeeder::class
+            
         ]);
     }
 }

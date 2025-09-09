@@ -67,4 +67,8 @@ class UserBuild extends Model
     public function cooler() {
         return $this->belongsTo(Cooler::class);
     }
+
+    public function orderedBuild() {
+        return $this->hasOne(OrderedBuild::class);
+    }
 }
