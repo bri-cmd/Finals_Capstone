@@ -25,7 +25,7 @@ class CoolerController extends Controller
 
     public function getFormattedCoolers()
     {
-        $coolers = Cooler::all();
+        $coolers = Cooler::withTrashed()->get();
 
         $coolerSales = DB::table('user_builds')
                 ->select('cooler_id', DB::raw('COUNT(*) as sold_count'))

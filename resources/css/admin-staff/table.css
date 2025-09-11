@@ -6,7 +6,7 @@
 }
 
 .table-body {
-    overflow-y: scroll;
+    height: 70vh;
 }
 
 .section-style h2 {
@@ -30,8 +30,6 @@
 
 .table th {
     padding-bottom: 8px;
-    padding-right: 25px;
-    padding-left: 4px;
 }
 
 .table tr {
@@ -55,6 +53,10 @@
 
 .view-icon:hover, 
 .edit-icon:hover {
+    color: var(--blue);
+}
+
+.restore-icon:hover {
     color: var(--blue);
 }
 

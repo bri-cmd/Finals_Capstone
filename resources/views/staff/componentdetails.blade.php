@@ -51,7 +51,7 @@
 
     {{-- TABLE --}}
     <section class="section-style !pl-0 !h-[65vh]">
-        <div>
+        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" class=" h-[55vh]">
             <table class="table">
                 <thead>
                     <tr>
@@ -62,31 +62,44 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-            </table> 
-        </div>
-
-        <div x-data="{ showViewModal: false, showEditModal: false, selectedComponent:{} }" class="overflow-y-scroll">
-            <table class="table">
                 <tbody>
                     @foreach ($components as $component)
-                    <tr>
+                    <tr class="{{ $component->deleted_at ? 'bg-gray-300 opacity-50 cursor-not-allowed' : '' }}" >
                         <td>{{ $component->brand}} {{ $component->model }}</td>
                         <td>{{ $component->buildCategory->name}}</td>
                         <td>₱{{ number_format($component->price, 2) }}</td>
-                        <td>{{ $component->stock}}</td>
+                        <td>{{ $component->stock }}</td>
                         <td class="align-middle text-center">
                             <div class="flex justify-center gap-2">
-                                <button @click="showViewModal = true; selectedComponent = {{ $component->toJson() }};">
-                                    <x-icons.view/>    
-                                </button>
-                                <button @click="showEditModal = true; selectedComponent = {{ $component->toJson() }};">
-                                    <x-icons.edit/>    
-                                </button>
-                                <form action="{{ route('staff.componentdetails.delete', ['type' =>$component->component_type, 'id' => $component->id]) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" ><x-icons.delete /></button>
-                                </form>
+                                @if($component->deleted_at)
+                                    {{-- Restore Button for Soft Deleted Components --}}
+                                    <form action="{{ route('staff.componentdetails.restore', ['type' => $component->component_type, 'id' => $component->id]) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH') <!-- or any method you use for restoring -->
+                                        <button type="submit">
+                                            <x-icons.restore />
+                                        </button>
+                                    </form>
+                                @else
+                                    {{-- View Button for Active Components --}}
+                                    <button @click="showViewModal = true; selectedComponent = {{ $component->toJson() }};">
+                                        <x-icons.view />
+                                    </button>
+
+                                    {{-- Edit Button for Active Components --}}
+                                    <button @click="showEditModal = true; selectedComponent = {{ $component->toJson() }};">
+                                        <x-icons.edit />
+                                    </button>
+
+                                    {{-- Delete Button for Active Components --}}
+                                    <form action="{{ route('staff.componentdetails.delete', ['type' => $component->component_type, 'id' => $component->id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">
+                                            <x-icons.delete />
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                     </tr>    
@@ -169,6 +182,7 @@
             </div>
         </div>
 
+    {{ $components->links() }}
         
     </section>
 

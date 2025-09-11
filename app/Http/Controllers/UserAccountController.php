@@ -19,7 +19,7 @@ class UserAccountController extends Controller
     }
 
     public function useraccount(Request $request) {
-        $unverifiedUsers = UserVerification::all();
+        $unverifiedUsers = UserVerification::paginate(9, ['*'], 'page_unverified');
         $search = $request->input('search');
 
         // exclude the authenticated user first
@@ -36,7 +36,9 @@ class UserAccountController extends Controller
         }
 
         // Get the results and sort by latest created
-        $userAccounts = $query->orderByDesc('created_at')->get();
+        $userAccounts = $query->orderByRaw("CASE WHEN status = 'Inactive' THEN 1 ELSE 0 END")
+                              ->orderByDesc('created_at')
+                              ->paginate(9);
 
         // compact -> takes the string passed into a key-value pair
         return view('admin.useraccount', compact('unverifiedUsers', 'userAccounts'));
@@ -48,6 +50,8 @@ class UserAccountController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:255',
+            'phone_number' => 'required|string|max:11',
+            'address' => 'required|string|max:255',
             'role' => 'required|string',
         ]);
 
@@ -80,7 +84,8 @@ class UserAccountController extends Controller
             'email' => $unverified->email,
             'password' => $unverified->password,
             'role' => 'Customer',
-            'status' => 'Active'
+            'status' => 'Active',
+            'is_first_login' => true,
         ]);
             // optionally sent email or notifiation here
 
@@ -130,13 +135,31 @@ class UserAccountController extends Controller
     public function delete($id) {
         $user = User::findorFail($id);
 
-        $user->delete();
+        $user->update([
+            'status' => 'Inactive'
+        ]);
         
         return back()->with([
-            'message' => 'User has been deleted.',
+            'message' => 'User status has been inactive.',
             'type' => 'success',
         ]);
     }
+
+    public function restore($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->status === 'Inactive') {
+            $user->status = 'Active';
+            $user->save();
+        }
+
+        return back()->with([
+            'message' => 'User account has been reactivated.',
+            'type' => 'success',
+        ]);
+    }
+
 
     public function dashboard() {
         return view ('dashboard.dashboard');

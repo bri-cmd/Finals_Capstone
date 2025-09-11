@@ -1,107 +1,103 @@
 <x-dashboardlayout>
-    <div class="flex gap-4">
-        {{-- add new staff/admin --}}
-        <section class="section-style">
-            <h2 class="section-header">Add New Admin / Staff</h2>
+    {{-- add new staff/admin --}}
+    <section class="section-style">
+        <h2 class="section-header">Add New Admin / Staff</h2>
 
-            <form action="{{ route('admin.users.add')}}" method="POST" class="form">
-                @csrf
-                
-                <div class="input-label">
-                    <label for="first_name">First name</label>
-                    <input required type="text" name="first_name">
+        <form action="{{ route('admin.users.add')}}" method="POST" class="form !flex !flex-col">
+            @csrf
+            <div class="flex flex-row gap-2">
+                <div class="flex flex-col gap-2">
+                    <div class="input-label">
+                        <label for="first_name">First name</label>
+                        <input required type="text" name="first_name">
+                    </div>
+                    
+                    <div class="input-label">
+                        <label for="last_name">Last Name</label>
+                        <input required type="text" name="last_name">
+                    </div>
+
+                    <div class="input-label">
+                        <label for="email">Email</label>
+                        <input required type="email" name="email">
+                    </div>
+
+                    <div class="input-label">
+                        <label for="password">Password</label>
+                        <input required type="text" name="password" value="password" readonly class="text-[var(--gray)]">
+                    </div>
+
+                    <div class="input-label">
+                        <label for="role">Role</label>
+                        <select name="role" id="role" class="pt-0 pb-0 pl-1">
+                            <option value="Staff">Staff</option>
+                            <option value="Admin">Admin</option>
+                        </select>               
+                    </div>
                 </div>
-                
-                <div class="input-label">
-                    <label for="last_name">Last Name</label>
-                    <input required type="text" name="last_name">
+                <div class="flex flex-col gap-2">
+                    <div class="input-label">
+                        <label for="phone_number">Contact Number</label>
+                        <input required name="phone_number" id="phone_number" type="number" onkeydown="return !['e','E','+','-'].includes(event.key)">
+                    </div>
+                    <div class="input-label">
+                        <label for="address">Address</label>
+                        <input required type="text" name="address">
+                    </div>
                 </div>
+            </div>
+            <button class="form-button">Add</button>    
+        </form>   
+        
+    </section>
 
-                <div class="input-label">
-                    <label for="email">Email</label>
-                    <input required type="email" name="email">
-                </div>
-
-                <div class="input-label">
-                    <label for="password">Password</label>
-                    <input required type="text" name="password">
-                </div>
-
-                <div class="input-label">
-                    <label for="role">Role</label>
-                    <select name="role" id="role" class="pt-0 pb-0 pl-1">
-                        <option value="Staff">Staff</option>
-                        <option value="Admin">Admin</option>
-                    </select>               
-                </div>
-
-                <button class="form-button">Add</button>
-
-                {{-- validation error --}}
-                {{-- @if ($errors->any())
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li class="text-red-500 text-xs">{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif --}}
-            </form>   
-            
-        </section>
-
-        {{-- unverified users --}}
-        <section class="section-style">
-            <h2 class="section-header">Unverified Users</h2>
-            
-            <div>
-                <table class="table">
-                    <thead>
+    {{-- unverified users --}}
+    <section class="section-style mt-[3%] !h-[100vh]">
+        <h2 class="section-header">Unverified Users</h2>
+        
+        <div class="table-body">
+            <table class="table mb-[3%]">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>ID Uploaded</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($unverifiedUsers as $unverifieduser)
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>ID Uploaded</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>    
-            </div>
-            
-            <div class="table-body">
-                <table class="table">
-                    <tbody>
-                        @foreach ($unverifiedUsers as $unverifieduser)
-                            <tr>
-                                <td>{{ $unverifieduser->first_name}} {{ $unverifieduser->last_name}}</td>
-                                <td>{{ $unverifieduser->email}}</td>
-                                <td class="text-center">
-                                    <a href="{{ asset('storage/' . $unverifieduser->id_uploaded) }}" target="_blank" class="hover:underline">
-                                        {{ basename($unverifieduser->id_uploaded)}}
-                                    </a>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <div class="flex justify-center gap-2">
-                                        <form action="{{ route('admin.users.approved', $unverifieduser->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" ><x-icons.check /></button>
-                                        </form>
-                                        <form action="{{ route('admin.users.decline', $unverifieduser->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" ><x-icons.close /></button>
-                                        </form>
-                                    </div>
-                                </td>    
-                            </tr>    
-                        @endforeach
-                    </tbody>
-                </table>    
-            </div>
-        </section>    
-    </div>
-    
+                            <td>{{ $unverifieduser->first_name}} {{ $unverifieduser->last_name}}</td>
+                            <td>{{ $unverifieduser->email}}</td>
+                            <td class="text-center">
+                                <a href="{{ asset('storage/' . $unverifieduser->id_uploaded) }}" target="_blank" class="hover:underline">
+                                    {{ basename($unverifieduser->id_uploaded)}}
+                                </a>
+                            </td>
+                            <td class="align-middle text-center">
+                                <div class="flex justify-center gap-2">
+                                    <form action="{{ route('admin.users.approved', $unverifieduser->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" ><x-icons.check /></button>
+                                    </form>
+                                    <form action="{{ route('admin.users.decline', $unverifieduser->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" ><x-icons.close /></button>
+                                    </form>
+                                </div>
+                            </td>    
+                        </tr>    
+                    @endforeach
+                </tbody>
+            </table>   
+        </div>
+        {{ $unverifiedUsers->appends(request()->except('page'))->links() }}
+    </section>    
     
     {{-- user acccounts --}}
-    <section class="section-style">
+    <section class="section-style mb-[10%] !h-[100vh] pb-[1%]">
         <div class="header-container">
             <h2 class="section-header">User accounts</h2>
             
@@ -120,8 +116,8 @@
             </form>
         </div>
 
-        <div>
-            <table class="table">
+        <div class="table-body" x-data="{ showEditModal: false, selectedUser: {}, showViewModal: false, selectedUser: {} }">
+            <table class="table mb-[3%]">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -131,47 +127,59 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-            </table>    
-        </div>
-        
-        <div class="table-body" x-data="{ showEditModal: false, selectedUser: {}, showViewModal: false, selectedUser: {} }">
-            <table class="table">
                 <tbody>
                     @foreach ($userAccounts as $userAccount)
-                        <tr>
-                            <td>{{ $userAccount->first_name }} {{ $userAccount->last_name}}</td>
+                        <tr @if($userAccount->status === 'Inactive') class="bg-gray-200 opacity-60" @endif>
+                            <td>{{ $userAccount->first_name }} {{ $userAccount->last_name }}</td>
                             <td>{{ $userAccount->email }}</td>
                             <td class="text-center">{{ ucfirst($userAccount->role) }}</td>
                             <td class="text-center">{{ ucfirst($userAccount->status) }}</td>
                             <td class="align-middle text-center">
                                 <div class="flex justify-center gap-2">
-                                    @if ($userAccount->role === 'Customer') 
-                                        <button @click="showViewModal = true; selectedUser = {{ $userAccount->toJson() }}">
-                                        {{-- <button @click="showModal = true; selectedUser = JSON.parse('{!! addslashes($userAccount->toJson()) !!}')"> --}}
-                                            <x-icons.view />    
-                                        </button>
+                                    @if ($userAccount->status === 'Inactive')
+                                        {{-- ✅ Restore Button --}}
+                                        <form action="{{ route('admin.users.restore', $userAccount->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" title="Activate">
+                                                <x-icons.restore />
+                                            </button>
+                                        </form>
                                     @else
-                                        <button @click="showEditModal = true; selectedUser = {{ $userAccount->toJson() }}">
-                                            <x-icons.edit />
-                                        </button>
+                                        {{-- View / Edit / Delete Buttons --}}
+                                        @if ($userAccount->role === 'Customer') 
+                                            <button @click="showViewModal = true; selectedUser = {{ $userAccount->toJson() }}">
+                                                <x-icons.view />    
+                                            </button>
+                                        @else
+                                            <button @click="showEditModal = true; selectedUser = {{ $userAccount->toJson() }}">
+                                                <x-icons.edit />
+                                            </button>
+                                        @endif
+
+                                        <form action="{{ route('admin.users.delete', $userAccount->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit">
+                                                <x-icons.delete />
+                                            </button>
+                                        </form>
                                     @endif
-                                    <form action="{{ route('admin.users.delete', $userAccount->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" ><x-icons.delete /></button>
-                                    </form>
                                 </div>
                             </td>    
                         </tr>    
-                    @endforeach
+                        @endforeach
                 </tbody>
             </table>    
+
 
             {{-- Edit Modal --}}
             <div x-show="showEditModal" x-cloak x-transition class="modal">
                 <div class="modal-form" @click.away="showEditModal = false">
-                    <h2 class="text-center">Edit User</h2>
-
+                    <div class="flex">
+                        <h2 class="text-center">Edit User</h2>
+                        <x-icons.close class="close" @click="showEditModal = false"/>    
+                    </div>
                     <form :action="'/users/' + selectedUser.id + '/update'" method="POST">
                         @csrf
                         @method('PUT')
@@ -179,17 +187,24 @@
 
                         <div>
                             <label for="first_name">First Name</label>
-                            <input type="text" name="first_name" x-model="selectedUser.first_name">
+                            <input readonly x-model="selectedUser.first_name">
                         </div>
                         <div>
                             <label for="last_name">Last Name</label>
-                            <input type="text" name="last_name" x-model="selectedUser.last_name">
+                            <input readonly x-model="selectedUser.last_name">
+                        </div>
+                        <div>
+                            <label>Contact Number</label>
+                            <input readonly x-model="selectedUser.phone_number">
+                        </div>
+                        <div>
+                            <label>Address</label>
+                            <input readonly x-model="selectedUser.address">
                         </div>
                         <div>
                             <label for="email">Email</label>
                             <input type="email" name="email" x-model="selectedUser.email">
                         </div>
-
                         <div>
                             <label for="role">Role</label>
                             <select name="role" id="role" class="rounded" x-model="selectedUser.role">
@@ -206,7 +221,10 @@
             {{-- View Modal --}}
             <div x-show="showViewModal" x-cloak x-transition class="modal">
                 <div class="modal-form" @click.away="showViewModal = false">
-                    <h2 class="text-center">Customer Details</h2>
+                    <div>
+                        <h2 class="text-center">Customer Details</h2>
+                        <x-icons.close class="close" @click="showViewModal = false"/>        
+                    </div>
 
                     <form>
                         @csrf
@@ -222,10 +240,17 @@
                             <input type="text" name="last_name" x-model="selectedUser.last_name" readonly>
                         </div>
                         <div>
+                            <label>Contact Number</label>
+                            <input readonly x-model="selectedUser.phone_number">
+                        </div>
+                        <div>
+                            <label>Address</label>
+                            <input readonly x-model="selectedUser.address">
+                        </div>
+                        <div>
                             <label for="email">Email</label>
                             <input type="text" name="email" x-model="selectedUser.email" readonly>
                         </div>
-
                         <div>
                             <label for="role">Role</label>
                             <input type="text" name="role" x-model="selectedUser.role" readonly>
@@ -234,5 +259,6 @@
                 </div>
             </div>
         </div>
+        {{ $userAccounts->appends(request()->except('page_unverified'))->links() }}
     </section>
 </x-dashboardlayout>

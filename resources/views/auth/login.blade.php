@@ -31,7 +31,7 @@
             <div>
                 <label for="password">Password</label>
                 <input type="password" name="password">   
-                <a href="{{ route('password.request') }}" class="forget-pass">Forget your password</a> 
+                <a href="{{ route('password.request') }}" class="forget-pass">Forgot Password</a> 
             </div>
         </x-logoheader>
 

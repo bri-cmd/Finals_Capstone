@@ -8,6 +8,11 @@
     z-index: 1000;
 }
 
+.close {
+    position: absolute;
+    left: 62%;
+}
+
 .modal-form,
 .add-component,
 .new-component,

@@ -6,11 +6,13 @@ use App\Models\BuildCategory;
 use App\Models\UserBuild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ram extends Model
 {
     /** @use HasFactory<\Database\Factories\RamFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'build_category_id',

@@ -12,6 +12,7 @@ use App\Http\Controllers\Components\RamController;
 use App\Http\Controllers\Components\StorageController;
 use Illuminate\Http\Request;
 use App\Services\GoogleDriveUploader;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class ComponentDetailsController extends Controller
@@ -27,8 +28,12 @@ class ComponentDetailsController extends Controller
             ...app(RamController::class)->getFormattedRams(),
             ...app(StorageController::class)->getFormattedStorages(),
             ...app(CoolerController::class)->getFormattedCoolers(),
-        ])->sortByDesc('created_at')->values();
-    }
+        ])->sortBy([
+                fn ($component) => !is_null($component['deleted_at']),
+                fn ($component) => -strtotime($component['created_at']),
+            ])
+          ->values();
+        }
 
     public function getAllSpecs()
     {
@@ -46,9 +51,21 @@ class ComponentDetailsController extends Controller
 
     public function index() {
         $components = $this->getAllFormattedComponents();
-        
+
+        $perPage = 6;
+        $currentPage = request()->get('page', 1);
+        $currentPageItems = $components->forPage($currentPage, $perPage);
+
+        $paginated = new LengthAwarePaginator(
+            $currentPageItems,
+            $components->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
         return view('staff.componentdetails', array_merge(
-            ['components' => $components],
+            ['components' => $paginated],
             $this->getAllSpecs()
         ));
     }
@@ -77,6 +94,23 @@ class ComponentDetailsController extends Controller
 
         return back()->with([
             'message' => ucfirst($type) . ' has been deleted.',
+            'type' => 'success',
+        ]);
+    }
+
+    public function restore (string $type, string $id) {
+        $modelMap = config('components'); // FOUND IN CONFIG FILE
+
+        if (!array_key_exists($type, $modelMap)) {
+            abort(404, "Unknown component type: {$type}");
+        }   
+
+        $model = $modelMap[$type];
+        $component = $model::withTrashed()->findOrFail($id);
+        $component->restore();
+
+        return back()->with([
+            'message' => ucfirst($type) . ' has been restored.',
             'type' => 'success',
         ]);
     }

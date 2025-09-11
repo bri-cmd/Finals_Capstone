@@ -8,6 +8,10 @@
     gap: 30px;
 }
 
+.header {
+    position: fixed;
+}
+
 .header div {
     display: flex;
     align-items: center;

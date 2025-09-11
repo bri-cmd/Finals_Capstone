@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('coolers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreignId('build_category_id')->constrained()->onDelete('cascade');
             $table->string('brand');
             $table->string('model');

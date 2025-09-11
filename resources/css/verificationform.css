@@ -40,6 +40,10 @@
     width: 100%;
 }
 
+.form-button:hover {
+    opacity: 0.5;
+}
+
 .custom-file {
   color: transparent; /* hides the "No file chosen" text */
 }
@@ -63,6 +67,10 @@
     display: block;
     text-align: right;
     font-size: 12px;
+}
+
+.forget-pass:hover {
+    opacity: 0.5;
 }
 
 .id-upload {

@@ -9,11 +9,13 @@ use App\Models\Hardware\PcCaseRadiatorSupport;
 use App\Models\UserBuild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PcCase extends Model
 {
     /** @use HasFactory<\Database\Factories\PcCaseFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'build_category_id',

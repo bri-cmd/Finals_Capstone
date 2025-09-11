@@ -58,6 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('users/{id}/decline', [UserAccountController::class, 'decline'])->name('users.decline');
     Route::put('users/{id}/update', [UserAccountController::class, 'update']);
     Route::delete('users/{id}/delete', [UserAccountController::class, 'delete'])->name('users.delete');
+    Route::patch('/admin/users/{id}/restore', [UserAccountController::class, 'restore'])->name('users.restore');
 
     // SALES
     Route::get('sales', [SalesController::class, 'index'])->name('sales');
@@ -79,6 +80,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::post('component-details/storage', [StorageController::class, 'store'])->name('componentdetails.storage.store');
     Route::post('component-details/cpu', [CpuController::class, 'store'])->name('componentdetails.cpu.store');
     Route::post('component-details/cooler', [CoolerController::class, 'store'])->name('componentdetails.cooler.store');
+
     Route::put('component-details/psu/{id}', [PsuController::class, 'update']);
     Route::put('component-details/storage/{id}', [StorageController::class, 'update']);
     Route::put('component-details/case/{id}', [CaseController::class, 'update']);
@@ -87,7 +89,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::put('component-details/gpu/{id}', [GpuController::class, 'update']);
     Route::put('component-details/ram/{id}', [RamController::class, 'update']);
     Route::put('component-details/cooler/{id}', [CoolerController::class, 'update']);
+
     Route::delete('component-details/{type}/{id}', [ComponentDetailsController::class, 'delete'])->name('componentdetails.delete');
+    Route::patch('component-details/{type}/{id}/restore', [ComponentDetailsController::class, 'restore'])->name('componentdetails.restore');
 
     // INVENTORY REPORT
     Route::get('inventory', [InventoryController::class, 'index'])->name('inventory');

@@ -6,11 +6,14 @@ use App\Models\BuildCategory;
 use App\Models\UserBuild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cpu extends Model
 {
     /** @use HasFactory<\Database\Factories\CpuFactory> */
     use HasFactory;
+    use SoftDeletes;
+
 
     protected $fillable = [
         'build_category_id',
