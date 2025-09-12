@@ -13,11 +13,8 @@
         <div class="form-divider">
             <div>
                 <label for="">Brand</label>
-                <select required name="brand" id="brand" x-model="selectedComponent.brand">
+                <select required name="brand" id="brand">
                     <option disabled selected hidden value="">Select a brand</option>
-                    @foreach ($caseSpecs['brands'] as $brand)
-                        <option value="{{ $brand }}">{{ $brand }}</option>
-                    @endforeach
                 </select>
             </div>
 

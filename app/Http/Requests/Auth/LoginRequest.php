@@ -39,11 +39,6 @@ class LoginRequest extends FormRequest
     public function redirectTo() {
         $user = $this->user();
 
-        if ($user->is_first_login) {
-            // Redirect to password change page for first-time login
-            return route('cart.index');
-        }
-
         return match ($user->role) {
             'Admin' => route('admin.dashboard'),
             'Staff' => route('staff.dashboard'),

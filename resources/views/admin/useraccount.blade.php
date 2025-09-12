@@ -53,7 +53,7 @@
 
     {{-- unverified users --}}
     <section class="section-style mt-[3%] !h-[100vh]">
-        <h2 class="section-header">Unverified Users</h2>
+        <h2 class="section-header">Unverified Customers</h2>
         
         <div class="table-body">
             <table class="table mb-[3%]">

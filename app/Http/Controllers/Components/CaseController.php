@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Components;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\BuildCategory;
 use App\Models\Hardware\PcCase;
 use App\Models\Hardware\PcCaseDriveBay;
 use App\Models\Hardware\PcCaseFrontUsbPorts;
 use App\Models\Hardware\PcCaseRadiatorSupport;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Services\GoogleDriveUploader;
@@ -19,12 +21,22 @@ class CaseController extends Controller
     public function getCaseSpecs()
     {
         return[
-            'brands' => ['Cooler Master', 'NZXT', 'Fractal Design', 'Lian Li'],
+            'suppliers' => Supplier::select('id','name')->get(),
+            'brands' => Brand::select('id', 'name', 'supplier_id')->get(),
             'form_factor_supports' => ['Micro-ATX', 'ATX', 'E-ATX', 'Mini-ITX', ],
             'locations' => ['Front', 'Top', 'Rear', 'Bottom', 'Side'],
             'buildCategories' => BuildCategory::select('id', 'name')->get(),
             
         ];
+    }
+
+    public function getBrandsBySupplier($supplierId)
+    {
+        $brands = Brand::select('id', 'name')
+            ->where('supplier_id', $supplierId)
+            ->get();
+
+        return response()->json($brands);
     }
 
     public function getFormattedCases()

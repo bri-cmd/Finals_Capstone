@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForcePasswordResetController;
 use App\Http\Controllers\BuildController;
 use App\Http\Controllers\BuildExtController;
 use App\Http\Controllers\CartController;
@@ -17,9 +18,11 @@ use App\Http\Controllers\Components\StorageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SoftwareDetailsController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // STAFF RESET PASSWORD
+    Route::get('/force-password-reset', [ForcePasswordResetController::class, 'index'])->name('force.password.reset');
+    Route::post('/force-password-reset', [ForcePasswordResetController::class, 'store'])->name('force.password.update');
 });
 
 Route::get('/email/verify', function () {
@@ -68,6 +75,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('staff')->name('staff.')->group(function () {
     //DASHBOARD
     Route::get('dashboard', [UserAccountController::class, 'index'])->name('dashboard');
+
+    //SUPPLIER
+    Route::get('supplier', [SupplierController::class, 'index'])->name('supplier');
+    Route::post('supplier/store', [SupplierController::class, 'storeSupplier'])->name('supplier.store');
+    Route::post('supplier/store/brand', [SupplierController::class, 'storeBrand'])->name('supplier.store.brand');
 
     // COMPONENT DETAILS
     Route::get('component-details', [ComponentDetailsController::class, 'index'])->name('componentdetails');
@@ -124,3 +136,5 @@ Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkou
 Route::post('/cart/add', [CartController::class, 'add'])->middleware('auth')->name('cart.add');
 
 Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+
+Route::get('/brands-by-supplier/{supplierId}', [CaseController::class, 'getBrandsBySupplier']);

@@ -12,15 +12,23 @@
         {{-- SPECS --}}
         <div class="form-divider">
             <div>
-                <label for="">Brand</label>
-                <select required name="brand" id="brand">
-                    <option disabled selected hidden value="">Select a brand</option>
-                    @foreach ($caseSpecs['brands'] as $brand)
-                        <option value="{{ $brand }}">{{ $brand }}</option>
+                <label for="">Supplier</label>
+                <select required name="supplier" id="supplier-select">
+                    <option disabled selected hidden value="">Select a supplier</option>
+                    @foreach ($caseSpecs['suppliers'] as $supplier)
+                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                     @endforeach
                 </select>
             </div>
-
+            <div>
+                <label for="">Brand</label>
+                <select required name="brand" id="brand-select" disabled>
+                    <option disabled selected hidden value="">Select a supplier first</option>
+                    @foreach ($caseSpecs['brands'] as $brand)
+                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div>
                 <label for="">Model</label>
                 <input name="model" required type="text" placeholder="Enter Model">
@@ -142,3 +150,33 @@
     
     <button>Add Component</button>
 </form>
+
+<script>
+    document.getElementById('supplier-select').addEventListener('change', function() {
+        const supplierId = this.value;
+        const brandSelect = document.getElementById('brand-select');
+
+        if (!supplierId) {
+            // No supplier selected, disable brand select and clear options
+            brandSelect.innerHTML = '';
+            brandSelect.disabled = true;
+            return;
+        }
+
+        // Supplier selected, enable brand select
+        brandSelect.disabled = false;
+
+        fetch(`/brands-by-supplier/${supplierId}`)
+            .then(response => response.json())
+            .then(brands => {
+                brandSelect.innerHTML = ''; // clear previous options
+
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand.id;
+                    option.textContent = brand.name;
+                    brandSelect.appendChild(option);
+                });
+            });
+    });
+</script>

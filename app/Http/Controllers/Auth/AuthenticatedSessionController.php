@@ -28,6 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+
+        if ($user->is_first_login) {
+            // Redirect to password change page for first-time login
+            return redirect()->route('force.password.reset');
+        }
+
         return redirect()->intended($request->redirectTo());
     }
 

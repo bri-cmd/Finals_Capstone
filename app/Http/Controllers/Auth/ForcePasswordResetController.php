@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class PasswordChangeController extends Controller
+class ForcePasswordResetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,6 +16,7 @@ class PasswordChangeController extends Controller
     public function index()
     {
         //
+        return view('auth.staff-reset-password');
     }
 
     /**
@@ -27,7 +32,21 @@ class PasswordChangeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+        // dd(get_class($user), $user);
+
+        $user->password = Hash::make($request->password);
+        $user->is_first_login = false;
+        $user->save();
+
+        return redirect()->route('staff.dashboard')->with([
+            'message' => 'Password updated successfully',
+            'type' => 'success',
+        ]);
     }
 
     /**

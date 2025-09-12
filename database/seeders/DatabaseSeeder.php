@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             // UserBuildSeeder::class
 
             // UserBuildSeeder::class
-            OrderedBuildSeeder::class
-            
+            // OrderedBuildSeeder::class
+            SupplierSeeder::class 
         ]);
     }
 }

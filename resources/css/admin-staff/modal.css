@@ -334,7 +334,8 @@
 }
 
 /* INVENTORY */
-.inventory-form {
+.inventory-form,
+.supplier-form {
     display: flex;
     flex-direction: column;
 }
@@ -358,4 +359,10 @@
     border-radius: 4px;
     width: 60%;
     padding: 0 4px;
+}
+
+/* SUPPLIER */
+.supplier-form .supplier-container {
+    display: flex;
+    flex-direction: column;
 }
