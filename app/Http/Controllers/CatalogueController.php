@@ -11,7 +11,7 @@ class CatalogueController extends Controller
 {
     public function index(Request $request)
     {
-        // 1) Pull from all component tables that exist
+        // 1) Map tables to category names
         $maps = [
             'cpus'         => 'cpu',
             'gpus'         => 'gpu',
@@ -19,7 +19,7 @@ class CatalogueController extends Controller
             'rams'         => 'ram',
             'storages'     => 'storage',
             'psus'         => 'psu',
-            'cases'        => 'case',     // ok even if table doesn't exist; we skip it below
+            'cases'        => 'case',
             'coolers'      => 'cooler',
         ];
 
@@ -27,37 +27,36 @@ class CatalogueController extends Controller
 
         foreach ($maps as $table => $category) {
             if (!Schema::hasTable($table)) {
-                continue; // skip cleanly if teammate didn't migrate this table yet
+                continue; // skip if table not migrated yet
             }
 
-            // We only select columns that are common across tables.
-            // If a column is missing in a specific table, DB will still return null for it.
-            $rows = DB::table($table)->select([
-                "{$table}.id",
-                "{$table}.brand",
-                "{$table}.model",
-                "{$table}.price",
-                "{$table}.stock",
-                "{$table}.image",
-                "{$table}.created_at",
-            ])->get();
+            // Grab all rows (all fields)
+            $rows = DB::table($table)->get();
 
-            // Normalize every row into a single shape for the Blade
             $normalized = $rows->map(function ($row) use ($category, $table) {
-            $image = $row->image ? str_replace(['\\', '"'], '', $row->image) : 'images/placeholder.png';
-                return [
-                    'id'             => (int) ($row->id ?? 0),
-                    'component_type' => strtolower($category),  // e.g., "cpu"
-                    'table'          => $table,                 // e.g., "cpus"
-                    'name'           => trim(($row->brand ?? '') . ' ' . ($row->model ?? '')),
-                    'brand'          => (string) ($row->brand ?? ''),
-                    'category'       => $category,              // e.g., "CPU"
-                    'price'          => (float) ($row->price ?? 0),
-                    'stock'          => (int) ($row->stock ?? 0),
-                    'image'          => $image,
-                    'created_at'     => $row->created_at ?? now(),
-                    // You can add more normalized fields later if needed (rating, etc.)
+                $rowArr = (array) $row;
+
+                // Common fields
+                $common = [
+                    'id'             => (int) ($rowArr['id'] ?? 0),
+                    'component_type' => strtolower($category),
+                    'table'          => $table,
+                    'name'           => trim(($rowArr['brand'] ?? '') . ' ' . ($rowArr['model'] ?? '')),
+                    'brand'          => (string) ($rowArr['brand'] ?? ''),
+                    'category'       => $category,
+                    'price'          => (float) ($rowArr['price'] ?? 0),
+                    'stock'          => (int) ($rowArr['stock'] ?? 0),
+                    'image'          => $rowArr['image'] ?? 'images/placeholder.png',
+                    'created_at'     => $rowArr['created_at'] ?? now(),
                 ];
+
+                // Specs = all fields except the common ones
+                $exclude = ['id','brand','model','price','stock','image','created_at','updated_at'];
+                $specs = collect($rowArr)->except($exclude)->toArray();
+
+                $common['specs'] = $specs;
+
+                return $common;
             });
 
             $all = $all->merge($normalized);
@@ -66,7 +65,6 @@ class CatalogueController extends Controller
         // 2) Filters
         $filtered = $all;
 
-        // Search
         if ($request->filled('search')) {
             $q = mb_strtolower($request->input('search'));
             $filtered = $filtered->filter(function ($item) use ($q) {
@@ -75,21 +73,19 @@ class CatalogueController extends Controller
             });
         }
 
-        // Category
         if ($request->filled('category')) {
             $filtered = $filtered->filter(fn ($i) => $i['category'] === $request->category);
         }
 
-        // Brand
         if ($request->filled('brand')) {
             $filtered = $filtered->filter(fn ($i) => $i['brand'] === $request->brand);
         }
 
-        // Price range
         if ($request->filled('min_price')) {
             $min = (float) $request->min_price;
             $filtered = $filtered->filter(fn ($i) => $i['price'] >= $min);
         }
+
         if ($request->filled('max_price')) {
             $max = (float) $request->max_price;
             $filtered = $filtered->filter(fn ($i) => $i['price'] <= $max);
@@ -113,16 +109,15 @@ class CatalogueController extends Controller
                 $filtered = $filtered->sortByDesc('name', SORT_NATURAL | SORT_FLAG_CASE);
                 break;
             default:
-                // default order = newest
                 $filtered = $filtered->sortByDesc('created_at');
         }
 
-        // 4) Sidebar data (from ALL data so filters don't hide options)
+        // 4) Sidebar filters
         $categories = $all->pluck('category')->unique()->values();
         $brands     = $all->pluck('brand')->filter()->unique()->sort()->values();
 
-        // 5) Pagination (manual, because we used Collections)
-        $perPage = 12; // feel free to adjust
+        // 5) Pagination
+        $perPage = 12;
         $page    = (int) ($request->get('page', 1));
         $total   = $filtered->count();
         $items   = $filtered->slice(($page - 1) * $perPage, $perPage)->values();

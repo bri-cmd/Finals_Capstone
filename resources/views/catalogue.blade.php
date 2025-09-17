@@ -23,7 +23,7 @@
     <x-landingheader :name="Auth::user()?->first_name" />
 
     <main class="main-content">
-        <!-- Top Nav Tabs (optional filter shortcuts) -->
+        <!-- Top Nav Tabs -->
         <div class="w-full border-b bg-white shadow-sm">
             <div class="flex justify-center items-center gap-8 py-4 text-gray-600 font-semibold text-sm">
                 <a href="{{ route('catalogue') }}" class="hover:underline hover:text-blue-500">ALL</a>
@@ -85,7 +85,6 @@
                 <!-- Price Filter -->
                 <h2 class="font-bold mt-6 mb-2">PRICE</h2>
                 <form method="GET" action="{{ route('catalogue') }}" class="space-y-3">
-                    {{-- keep existing query except price params --}}
                     @foreach(request()->except(['min_price','max_price','page']) as $key => $val)
                         <input type="hidden" name="{{ $key }}" value="{{ $val }}">
                     @endforeach
@@ -141,44 +140,97 @@
             </aside>
 
             <!-- Product Grid -->
-            <main class="w-full sm:w-3/4 p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @forelse($products as $product)
-                    <div class="relative border rounded-lg p-4 text-center bg-blue-50 shadow hover:shadow-lg transition flex flex-col justify-between h-[320px]">
-                        <img src="{{ asset('storage/' . str_replace('\\', '/', $product['image'])) }}" alt="{{ $product['name'] }}"
+<main class="w-full sm:w-3/4 p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      x-data="{ openModal: false, specs: {}, name: '' }"
+      x-on:open-specs.window="openModal = true; specs = $event.detail.specs; name = $event.detail.name">
 
-                            class="mx-auto mb-3 h-32 object-contain">
+    @forelse($products as $product)
+        <div class="relative border rounded-lg p-4 text-center bg-blue-50 shadow hover:shadow-lg transition flex flex-col justify-between h-[360px] group">
+            
+            <!-- Menu -->
+            <button @click="$dispatch('open-specs', { specs: {{ json_encode($product['specs']) }}, name: '{{ $product['name'] }}' })"
+                    class="absolute top-2 right-2 p-2 rounded-full bg-white shadow hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    fill="currentColor" 
+                    viewBox="0 0 16 16" 
+                    class="w-5 h-5 text-gray-700">
+                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+            </button>
 
-                        <div>
-                            <h3 class="font-bold text-sm truncate" title="{{ $product['name'] }}">{{ $product['name'] }}</h3>
-                            <p class="text-xs text-gray-600">{{ $product['brand'] }}</p>
-                            <p class="text-[11px] text-gray-500 mt-0.5">{{ $product['category'] }}</p>
-                        </div>
+            <!-- Image -->
+            <img src="{{ asset('storage/' . str_replace('\\', '/', $product['image'])) }}" 
+                 alt="{{ $product['name'] }}"
+                 class="mx-auto mb-3 h-32 object-contain">
 
-                        <p class="text-gray-800 font-semibold mt-1">₱{{ number_format($product['price'], 0) }}</p>
+            <!-- Name + Brand + Category -->
+            <div>
+                <h3 class="font-bold text-sm truncate" title="{{ $product['name'] }}">{{ $product['name'] }}</h3>
+                <p class="text-xs text-gray-600">{{ $product['brand'] }}</p>
+                <p class="text-[11px] text-gray-500 mt-0.5">{{ $product['category'] }}</p>
+            </div>
 
-                        <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
-                            <input type="hidden" name="name" value="{{ $product['name'] }}">
-                            <input type="hidden" name="price" value="{{ $product['price'] }}">
-                            <input type="hidden" name="component_type" value="{{ $product['category'] }}">
-                            <button type="submit" class="w-full py-2 bg-white border rounded-md font-semibold text-gray-700 shadow hover:bg-gray-100">
-                                Add to Cart
-                            </button>
-                        </form>
+            <!-- ⭐ Rating -->
+            <p class="text-yellow-500 text-sm mb-1">
+                @if(!empty($product['rating']))
+                    ⭐ {{ $product['rating'] }} ({{ $product['reviews_count'] ?? 0 }})
+                @else
+                    ⭐ No reviews yet
+                @endif
+            </p>
+
+            <!-- Price -->
+            <p class="text-gray-800 font-semibold mt-1">₱{{ number_format($product['price'], 0) }}</p>
+
+            <!-- Add to Cart -->
+            <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                <input type="hidden" name="name" value="{{ $product['name'] }}">
+                <input type="hidden" name="price" value="{{ $product['price'] }}">
+                <input type="hidden" name="component_type" value="{{ $product['category'] }}">
+                <button type="submit" class="w-full py-2 bg-white border rounded-md font-semibold text-gray-700 shadow hover:bg-gray-100">
+                    Add to Cart
+                </button>
+            </form>
+        </div>
+    @empty
+        <p class="col-span-4 text-center text-gray-500">No products available.</p>
+    @endforelse
 
 
-                    </div>
-                @empty
-                    <p class="col-span-4 text-center text-gray-500">No products available.</p>
-                @endforelse
-            </main>
+    <!-- 🔥 Global Modal -->
+    <template x-if="openModal">
+        <div class="fixed inset-0 flex items-center justify-center z-50">
+            <!-- Background overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50" @click="openModal = false"></div>
+
+            <!-- Modal box -->
+            <div class="relative bg-white text-black rounded-lg shadow-xl w-96 max-h-[80vh] overflow-y-auto p-5 z-60">
+                <h4 class="text-lg font-bold mb-4" x-text="name"></h4>
+
+                <template x-for="(value, key) in specs" :key="key">
+                    <p class="mb-2">
+                        <strong x-text="key.replace('_',' ').toUpperCase()"></strong>: 
+                        <span x-text="value"></span>
+                    </p>
+                </template>
+
+                <!-- Close button -->
+                <button @click="openModal = false"
+                        class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                    ✖
+                </button>
+            </div>
+        </div>
+    </template>
+</main>
+
         </div>
 
         <div class="px-6 py-4">
             {{ $products->withQueryString()->links() }}
         </div>
-
     </main>
     
     <script src="//unpkg.com/alpinejs" defer></script>
