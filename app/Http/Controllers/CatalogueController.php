@@ -30,7 +30,7 @@ class CatalogueController extends Controller
                 continue; // skip if table not migrated yet
             }
 
-            // Grab all rows (all fields)
+            // Grab all rows
             $rows = DB::table($table)->get();
 
             $normalized = $rows->map(function ($row) use ($category, $table) {
@@ -50,12 +50,126 @@ class CatalogueController extends Controller
                     'created_at'     => $rowArr['created_at'] ?? now(),
                 ];
 
-                // Specs = all fields except the common ones
-                $exclude = ['id','brand','model','price','stock','image','created_at','updated_at'];
-                $specs = collect($rowArr)->except($exclude)->toArray();
+                // ✅ Specs mapping per category
+                switch ($category) {
+                    case 'cpu':
+                        $specs = [
+                            'brand'               => $rowArr['brand'] ?? '',
+                            'model'               => $rowArr['model'] ?? '',
+                            'socket_type'         => $rowArr['socket_type'] ?? '',
+                            'cores'               => $rowArr['cores'] ?? '',
+                            'threads'             => $rowArr['threads'] ?? '',
+                            'base_clock'          => $rowArr['base_clock'] ?? '',
+                            'boost_clock'         => $rowArr['boost_clock'] ?? '',
+                            'tdp'                 => $rowArr['tdp'] ?? '',
+                            'integrated_graphics' => $rowArr['integrated_graphics'] ?? '',
+                            'generation'          => $rowArr['generation'] ?? '',
+                            'price'               => $rowArr['price'] ?? '',
+                            'stock'               => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'gpu':
+                        $specs = [
+                            'brand'       => $rowArr['brand'] ?? '',
+                            'model'       => $rowArr['model'] ?? '',
+                            'memory'      => $rowArr['memory'] ?? '',
+                            'core_clock'  => $rowArr['core_clock'] ?? '',
+                            'boost_clock' => $rowArr['boost_clock'] ?? '',
+                            'tdp'         => $rowArr['tdp'] ?? '',
+                            'generation'  => $rowArr['generation'] ?? '',
+                            'price'       => $rowArr['price'] ?? '',
+                            'stock'       => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'motherboard':
+                        $specs = [
+                            'brand'        => $rowArr['brand'] ?? '',
+                            'model'        => $rowArr['model'] ?? '',
+                            'socket_type'  => $rowArr['socket_type'] ?? '',
+                            'form_factor'  => $rowArr['form_factor'] ?? '',
+                            'chipset'      => $rowArr['chipset'] ?? '',
+                            'memory_slots' => $rowArr['memory_slots'] ?? '',
+                            'max_memory'   => $rowArr['max_memory'] ?? '',
+                            'price'        => $rowArr['price'] ?? '',
+                            'stock'        => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'ram':
+                        $specs = [
+                            'brand'    => $rowArr['brand'] ?? '',
+                            'model'    => $rowArr['model'] ?? '',
+                            'capacity' => $rowArr['capacity'] ?? '',
+                            'speed'    => $rowArr['speed'] ?? '',
+                            'type'     => $rowArr['type'] ?? '',
+                            'modules'  => $rowArr['modules'] ?? '',
+                            'price'    => $rowArr['price'] ?? '',
+                            'stock'    => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'storage':
+                        $specs = [
+                            'brand'     => $rowArr['brand'] ?? '',
+                            'model'     => $rowArr['model'] ?? '',
+                            'capacity'  => $rowArr['capacity'] ?? '',
+                            'type'      => $rowArr['type'] ?? '',
+                            'interface' => $rowArr['interface'] ?? '',
+                            'price'     => $rowArr['price'] ?? '',
+                            'stock'     => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'psu':
+                        $specs = [
+                            'brand'      => $rowArr['brand'] ?? '',
+                            'model'      => $rowArr['model'] ?? '',
+                            'wattage'    => $rowArr['wattage'] ?? '',
+                            'efficiency' => $rowArr['efficiency'] ?? '',
+                            'modular'    => $rowArr['modular'] ?? '',
+                            'price'      => $rowArr['price'] ?? '',
+                            'stock'      => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'cooler':
+                        $specs = [
+                            'brand'       => $rowArr['brand'] ?? '',
+                            'model'       => $rowArr['model'] ?? '',
+                            'type'        => $rowArr['type'] ?? '',
+                            'fan_size'    => $rowArr['fan_size'] ?? '',
+                            'fan_speed'   => $rowArr['fan_speed'] ?? '',
+                            'noise_level' => $rowArr['noise_level'] ?? '',
+                            'tdp_support' => $rowArr['tdp_support'] ?? '',
+                            'price'       => $rowArr['price'] ?? '',
+                            'stock'       => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    case 'case':
+                        $specs = [
+                            'brand'       => $rowArr['brand'] ?? '',
+                            'model'       => $rowArr['model'] ?? '',
+                            'form_factor' => $rowArr['form_factor'] ?? '',
+                            'color'       => $rowArr['color'] ?? '',
+                            'dimensions'  => $rowArr['dimensions'] ?? '',
+                            'price'       => $rowArr['price'] ?? '',
+                            'stock'       => $rowArr['stock'] ?? '',
+                        ];
+                        break;
+
+                    default:
+                        $specs = [
+                            'brand' => $rowArr['brand'] ?? '',
+                            'model' => $rowArr['model'] ?? '',
+                            'price' => $rowArr['price'] ?? '',
+                            'stock' => $rowArr['stock'] ?? '',
+                        ];
+                }
 
                 $common['specs'] = $specs;
-
                 return $common;
             });
 
