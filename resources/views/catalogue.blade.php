@@ -145,58 +145,63 @@
       x-on:open-specs.window="openModal = true; specs = $event.detail.specs; name = $event.detail.name">
 
     @forelse($products as $product)
-        <div class="relative border rounded-lg p-4 text-center bg-blue-50 shadow hover:shadow-lg transition flex flex-col justify-between h-[360px] group">
-            
-            <!-- Menu -->
-            <button @click="$dispatch('open-specs', { specs: {{ json_encode($product['specs']) }}, name: '{{ $product['name'] }}' })"
-                    class="absolute top-2 right-2 p-2 rounded-full bg-white shadow hover:bg-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    fill="currentColor" 
-                    viewBox="0 0 16 16" 
-                    class="w-5 h-5 text-gray-700">
-                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                </svg>
-            </button>
+    <div class="relative border rounded-lg p-4 text-center bg-blue-50 shadow hover:shadow-lg transition flex flex-col justify-between h-[360px] group">
+        
+        <!-- Menu -->
+        <button @click="$dispatch('open-specs', { specs: {{ json_encode($product['specs']) }}, name: '{{ $product['name'] }}' })"
+                class="absolute top-2 right-2 p-2 rounded-full bg-white shadow hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                fill="currentColor" 
+                viewBox="0 0 16 16" 
+                class="w-5 h-5 text-gray-700">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+            </svg>
+        </button>
 
-            <!-- Image -->
-            <img src="{{ asset('storage/' . str_replace('\\', '/', $product['image'])) }}" 
+        <!-- Image + Name as Link -->
+        <a href="{{ route('catalogue.show', ['table' => $product['table'], 'id' => $product['id']]) }}">
+            <img src="{{ asset('storage/' . str_replace('\\', '/', $product['image'])) }}"
                  alt="{{ $product['name'] }}"
                  class="mx-auto mb-3 h-32 object-contain">
+        </a>
 
-            <!-- Name + Brand + Category -->
-            <div>
-                <h3 class="font-bold text-sm truncate" title="{{ $product['name'] }}">{{ $product['name'] }}</h3>
-                <p class="text-xs text-gray-600">{{ $product['brand'] }}</p>
-                <p class="text-[11px] text-gray-500 mt-0.5">{{ $product['category'] }}</p>
-            </div>
+        <h3 class="font-bold text-sm truncate">
+            <a href="{{ route('catalogue.show', ['table' => $product['table'], 'id' => $product['id']]) }}">
+                {{ $product['name'] }}
+            </a>
+        </h3>
 
-            <!-- ⭐ Rating -->
-            <p class="text-yellow-500 text-sm mb-1">
-                @if(!empty($product['rating']))
-                    ⭐ {{ $product['rating'] }} ({{ $product['reviews_count'] ?? 0 }})
-                @else
-                    ⭐ No reviews yet
-                @endif
-            </p>
+        <p class="text-xs text-gray-600">{{ $product['brand'] }}</p>
+        <p class="text-[11px] text-gray-500 mt-0.5">{{ $product['category'] }}</p>
 
-            <!-- Price -->
-            <p class="text-gray-800 font-semibold mt-1">₱{{ number_format($product['price'], 0) }}</p>
+        <!-- ⭐ Rating -->
+        <p class="text-yellow-500 text-sm mb-1">
+            @if(!empty($product['rating']))
+                ⭐ {{ $product['rating'] }} ({{ $product['reviews_count'] ?? 0 }})
+            @else
+                ⭐ No reviews yet
+            @endif
+        </p>
 
-            <!-- Add to Cart -->
-            <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product['id'] }}">
-                <input type="hidden" name="name" value="{{ $product['name'] }}">
-                <input type="hidden" name="price" value="{{ $product['price'] }}">
-                <input type="hidden" name="component_type" value="{{ $product['category'] }}">
-                <button type="submit" class="w-full py-2 bg-white border rounded-md font-semibold text-gray-700 shadow hover:bg-gray-100">
-                    Add to Cart
-                </button>
-            </form>
-        </div>
-    @empty
-        <p class="col-span-4 text-center text-gray-500">No products available.</p>
-    @endforelse
+        <!-- Price -->
+        <p class="text-gray-800 font-semibold mt-1">₱{{ number_format($product['price'], 0) }}</p>
+
+        <!-- Add to Cart -->
+        <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <input type="hidden" name="name" value="{{ $product['name'] }}">
+            <input type="hidden" name="price" value="{{ $product['price'] }}">
+            <input type="hidden" name="component_type" value="{{ $product['category'] }}">
+            <button type="submit" class="w-full py-2 bg-white border rounded-md font-semibold text-gray-700 shadow hover:bg-gray-100">
+                Add to Cart
+            </button>
+        </form>
+    </div>
+@empty
+    <p class="col-span-4 text-center text-gray-500">No products available.</p>
+@endforelse
+
 
 
     <!-- 🔥 Global Modal -->

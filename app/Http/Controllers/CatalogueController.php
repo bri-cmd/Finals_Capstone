@@ -249,4 +249,33 @@ class CatalogueController extends Controller
 
         return view('catalogue', compact('products', 'categories', 'brands'));
     }
+
+    public function show($table, $id)
+{
+    if (!Schema::hasTable($table)) {
+        abort(404, 'Table not found');
+    }
+
+    $row = DB::table($table)->find($id);
+
+    if (!$row) {
+        abort(404, 'Product not found');
+    }
+
+    // Normalize product (minimal for detail page)
+    $rowArr = (array) $row;
+
+    $product = [
+        'id'       => $rowArr['id'] ?? 0,
+        'name'     => trim(($rowArr['brand'] ?? '') . ' ' . ($rowArr['model'] ?? '')),
+        'brand'    => $rowArr['brand'] ?? '',
+        'category' => $table,
+        'price'    => (float) ($rowArr['price'] ?? 0),
+        'stock'    => (int) ($rowArr['stock'] ?? 0),
+        'image'    => $rowArr['image'] ?? 'images/placeholder.png',
+    ];
+
+    return view('product.show', compact('product'));
+}
+
 }
