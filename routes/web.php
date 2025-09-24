@@ -26,6 +26,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\PayPalController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -145,3 +146,7 @@ Route::match(['get','post'], '/paypal/create', [PayPalController::class, 'create
 Route::post('/paypal/capture', [PayPalController::class, 'capture'])->name('paypal.capture');
 Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
 Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
