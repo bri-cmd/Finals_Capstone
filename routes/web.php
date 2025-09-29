@@ -27,6 +27,7 @@ use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\PayPalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StaffDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -149,4 +150,8 @@ Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/staff/dashboard', [StaffDashboardController::class, 'index'])->name('staff.dashboard');
 });
