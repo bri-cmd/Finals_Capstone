@@ -30,6 +30,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StaffDashboardController;
 use App\Http\Controllers\CheckoutDetailsController;
 use App\Http\Controllers\OrderDetailsController;
+use App\Http\Controllers\PurchasedHistoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -165,4 +166,12 @@ Route::get('/customer/checkout-details', [CheckoutDetailsController::class, 'ind
 
 Route::get('/customer/order-details', [OrderDetailsController::class, 'index'])
     ->name('customer.orderdetails')
+    ->middleware('auth');
+
+Route::get('/customer/purchased-history', [PurchasedHistoryController::class, 'index'])
+    ->name('customer.purchasedhistory')
+    ->middleware('auth');
+
+Route::get('/customer/invoice/{order}', [PurchasedHistoryController::class, 'invoice'])
+    ->name('customer.invoice.show')
     ->middleware('auth');
