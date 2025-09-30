@@ -12,7 +12,6 @@ class CheckoutDetailsController extends Controller
     {
         $userId = Auth::id();
 
-        // Get latest order for the logged-in user
         $order = Order::where('user_id', $userId)
             ->latest()
             ->with(['items', 'user'])
@@ -27,11 +26,27 @@ class CheckoutDetailsController extends Controller
             ]);
         }
 
-        // ✅ Use data directly from order_items table (like cart does)
-        $checkoutItems = $order->items->map(function ($item) {
+        // hardware map just like in cart
+        $hardwareMap = config('hardware');
+
+        $checkoutItems = $order->items->map(function ($item) use ($hardwareMap) {
+            $product = null;
+            $category = 'N/A';
+            $component = $item->name ?? 'Unknown';
+
+            if (!empty($item->product_type) && isset($hardwareMap[$item->product_type])) {
+                $model = $hardwareMap[$item->product_type];
+                $product = $model::find($item->product_id);
+
+                if ($product) {
+                    $component = trim(($product->brand ?? '') . ' ' . ($product->model ?? '') . ' ' . ($product->name ?? ''));
+                    $category = $product->category->name ?? ucfirst($item->product_type);
+                }
+            }
+
             return [
-                'component' => $item->name ?? 'Unknown',
-                'category'  => $item->category ?? ucfirst($item->product_type ?? 'N/A'),
+                'component' => $component,
+                'category'  => $category,
                 'qty'       => $item->quantity ?? 1,
                 'price'     => $item->price ?? 0,
             ];
@@ -39,7 +54,6 @@ class CheckoutDetailsController extends Controller
 
         $total = $checkoutItems->sum(fn($it) => $it['price'] * $it['qty']);
 
-        // Resolve contact number
         $contactNumber = $order->contact
             ?? $order->phone
             ?? $order->phone_number

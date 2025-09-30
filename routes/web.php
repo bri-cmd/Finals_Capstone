@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StaffDashboardController;
 use App\Http\Controllers\CheckoutDetailsController;
+use App\Http\Controllers\OrderDetailsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -160,4 +161,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/customer/checkout-details', [CheckoutDetailsController::class, 'index'])
     ->name('customer.checkoutdetails')
+    ->middleware('auth');
+
+Route::get('/customer/order-details', [OrderDetailsController::class, 'index'])
+    ->name('customer.orderdetails')
     ->middleware('auth');
