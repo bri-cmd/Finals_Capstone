@@ -28,6 +28,7 @@ use App\Http\Controllers\PayPalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StaffDashboardController;
+use App\Http\Controllers\CheckoutDetailsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -155,3 +156,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/staff/dashboard', [StaffDashboardController::class, 'index'])->name('staff.dashboard');
 });
+
+
+Route::get('/customer/checkout-details', [CheckoutDetailsController::class, 'index'])
+    ->name('customer.checkoutdetails')
+    ->middleware('auth');

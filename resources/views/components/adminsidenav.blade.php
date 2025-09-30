@@ -34,7 +34,7 @@
             ],
             'Customer' => [
                 ['route' => route('customer.dashboard'), 'label' => 'Profile', 'icon' => 'dashboard'],
-                ['route' => '', 'label' => 'Checkout Details', 'icon' => 'checkout'],
+                ['route' => route('customer.checkoutdetails'), 'label' => 'Checkout Details', 'icon' => 'checkout'],
                 ['route' => '', 'label' => 'Order Details', 'icon' => 'order'],
                 ['route' => '', 'label' => 'Purchased History', 'icon' => 'purchase'],
             ],
