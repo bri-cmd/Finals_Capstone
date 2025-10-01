@@ -273,9 +273,15 @@ class CatalogueController extends Controller
         'price'    => (float) ($rowArr['price'] ?? 0),
         'stock'    => (int) ($rowArr['stock'] ?? 0),
         'image'    => $rowArr['image'] ?? 'images/placeholder.png',
+        'description' => $rowArr['description'] ?? '', // optional, if exists
     ];
 
-    return view('product.show', compact('product'));
+    // ✅ Get reviews linked to this product
+    $reviews = \App\Models\Review::where('product_id', $product['id'])
+                ->latest()
+                ->get();
+
+    return view('product.show', compact('product', 'reviews'));
 }
 
 }

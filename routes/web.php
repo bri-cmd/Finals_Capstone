@@ -31,6 +31,7 @@ use App\Http\Controllers\StaffDashboardController;
 use App\Http\Controllers\CheckoutDetailsController;
 use App\Http\Controllers\OrderDetailsController;
 use App\Http\Controllers\PurchasedHistoryController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -175,3 +176,8 @@ Route::get('/customer/purchased-history', [PurchasedHistoryController::class, 'i
 Route::get('/customer/invoice/{order}', [PurchasedHistoryController::class, 'invoice'])
     ->name('customer.invoice.show')
     ->middleware('auth');
+
+
+
+Route::post('/reviews', [ReviewController::class, 'store'])
+    ->name('reviews.store');
