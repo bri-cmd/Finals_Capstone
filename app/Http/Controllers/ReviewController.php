@@ -11,10 +11,11 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'product_id' => ['required', 'integer'],
-            'rating'     => ['required', 'integer', 'min:1', 'max:5'],
-            'title'      => ['nullable', 'string', 'max:100'],
-            'content'    => ['nullable', 'string', 'max:2000'],
+            'product_id'    => ['required', 'integer'],
+            'product_table' => ['required', 'string', 'max:100'], // new required
+            'rating'        => ['required', 'integer', 'min:1', 'max:5'],
+            'title'         => ['nullable', 'string', 'max:100'],
+            'content'       => ['nullable', 'string', 'max:2000'],
         ]);
 
         // attach current user if logged in

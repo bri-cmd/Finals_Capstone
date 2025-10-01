@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\Review;
 
 class CatalogueController extends Controller
 {
@@ -40,7 +41,7 @@ class CatalogueController extends Controller
                 $common = [
                     'id'             => (int) ($rowArr['id'] ?? 0),
                     'component_type' => strtolower($category),
-                    'table'          => $table,
+                    'table'          => $table, // original table name
                     'name'           => trim(($rowArr['brand'] ?? '') . ' ' . ($rowArr['model'] ?? '')),
                     'brand'          => (string) ($rowArr['brand'] ?? ''),
                     'category'       => $category,
@@ -50,7 +51,17 @@ class CatalogueController extends Controller
                     'created_at'     => $rowArr['created_at'] ?? now(),
                 ];
 
-                // ✅ Specs mapping per category
+                // Attach review info (filter by both id and table to avoid collisions)
+                $reviews = Review::where('product_id', $common['id'])
+                                 ->where('product_table', $table)
+                                 ->get();
+
+                $common['review_count'] = $reviews->count();
+                $common['average_rating'] = $common['review_count'] > 0
+                    ? round($reviews->avg('rating'), 1)
+                    : null;
+
+                // ✅ Specs mapping per category (unchanged)
                 switch ($category) {
                     case 'cpu':
                         $specs = [
@@ -251,37 +262,37 @@ class CatalogueController extends Controller
     }
 
     public function show($table, $id)
-{
-    if (!Schema::hasTable($table)) {
-        abort(404, 'Table not found');
+    {
+        if (!Schema::hasTable($table)) {
+            abort(404, 'Table not found');
+        }
+
+        $row = DB::table($table)->find($id);
+
+        if (!$row) {
+            abort(404, 'Product not found');
+        }
+
+        // Normalize product (minimal for detail page)
+        $rowArr = (array) $row;
+
+        $product = [
+            'id'          => $rowArr['id'] ?? 0,
+            'name'        => trim(($rowArr['brand'] ?? '') . ' ' . ($rowArr['model'] ?? '')),
+            'brand'       => $rowArr['brand'] ?? '',
+            'category'    => $table, // keep table name here
+            'price'       => (float) ($rowArr['price'] ?? 0),
+            'stock'       => (int) ($rowArr['stock'] ?? 0),
+            'image'       => $rowArr['image'] ?? 'images/placeholder.png',
+            'description' => $rowArr['description'] ?? '', // optional, if exists
+        ];
+
+        // ✅ Get reviews linked to this product (filter by table too)
+        $reviews = Review::where('product_id', $product['id'])
+                    ->where('product_table', $table)
+                    ->latest()
+                    ->get();
+
+        return view('product.show', compact('product', 'reviews'));
     }
-
-    $row = DB::table($table)->find($id);
-
-    if (!$row) {
-        abort(404, 'Product not found');
-    }
-
-    // Normalize product (minimal for detail page)
-    $rowArr = (array) $row;
-
-    $product = [
-        'id'       => $rowArr['id'] ?? 0,
-        'name'     => trim(($rowArr['brand'] ?? '') . ' ' . ($rowArr['model'] ?? '')),
-        'brand'    => $rowArr['brand'] ?? '',
-        'category' => $table,
-        'price'    => (float) ($rowArr['price'] ?? 0),
-        'stock'    => (int) ($rowArr['stock'] ?? 0),
-        'image'    => $rowArr['image'] ?? 'images/placeholder.png',
-        'description' => $rowArr['description'] ?? '', // optional, if exists
-    ];
-
-    // ✅ Get reviews linked to this product
-    $reviews = \App\Models\Review::where('product_id', $product['id'])
-                ->latest()
-                ->get();
-
-    return view('product.show', compact('product', 'reviews'));
-}
-
 }

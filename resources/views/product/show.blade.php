@@ -204,6 +204,7 @@
                 <form action="{{ route('reviews.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                    <input type="hidden" name="product_table" value="{{ $product['category'] }}">
 
                     <!-- Rating -->
                     <label class="block text-sm font-medium mb-2">Rating:</label>
