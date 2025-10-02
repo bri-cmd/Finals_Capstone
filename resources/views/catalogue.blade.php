@@ -175,16 +175,16 @@
         <p class="text-[11px] text-gray-500 mt-0.5">{{ $product['category'] }}</p>
 
         <!-- ⭐ Rating -->
-<p class="text-yellow-500 text-sm mb-1">
-    @if(!empty($product['review_count']) && $product['review_count'] > 0)
-        <span class="font-semibold">★</span>
-        {{ $product['average_rating'] }} / 5
-        <span class="text-gray-500">({{ $product['review_count'] }})</span>
-    @else
-        <span class="text-yellow-400">★</span>
-        <span class="text-gray-600">No reviews yet</span>
-    @endif
-</p>
+        <p class="text-yellow-500 text-sm mb-1">
+            @if(!empty($product['review_count']) && $product['review_count'] > 0)
+                <span class="font-semibold">★</span>
+                {{ $product['average_rating'] }} / 5
+                <span class="text-yellow-500">({{ $product['review_count'] }} reviews)</span>
+            @else
+                <span class="text-yellow-400">★</span>
+                <span class="text-yellow-400">No reviews yet</span>
+            @endif
+        </p>
 
         <!-- Price -->
         <p class="text-gray-800 font-semibold mt-1">₱{{ number_format($product['price'], 0) }}</p>
